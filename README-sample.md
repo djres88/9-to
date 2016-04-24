@@ -1,50 +1,34 @@
 # FresherNote
 
-[Heroku link]:[heroku]
+[Heroku link][heroku] **NB:** This should be a link to your production site
 
-[heroku]: http://nine-to.heroku.com
+[heroku]: http://www.herokuapp.com
 
 ## Minimum Viable Product
 
-9-to is an Airbnb-inspired web application built using Ruby on Rails and React.js. The service helps freelancers and small startups find their ideal office space at flexible terms, without the hassle of signing a lease. By the end of Week 9, the app will satisfy the following criteria:
+FresherNote is a web application inspired by Evernote that will be build using Ruby on Rails and React.js.  By the end of Week 9, this app will, at a minimum, satisfy the following criteria:
 
-1. [ ] **Account Registration & Login** (including Guest/Demo Login)
-2. [ ] **Seed Data.** Users, owners, listings, reservations, favorites. (For MVP -- see schema.)
-3. [ ] **User Features**
-  - Browse Workspaces
-  - Reserve Workspaces
-  - Save "Favorites"
-  - Review Workspaces
-  - Update account
-  - (Bonus) Host ("Owner") Functionality — that is, the ability to add/manage a listing.
-  - (Bonus) Messaging between owners/tenants
-4. [ ] **Smooth Scrolling & Navigation**. No bugs!
-5. [ ] **Hosting on Heroku**
-6. [ ] **CSS/UI Style** just like Airbnb. Aim for that first, improve upon it later (if you can).
-7. [ ] **Production README**, replacing this README (Reference the [sample production README](https://github.com/appacademy/sample-project-proposal/blob/master/docs/production_readme.md)
+- [ ] New account creation, login, and guest/demo login
+- [ ] Smooth, bug-free navigation
+- [ ] Adequate seed data to demonstrate the site's features
+- [ ] The minimally necessary features for an Evernote-inspired site: note creation and saving, note editing, and notes organized into notebooks
+- [ ] Hosting on Heroku
+- [ ] CSS styling that is satisfactorily visually appealing
+- [ ] A production README, replacing this README (**NB**: check out the [sample production README](https://github.com/appacademy/sample-project-proposal/blob/master/docs/production_readme.md) -- you'll write this later)
 
 ## Product Goals and Priorities
 
-To expand on item#3 (see above), 9-to users will be able to do the following:
+FresherNote will allow users to do the following:
+
 <!-- This is a Markdown checklist. Use it to keep track of your
 progress. Put an x between the brackets for a checkmark: [x] -->
-Note: A * indicates bonus. Everything else falls under MVP.
-1. [ ] Create Accounts
-  - [ ] Register
-  - [ ] Login
-  - [ ] Guest/Demo Login
-2. [ ] Browse Office Listings
-  - [ ] Search Functionality (Search by Location, Dates, Price)
-  - [ ] Listings Display (Photo, Price/Day, Owner "Button")
-  - [ ] Map API Displays Listings
-  - [ ] Available Dates Popup
-  - [ ] *Show Ratings*
-3. [ ] Create Reservations  
-4. [ ] Manage Account
-  - [ ] View/update reservations
-  - [ ] Write reviews
-5. [ ] *Add/Manage Listings (owner features)*
-6. [ ] *Send messages*
+
+- [ ] Create an account (MVP)
+- [ ] Log in / Log out, including as a Guest/Demo User (MVP)
+- [ ] Create, read, edit, and delete notes (MVP)
+- [ ] Organize notes within Notebooks (MVP)
+- [ ] Tag notes with multiple tags (expected feature, but not MVP)
+- [ ] Apply complex styling to notes while editing (expected feature, but not MVP)
 
 ## Design Docs
 * [View Wireframes][views]
