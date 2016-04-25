@@ -68,36 +68,36 @@ progress. Put an x between the brackets for a checkmark: [x] -->
 #### Phase 1: Project Setup and User Accounts (4 Hours)
 
 **Objective:** Create functioning project where users can create accounts and log in/out.
-1. [x] New Project (9-to) w/ Core Gems
-  - gems: pry-rails, better_errors, binding_of_caller, bcrypt (for auth)
-2. [ ] `User` Model
-3. [ ] Authentication
-4. [ ] User Signup/Sign-In Pages (w/o Design)
-5. [ ] Blank Landing Page @ Sign-In
+- [x] New Project (9-to) w/ Core Gems
+  * gems: pry-rails, better_errors, binding_of_caller, bcrypt (for auth)
+- [ ] `User` Model
+- [ ] Authentication
+- [ ] User Signup/Sign-In Pages (w/o Design)
+- [ ] Blank Landing Page @ Sign-In
 
 #### Phase 2: Webpack and First Route (0.5 Hours)
 **Objective:** Entry file renders into static_pages#root view.
-1. [ ] Core node packages
-  - npm install webpack, react, react-dom, react-router, babel-core, babel-loader, babel-preset-react, flux
-2. [ ] StaticPagesController, root.html, root to: "static_pages#root"
-3. [ ] Frontend Folders (for Flux)
-4. [ ] Webpack Setup (config file)
-5. [ ] Entry File Testing: `9-to.jsx`
-6. [ ] Test that entry file content appears in root's `content` div.
+- [ ] Core node packages
+  * npm install webpack, react, react-dom, react-router, babel-core, babel-loader, babel-preset-react, flux
+- [ ] StaticPagesController, root.html, root to: "static_pages#root"
+- [ ] Frontend Folders (for Flux)
+- [ ] Webpack Setup (config file)
+- [ ] Entry File Testing: `9-to.jsx`
+- [ ] Test that entry file content appears in root's `content` div.
 
 #### Phase 3: Listings Model & Basic API (3 Hours)
 
 **Objective:** APIUtil retrieves/displays listings data.
 
-1. [ ] Create `Listing` Model
-2. [ ] Seed DB w/ Users & Office Spaces
-3. [ ] Create `ListingsController`. Only `index` and `show` needed at this stage.
-4. [ ] jBuilder for ListingsIndex & ListingsIndexItem
-5. [ ] Create `APIUtil`
-6. [ ] Test that ajax queries retrieve Listings data
+- [ ] Create `Listing` Model
+- [ ] Seed DB w/ Users & Office Spaces
+- [ ] Create `ListingsController`. Only `index` and `show` needed at this stage.
+- [ ] jBuilder for ListingsIndex & ListingsIndexItem
+- [ ] Create `APIUtil`
+- [ ] Test that ajax queries retrieve Listings data
 
 #### Phase 4: Reservations Model & Functional API (10 Hours)
-1. [ ] Create `Reservation` Model
+- [ ] Create `Reservation` Model
 
 
 
