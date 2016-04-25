@@ -1,10 +1,10 @@
 # 9-to
 
-[Heroku link]:[heroku]
+[Heroku link][heroku]
 
-[heroku]: http://nine-to.heroku.com
+[heroku]:http://nine-to.heroku.com
 
-## Minimum Viable Product
+## I. Minimum Viable Product
 
 9-to is an Airbnb-inspired web application built using Ruby on Rails and React.js. The service helps freelancers and small startups find their ideal office space at flexible terms, without the hassle of signing a lease. By the end of Week 9, the app will satisfy the following criteria:
 
@@ -23,12 +23,11 @@
 6. [ ] **CSS/UI Style** just like Airbnb. Aim for that first, improve upon it later (if you can).
 7. [ ] **Production README**, replacing this README (Reference the [sample production README](https://github.com/appacademy/sample-project-proposal/blob/master/docs/production_readme.md)
 
-## Product Goals and Priorities
+## II. Product Goals and Priorities
 
 To expand on item#3 (see above), 9-to users will be able to do the following:
 <!-- This is a Markdown checklist. Use it to keep track of your
 progress. Put an x between the brackets for a checkmark: [x] -->
-Note: Plain text = MVP. Italics = Bonus.
 
 1. Create Accounts
   - [ ] Register
@@ -46,11 +45,13 @@ Note: Plain text = MVP. Italics = Bonus.
   - [ ] View/update reservations
   - [ ] Write reviews
 5. *Add/Manage Listings (owner features)*
-  - [ ] (bonus)
+  - [ ] bonus
 6. *Send messages*
-  - [ ] (bonus)
+  - [ ] bonus
 
-## Design Docs
+(Plain text => MVP, *italics* => bonus)
+
+## III. Design Docs
 * [View Wireframes][views]
 * [React Components][components]
 * [DB schema][schema]
@@ -59,7 +60,7 @@ Note: Plain text = MVP. Italics = Bonus.
 [components]: ./docs/components.md
 [schema]: ./docs/schema.md
 
-## Implementation Timeline
+## IV. Implementation Timeline
 
 ### Phase 1: Backend setup and User Authentication (0.5 days)
 
