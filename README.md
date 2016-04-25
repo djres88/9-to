@@ -63,9 +63,9 @@ progress. Put an x between the brackets for a checkmark: [x] -->
 
 ## IV. Implementation Timeline (Hour Estimates = MAX time)
 
-###DAY 1
+### Tues. 4/25
 
-#### Phase 1: Project Setup and User Accounts (4 Hours)
+#### Phase 1: Project Setup and User Accounts -- 2.5 Hours
 
 **Objective:** Create functioning project where users can create accounts and log in/out.
 - [x] New Project (9-to) w/ Core Gems
@@ -74,72 +74,86 @@ progress. Put an x between the brackets for a checkmark: [x] -->
 - [ ] Authentication
 - [ ] User Signup/Sign-In Pages (w/o Design)
 - [ ] Blank Landing Page @ Sign-In
+- [ ] Seed DB w/ Users
 
-#### Phase 2: Webpack and First Route (0.5 Hours)
+#### Phase 2: Webpack and First Route -- 0.5 Hours
 **Objective:** Entry file renders into static_pages#root view.
 - [ ] Core node packages
   * npm install webpack, react, react-dom, react-router, babel-core, babel-loader, babel-preset-react, flux
 - [ ] StaticPagesController, root.html, root to: "static_pages#root"
-- [ ] Frontend Folders (for Flux)
+- [ ] Frontend Folders (for Flux):
+```
+frontend
+  + actions
+  + components // all React components, both views and controller-views
+  + constants
+  + dispatcher
+  + stores
+  + util
+  9_to.jsx
+```
 - [ ] Webpack Setup (config file)
 - [ ] Entry File Testing: `9-to.jsx`
 - [ ] Test that entry file content appears in root's `content` div.
 
-#### Phase 3: Listings Model & Basic API (3 Hours)
+### Tues. 4/25 - Weds 4/26
 
-**Objective:** APIUtil retrieves/displays listings data.
+#### Phase 3: Workspace & Web API/Flux Setup -- 14 Hours
 
-- [ ] Create `Listing` Model
-- [ ] Seed DB w/ Users & Office Spaces
-- [ ] Create `ListingsController`. Only `index` and `show` needed at this stage.
-- [ ] jBuilder for ListingsIndex & ListingsIndexItem
-- [ ] Create `APIUtil`
-- [ ] Test that ajax queries retrieve Listings data
+**Objective:** Can view workspace data through the API.
 
-#### Phase 4: Reservations Model & Functional API (10 Hours)
-- [ ] Create `Reservation` Model
+##### A. Listings
+- [ ] Create `Workspace` Model
+- [ ] Seed DB w/ Workspaces
+  * **OPEN Q**: How to add images? Reference pokemon project?
+- [ ] Create `WorkspacesController`. Only `index` and `show` needed at this stage.
+- [ ] Add routes (under api namespace)
+- [ ] jBuilder for `workspace#index` and `workspace#show`
 
+##### B. Web API/Flux Setup
+- [ ] Dispatcher
+- [ ] WorkspaceStore
+- [ ] Create `APIUtil` to fetch workspace(s)
+- [ ] Constants, ServerActions, ClientActions
+- [ ] Test (in dev tools) that you can get data thru API.
+- [ ] WorkspaceIndex component
+- [ ] WorkspaceIndexItem component
+- [ ] Add Workspace paths to React Router
 
+##### C. Basic Styling
+- [ ] Position Workspaces on browse page (just get them to show up in a div of the right size)
 
-#### Phase 3: API, APIUtil
+### Thurs. 4/27 - Fri. 4/28
 
+#### Phase 4: `Search` & `Map` Components -- 16 Hours (seems complicated)
+**Objective:** Can view/search for listings through the user interface.
+##### A) Search Form
+- [ ] Create `Search` component
 
-###DAY 2-3
-#### Phase 3: Reservations Model (12 Hours)
+##### B) Search/Map Combo
+- [ ] Create `Map` component
+- [ ] Review google maps documentation; need API key
+- [ ] Render Map as child of `Search`
 
+##### C) Flux loop for both
+- [ ] searchStore(s) --> Dispatcher --> Actions --> API
+
+### Sat. 4/29
+
+#### Phase 5: Reservations (12 Hours)
+**Objective:** User can reserve a workspace.
+- [ ] Ask for help fleshing out how this would work. By now we'll have moved beyond searching for pokemon and into uncharted waters.
+
+### Sun. 4/30 - Tues. 5/3
+
+#### Phase 6: Design & UI/UX (24 Hours)
 **Objective:**
+- [ ] Make everything look according to wireframe.
+- [ ] Stamp out bugs. No mercy.
 
-###DAY 3-4
-### Phase 4: Flux Architecture and Router (1.5 days)
-
+#### Bonus Features (should have time for at least a couple of these)
+- [ ] User Account Page
+- [ ] User Favorites
+- [ ] Adding/removing listings (as owner)
+- [ ] Listing Ratings
 **Objective:**
-
-
-### Phase 4:
-
-**Objective:** Existing pages (including singup/signin) will look good.
-
-
-
-
-### Phase 5:
-
-**Objective:**
-
-
-### Phase 6:
-
-**Objective:**
-
-
-### Phase 7:
-
-**Objective:**
-
-
-### Phase 8: Styling Cleanup and Seeding (1 day)
-
-**Objective:**
-
-
-### Bonus Features (TBD)
