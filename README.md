@@ -12,11 +12,12 @@ LINK TO LIVE SITE: [9-to][heroku]
 1. [ ] **Account Registration & Login** (including Guest/Demo Login)
 2. [ ] **Seed Data.** Users, owners, listings, reservations, favorites. (For MVP -- see schema.)
 3. [ ] **User Features**
-  - Browse Workspaces
+  - Browse Workspaces with search/map/combination of both
   - Reserve Workspaces
-  - Save "Favorites"
-  - Review Workspaces
-  - Update account
+  - View & Update Reservations
+  - (Bonus) Save "Favorites"
+  - (Bonus) Review Workspaces
+  - (Bonus) Update account
   - (Bonus) Host ("Owner") Functionality — that is, the ability to add/manage a listing.
   - (Bonus) Messaging between owners/tenants
 4. [ ] **Smooth Scrolling & Navigation**. No bugs!
@@ -70,6 +71,8 @@ progress. Put an x between the brackets for a checkmark: [x] -->
 **Objective:** Create functioning project where users can create accounts and log in/out.
 - [x] New Project (9-to) w/ Core Gems
   * gems: pry-rails, better_errors, binding_of_caller, bcrypt (for auth)
+- [x] Link up the app to Heroku
+- [ ] BONUS: point custom url to Heroku. Do this once everything else is finished.
 - [ ] `User` Model
 - [ ] Authentication
 - [ ] User Signup/Sign-In Pages (w/o Design)
@@ -125,7 +128,7 @@ frontend
 
 ### Thurs. 4/27 - Fri. 4/28
 
-#### Phase 4: `Search` & `Map` Components -- 16 Hours (seems complicated)
+#### Phase 4: `Search` & `Map` Components -- 16 Hours
 **Objective:** Can view/search for listings through the user interface.
 ##### A) Search Form
 - [ ] Create `Search` component
@@ -140,20 +143,22 @@ frontend
 
 ### Sat. 4/29
 
-#### Phase 5: Reservations (12 Hours)
+#### Phase 5: Reservations & User Account (12 Hours)
 **Objective:** User can reserve a workspace.
-- [ ] Ask for help fleshing out how this would work. By now we'll have moved beyond searching for pokemon and into uncharted waters.
+- [ ] Ask for guidance w/ fleshing out how this would work. By now we'll have moved beyond searching for pokemon...
+
 
 ### Sun. 4/30 - Tues. 5/3
 
 #### Phase 6: Design & UI/UX (24 Hours)
 **Objective:**
 - [ ] Make everything look according to wireframe.
-- [ ] Stamp out bugs. No mercy.
+- [ ] Crush bugs. No mercy.
+- [ ] Ask people to review for bugs. Then crush more bugs.
 
-#### Bonus Features (should have time for at least a couple of these)
-- [ ] User Account Page
+#### Bonus Features.
 - [ ] User Favorites
+- [ ] Workspace Reviews
 - [ ] Adding/removing listings (as owner)
 - [ ] Listing Ratings
 **Objective:**
