@@ -2,7 +2,7 @@
 
 [Heroku link][heroku]
 
-[heroku]:http://nine-to.heroku.com
+[heroku]:http://nineto.heroku.com
 
 ## I. Minimum Viable Product
 
