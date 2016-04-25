@@ -2,10 +2,14 @@
 
 * `App`
   * `NavBar`
-  * `SearchForm` - Q: Use the same component for search form on homepage vs. listings page?
-  * `ListingIndex`
-    * `ListingIndexItem`
-      * `ListingOwner`
-  * `ListingDetail`
+  * `SearchForm`
+    * `Map`
+  * `WorkspaceIndex`
+    * `WorkspaceIndexItem`
+      * `WorkspaceOwner`
+  * `WorkspaceDetail`
     * `ReservationForm`
-    * `FavoritesToggle`
+    * `FavoritesToggle` (bonus)
+  * `AccountView`
+    * `ReservationsView`
+    * `Ratings`

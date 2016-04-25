@@ -5,32 +5,32 @@ When we're dealing with different views/routes, how should I decide when to crea
 # View Wireframes
 
 ## 1. Homepage (Root)
-* **Needed Components**: NavBar | SearchMain?*
-  - Q: SearchMain necessary?
+**Needed Components**: NavBar | SearchMain?
+Q: Is SearchMain necessary?
 ----
 
 
 ## 2. New User
-* **Needed Components**: NewUserForm
+**Needed Components**: NewUserForm
 ----
 
 ![New User Form]
 
 ## 3. New Session
-* **Needed Components**: NewSessionForm
+**Needed Components**: NewSessionForm
 ----
 
 ![New Session Form]
 
 ## 4. Browse Listings
-* **Needed Components**: SearchIndex | ListingsIndex (parent) > ListingsIndexItem (child), Map (child)
+**Needed Components**: SearchIndex | ListingsIndex (parent) > ListingsIndexItem (child), Map (child)
 ----
 
 ![Browse Listings]
 
 ## 5. View Listing Details
-* **Needed Components**: ListingDetail (parent) > FavoritesToggle (child), ReservationForm (child)
-  - Q: Could use clarification, but I think this is the right structure. Both FavesToggle and ResForm could use the props from ListingDetail. 
+**Needed Components**: ListingDetail (parent) > FavoritesToggle (child), ReservationForm (child)
+  - Q: Could use clarification, but I think this is the right structure. Both FavesToggle and ResForm could use the props from ListingDetail.
 ----
 
 ![View Listing Details]
