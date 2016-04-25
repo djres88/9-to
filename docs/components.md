@@ -7,5 +7,5 @@
     * `ListingIndexItem`
       * `ListingOwner`
   * `ListingDetail`
-  * `ReservationForm`
-  * `FavoritesToggle`
+    * `ReservationForm`
+    * `FavoritesToggle`

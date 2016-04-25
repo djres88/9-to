@@ -4,7 +4,6 @@ Note: I could use some help with deciding what my components are/where they go. 
 
 ## Homepage (Root)
 ###**Components**: NavBar | SearchIndexRoot
-![Root]
 
 ## New User
 ###**Components**: NewUserForm
@@ -15,18 +14,14 @@ Note: I could use some help with deciding what my components are/where they go. 
 ![New Session Form]
 
 ## Browse Listings
-###**Components**: SearchIndex | ListingsIndex > ListingsIndexItem | Map
+###**Components**: SearchIndex | ListingsIndex > ListingsIndexItem, Map (Children)
 ![Browse Listings]
 
 ## View Listing Details
-###**Components**: ListingDetail | ListingRatings | ReservationForm
+###**Components**: ListingDetail > FavoritesToggle, ReservationForm (Children)
 ![View Listing Details]
 
-## View Account
-###**Components**: User | Reservations | UserRatings |
-
-[Root]: ./wireframes/homepage.png
-[New User Form]: ./wireframes/new_user.png
-[New Session Form]: ./wireframes/new_session.png
-[Browse Listings]: ./wireframes/browse_listings.png
-[View Listing Details]: ./wireframes/listing_details.png
+[New User Form]: ./wireframes/register-new-user.png
+[New Session Form]: ./wireframes/login-returning-user.png
+[Browse Listings]: ./wireframes/browse-listings.png
+[View Listing Details]: ./wireframes/listing-detail.png
