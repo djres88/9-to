@@ -3,22 +3,22 @@ Note: I could use some help with deciding what my components are/where they go. 
 # View Wireframes
 
 ## Homepage (Root)
-###**Components**: NavBar | SearchIndexRoot
+* **Needed Components**: NavBar | SearchIndexRoot
 
 ## New User
-###**Components**: NewUserForm
+* **Needed Components**: NewUserForm
 ![New User Form]
 
 ## New Session
-###**Components**: NewSessionForm
+* **Needed Components**: NewSessionForm
 ![New Session Form]
 
 ## Browse Listings
-###**Components**: SearchIndex | ListingsIndex > ListingsIndexItem, Map (Children)
+* **Needed Components**: SearchIndex | ListingsIndex > ListingsIndexItem, Map (Children)
 ![Browse Listings]
 
 ## View Listing Details
-###**Components**: ListingDetail > FavoritesToggle, ReservationForm (Children)
+* **Needed Components**: ListingDetail > FavoritesToggle, ReservationForm (Children)
 ![View Listing Details]
 
 [New User Form]: ./wireframes/register-new-user.png
