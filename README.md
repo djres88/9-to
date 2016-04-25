@@ -30,24 +30,24 @@ To expand on item#3 (see above), 9-to users will be able to do the following:
 progress. Put an x between the brackets for a checkmark: [x] -->
 Note: Plain text = MVP. Italics = Bonus.
 
-(1) Create Accounts
+1. Create Accounts
   - [ ] Register
   - [ ] Login
   - [ ] Guest/Demo Login
-(2) Browse Office Listings
+2. Browse Office Listings
   - [ ] Search Functionality (Search by Location, Dates, Price)
   - [ ] Listings Display (Photo, Price/Day, Owner "Button")
   - [ ] Map API Displays Listings
   - [ ] Available Dates Popup
   - [ ] *Show Ratings*
-(3) Create Reservations  
+3. Create Reservations  
   - [ ] Reservation added to user accounts
-(4) Manage Account
+4. Manage Account
   - [ ] View/update reservations
   - [ ] Write reviews
-(5) *Add/Manage Listings (owner features)*
+5. *Add/Manage Listings (owner features)*
   - [ ] (bonus)
-(6) *Send messages*
+6. *Send messages*
   - [ ] (bonus)
 
 ## Design Docs
