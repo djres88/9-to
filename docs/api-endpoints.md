@@ -8,6 +8,8 @@
 
 ## JSON API
 
+* See benchbnb frontend auth
+  
 ### Session
 - `GET /api/session`
 - `DELETE /api/session`

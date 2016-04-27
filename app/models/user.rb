@@ -1,18 +1,18 @@
 class User < ActiveRecord::Base
   validates :username, :session_token, :password_digest, presence: true
-  validates :password, presence: true, length: { minimum: 6, allow_nil: true }
+  validates :password, presence: true, length: { minimum: 6}, allow_nil: true
 
   attr_reader :password
 
-  has_many :reservations,
-    class_name: "Reservation",
-    foreign_key: "tenant_id"
+  # has_many :reservations,
+  #   class_name: "Reservation",
+  #   foreign_key: "tenant_id"
 
   after_initialize :ensure_session_token
 
   def self.find_by_credentials(username, password)
     user = User.find_by(username: username)
-    return user if (user && BCrypt::Password.new(self.password_digest).is_password?(password))
+    return user if (user && BCrypt::Password.new(user.password_digest).is_password?(password))
   end
 
   def password=(password)
