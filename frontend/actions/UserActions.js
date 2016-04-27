@@ -32,9 +32,10 @@ var UserActions = {
 		});
 	},
 	handleError: function(error) {
+		
 		AppDispatcher.dispatch({
 			actionType: "ERROR",
-			errors: error
+			errors: JSON.parse(error.responseText)
 		});
 	},
 	removeCurrentUser: function(){

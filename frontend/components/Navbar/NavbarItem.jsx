@@ -1,10 +1,9 @@
 var React = require('react');
 
 var NavbarItem = React.createClass({
-
   render: function() {
     return (
-      <a></a>
+      <a id={this.props.id} className="navbar-items" onClick={this.props.actions}>{this.props.text}</a>
     );
   }
 });

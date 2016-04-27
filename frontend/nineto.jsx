@@ -1,12 +1,17 @@
 //React
 var React = require('react');
 var ReactDOM = require('react-dom');
+
 //Router
 var ReactRouter = require('react-router');
 var Router = ReactRouter.Router;
 var Route = ReactRouter.Route;
 var IndexRoute = ReactRouter.IndexRoute;
 var hashHistory = ReactRouter.hashHistory;
+var Link = ReactRouter.Link;
+
+//React Add-Ons
+var Modal = require("react-modal");
 
 //Components
 var FakeEmptyComp = require('./components/FakeEmptyComp');
@@ -26,6 +31,8 @@ var App = React.createClass({
   }
 });
 
+// For testing
+window.hash = hashHistory;
 
 var Router = (
   <Router history={hashHistory}>
@@ -37,5 +44,6 @@ var Router = (
 );
 
 document.addEventListener('DOMContentLoaded', function() {
+  Modal.setAppElement(document.body);
   ReactDOM.render(Router, document.getElementById('content'));
 });
