@@ -17,7 +17,9 @@ var App = React.createClass({
   render: function() {
     return (
       <div>
-        <header><Navbar/></header>
+        <div id="above-fold-background">
+          <header><Navbar /></header>
+        </div>
         {this.props.children}
       </div>
     );

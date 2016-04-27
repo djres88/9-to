@@ -1,6 +1,14 @@
+#above-fold-background {
+  height: 600px;
+  width: 100%;
+  background-color: black;
+  padding: 0px;
+  margin: 0px;
+}
+
 .nav-on-landing {
   z-index:1000;
-  background: white;
+  background: none;
   height: 60px;
   width: 100%;
   color: white;
@@ -17,8 +25,7 @@
   margin: 2rem;
   font-size: 1.2rem;
   position: relative;
-  border-radius: 3px;
-  border-color: green;
+  border: 3px solid white;
   min-width: 530px;
   width: 38%;
 

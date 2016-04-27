@@ -67,9 +67,13 @@
 	      'div',
 	      null,
 	      React.createElement(
-	        'header',
-	        null,
-	        React.createElement(Navbar, null)
+	        'div',
+	        { id: 'above-fold-background' },
+	        React.createElement(
+	          'header',
+	          null,
+	          React.createElement(Navbar, null)
+	        )
 	      ),
 	      this.props.children
 	    );
