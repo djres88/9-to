@@ -5,9 +5,8 @@ var Navbar = React.createClass({
   render: function() {
     return (
       <div className="nav-on-landing">
-        <a className="navbar-items">Test</a>
-        <a className="navbar-items">Test</a>
-        <a className="navbar-items">Test</a>
+        <a className="navbar-items">Logo</a>
+        <a className="navbar-items">User Icon</a>
       </div>
     );
   }

@@ -32503,17 +32503,12 @@
 	      React.createElement(
 	        'a',
 	        { className: 'navbar-items' },
-	        'Test'
+	        'Logo'
 	      ),
 	      React.createElement(
 	        'a',
 	        { className: 'navbar-items' },
-	        'Test'
-	      ),
-	      React.createElement(
-	        'a',
-	        { className: 'navbar-items' },
-	        'Test'
+	        'User Icon'
 	      )
 	    );
 	  }
