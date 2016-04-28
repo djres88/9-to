@@ -25527,6 +25527,7 @@
 	
 		// Form Functions
 		setForm: function (e) {
+			e.preventDefault();
 			this.setState({ form: e.currentTarget.value });
 		},
 	
@@ -25559,7 +25560,8 @@
 			if (UserStore.currentUser()) {
 				loggedIn = true;
 			}
-	
+			console.log(UserStore.currentUser());
+			console.log(loggedIn);
 			this.setState({ userErrors: errors, loggedIn: loggedIn });
 		},
 	
@@ -25603,7 +25605,7 @@
 	
 			return React.createElement(
 				"form",
-				{ "class": "login-form", onSubmit: this.handleSubmit },
+				{ id: "login-form", onSubmit: this.handleSubmit },
 				React.createElement(
 					"section",
 					{ id: "form-inputs" },
@@ -32631,12 +32633,14 @@
 	    return farRightButton;
 	  },
 	
-	  // TODO: ? A bunch of conditional logic?
+	  addSpace: function () {},
+	
 	  render: function () {
 	    var alwaysPresentHeaders = React.createElement(
 	      'div',
 	      null,
-	      React.createElement(NavbarItem, { id: 'logo', actions: this.goHome, text: 'Logo' })
+	      React.createElement(NavbarItem, { id: 'logo', actions: this.goHome, text: 'Logo' }),
+	      React.createElement(NavbarItem, { id: 'list-your-space', actions: this.addSpace, text: 'List Your Space' })
 	    );
 	
 	    return React.createElement(

@@ -39,11 +39,15 @@ var Navbar = React.createClass({
     return farRightButton;
   },
 
-  // TODO: ? A bunch of conditional logic?
+  addSpace: function() {
+
+  },
+
   render: function() {
     var alwaysPresentHeaders = (
       <div>
         <NavbarItem id="logo" actions={this.goHome} text="Logo"></NavbarItem>
+        <NavbarItem id="list-your-space" actions={this.addSpace} text="List Your Space"></NavbarItem>
       </div>
     );
 

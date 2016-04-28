@@ -25,6 +25,7 @@ var LoginForm = React.createClass({
 
 	// Form Functions
 	setForm: function(e){
+		e.preventDefault();
 		this.setState({form: e.currentTarget.value});
 	},
 
@@ -57,7 +58,8 @@ var LoginForm = React.createClass({
 		if (UserStore.currentUser()) {
 			loggedIn = true;
 		}
-
+		console.log(UserStore.currentUser());
+		console.log(loggedIn);
 		this.setState({userErrors: errors, loggedIn: loggedIn});
 	},
 
@@ -96,7 +98,7 @@ var LoginForm = React.createClass({
 		// };
 
 		return (
-			<form class="login-form" onSubmit={this.handleSubmit}>
+			<form id="login-form" onSubmit={this.handleSubmit}>
 				<section id="form-inputs">
 					<input className="form-box" type="text"
 						placeholder="Username"

@@ -1,11 +1,3 @@
-body {
-  font-family: 'Work Sans', sans-serif;
-}
-
-hr {
-  border-color: #eee;
-}
-
 #above-fold-background {
   height: 600px;
   width: 100%;
@@ -28,7 +20,7 @@ hr {
   background: none;
   color: gray;
   padding: 2rem;
-  max-width: 100px;
+  max-width: 150px;
   padding-top: 0;
 
 
@@ -44,40 +36,10 @@ hr {
   justify-content: space-between;
 }
 
-#login, #user-dropdown-menu {
-  float: right;
-}
-
-.user-errors {
-  color: black;
-}
-
-#logo{
+#logo, #list-your-space {
   float: left;
 }
 
-#login-button {
-  width: 100%;
-  margin-top: 10px;
-  min-height: 65px;
-
-  font-size: 18px;
-  font-weight: 300;
-  background-color: red;
-  border: 5px solid red;
-  color: white;
-}
-
-.form-box {
-  width: 100%;
-  font-weight: 300;
-  margin-top: 10px;
-  min-height: 60px;
-  padding-left: 10px;
-
-  font-size: 18px;
-}
-
-#sign-up-link {
+#login, #user-dropdown-menu {
   float: right;
 }
