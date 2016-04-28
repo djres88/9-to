@@ -26,12 +26,13 @@ class Api::SessionsController < ApplicationController
   end
 
   def show
+    @user = current_user
+
     if current_user
-      @user = current_user
-      render "api/users/show"
+      render json: { username: @user.username }
     else
       @errors = nil
-      render "api/partials/_errors", status: 404
+      render "api/partials/_errors"
     end
   end
 end

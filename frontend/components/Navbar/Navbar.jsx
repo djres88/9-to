@@ -6,16 +6,17 @@ var LoginForm = require('../LoginForm');
 
 var Navbar = React.createClass({
   getInitialState: function() {
-    return {route: "", loggedIn: ""};
+    return {route: "", loggedIn: false};
   },
 
   componentDidMount: function() {
     UserStore.addListener(this._onChange);
-    this.setState({loggedIn: UserStore.currentUser()});
+    console.log(this.state.loggedIn);
   },
 
   _onChange: function() {
-    this.setState({loggedIn: UserStore.currentUser()});
+    // this.setState({loggedIn: UserStore.currentUser ()});
+    // debugger
   },
 
   goHome: function() {
@@ -27,11 +28,11 @@ var Navbar = React.createClass({
   userMenuToggle: function() {
     var farRightButton;
     if (this.state.loggedIn) {
-      farRightButton = (
+      console.log(this.state.loggedIn);
+      farRightButton =
         <div>
-          <NavbarItem id="user-dropdown-menu" actions={this.dropdownActions} text="User Icon"></NavbarItem>;
-        </div>
-        );
+          <NavbarItem id="user-dropdown-menu" actions={this.dropdownActions} text="User Icon"></NavbarItem>
+        </div>;
     } else {
       farRightButton = <LoginForm></LoginForm>;
     }
@@ -40,7 +41,7 @@ var Navbar = React.createClass({
 
   // TODO: ? A bunch of conditional logic?
   render: function() {
-    var alwaysPresentButton = (
+    var alwaysPresentHeaders = (
       <div>
         <NavbarItem id="logo" actions={this.goHome} text="Logo"></NavbarItem>
       </div>
@@ -48,7 +49,7 @@ var Navbar = React.createClass({
 
     return (
       <div className="nav-on-landing">
-        {alwaysPresentButton}
+        {alwaysPresentHeaders}
         {this.userMenuToggle()}
       </div>
     );

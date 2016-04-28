@@ -10,6 +10,9 @@ var IndexRoute = ReactRouter.IndexRoute;
 var hashHistory = ReactRouter.hashHistory;
 var Link = ReactRouter.Link;
 
+//Action (to populate session store)
+var UserActions = require('./actions/UserActions');
+
 //React Add-Ons
 var Modal = require("react-modal");
 
@@ -17,6 +20,9 @@ var Modal = require("react-modal");
 var FakeEmptyComp = require('./components/FakeEmptyComp');
 var LoginForm = require('./components/LoginForm');
 var Navbar = require('./components/Navbar/Navbar');
+
+// TODO
+UserActions.fetchCurrentUser();
 
 var App = React.createClass({
   render: function() {

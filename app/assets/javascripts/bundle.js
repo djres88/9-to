@@ -56,6 +56,9 @@
 	var hashHistory = ReactRouter.hashHistory;
 	var Link = ReactRouter.Link;
 	
+	//Action (to populate session store)
+	var UserActions = __webpack_require__(227);
+	
 	//React Add-Ons
 	var Modal = __webpack_require__(253);
 	
@@ -63,6 +66,9 @@
 	var FakeEmptyComp = __webpack_require__(225);
 	var LoginForm = __webpack_require__(226);
 	var Navbar = __webpack_require__(251);
+	
+	// TODO
+	UserActions.fetchCurrentUser();
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -25508,7 +25514,7 @@
 		displayName: "LoginForm",
 	
 		getInitialState: function () {
-			return { modalOpen: false, userErrors: "", username: "", password: "" };
+			return { modalOpen: false, userErrors: "", username: "", password: "", loggedIn: false };
 		},
 	
 		// Modal Functions
@@ -25540,11 +25546,21 @@
 			this.listener.remove();
 		},
 	
+		// _onChange: function() {
+		// 	var currentUser = UserStore.currentUser();
+		// 	console.log(currentUser);
+		// 	var errors = UserStore.errors();
+		// 	this.setState({currentUser: currentUser, userErrors: errors});
+		// },
+	
 		_onChange: function () {
-			var currentUser = UserStore.currentUser();
 			var errors = UserStore.errors();
-			console.log(errors);
-			this.setState({ currentUser: currentUser, userErrors: errors });
+			var loggedIn = false;
+			if (UserStore.currentUser()) {
+				loggedIn = true;
+			}
+	
+			this.setState({ userErrors: errors, loggedIn: loggedIn });
 		},
 	
 		errors: function () {
@@ -25580,15 +25596,17 @@
 		},
 	
 		form: function () {
-			if (this.state.currentUser) {
-				return;
-			}
+			// if (this.state.currentUser) {
+			// 	console.log(this.state.currentUser);
+			// 	return;
+			// };
+	
 			return React.createElement(
 				"form",
 				{ "class": "login-form", onSubmit: this.handleSubmit },
 				React.createElement(
 					"section",
-					null,
+					{ id: "form-inputs" },
 					React.createElement("input", { className: "form-box", type: "text",
 						placeholder: "Username",
 						value: this.state.username, onChange: this.updateUsername }),
@@ -25597,14 +25615,11 @@
 				),
 				React.createElement("br", null),
 				React.createElement("input", { id: "login-button", type: "Submit", value: "Log In", readOnly: "true" }),
-				React.createElement("hr", null),
-				React.createElement(
-					Link,
-					{ to: "/", className: "", onClick: this.signUpLink },
-					"Sign Up"
-				)
+				React.createElement("hr", null)
 			);
 		},
+	
+		guestLogin: function () {},
 	
 		render: function () {
 			//Modal Styles
@@ -25622,12 +25637,12 @@
 				content: {
 					position: 'fixed',
 					top: '250px',
-					left: '250px',
-					right: '250px',
+					left: '2em',
+					right: '2em',
 					bottom: '250px',
 					border: '1px solid #ccc',
 					// Whydis? TODO: see right margin
-					padding: '25px 25px 25px 25px',
+					padding: '25px 35px 25px 35px',
 					zIndex: 11
 				}
 			};
@@ -25640,7 +25655,17 @@
 					Modal,
 					{ isOpen: this.state.modalOpen, onRequestClose: this.closeModal, style: style },
 					this.form(),
-					this.errors()
+					this.errors(),
+					React.createElement(
+						"p",
+						null,
+						"Don't have an account?",
+						React.createElement(
+							Link,
+							{ to: "/", id: "sign-up-link", onClick: this.signUpLink },
+							" Sign Up"
+						)
+					)
 				)
 			);
 		}
@@ -25660,6 +25685,7 @@
 		fetchCurrentUser: function () {
 			UserApiUtil.fetchCurrentUser(UserActions.receiveCurrentUser, UserActions.handleError);
 		},
+	
 		signup: function (user) {
 			UserApiUtil.post({
 				url: "/api/user",
@@ -25668,6 +25694,7 @@
 				error: UserActions.handleError
 			});
 		},
+	
 		login: function (user) {
 			UserApiUtil.post({
 				url: "/api/session",
@@ -25676,17 +25703,19 @@
 				error: UserActions.handleError
 			});
 		},
-		guestLogin: function () {
-			UserActions.login({ username: "guest", password: "password" });
-		},
+		//
+		// guestLogin: function(){
+		// 	UserActions.login({username: "guest", password: "password"});
+		// },
+	
 		receiveCurrentUser: function (user) {
 			AppDispatcher.dispatch({
 				actionType: "LOGIN",
 				user: user
 			});
 		},
-		handleError: function (error) {
 	
+		handleError: function (error) {
 			AppDispatcher.dispatch({
 				actionType: "ERROR",
 				errors: JSON.parse(error.responseText)
@@ -25720,6 +25749,7 @@
 				error: options.error
 			});
 		},
+	
 		logout: function (success, error) {
 			$.ajax({
 				url: '/api/session',
@@ -25728,6 +25758,7 @@
 				error: error
 			});
 		},
+	
 		fetchCurrentUser: function (success, error) {
 			$.ajax({
 				url: '/api/session',
@@ -26070,6 +26101,7 @@
 	    case "LOGIN":
 	      UserStore.login(payload.user);
 	      UserStore.__emitChange();
+	      // debugger;
 	      break;
 	    case "LOGOUT":
 	      UserStore.logout();
@@ -26093,9 +26125,7 @@
 	};
 	
 	UserStore.currentUser = function () {
-	  if (_currentUser) {
-	    return $.extend({}, _currentUser);
-	  }
+	  return _currentUser;
 	};
 	
 	UserStore.setErrors = function (errors) {
@@ -32567,16 +32597,17 @@
 	  displayName: 'Navbar',
 	
 	  getInitialState: function () {
-	    return { route: "", loggedIn: "" };
+	    return { route: "", loggedIn: false };
 	  },
 	
 	  componentDidMount: function () {
 	    UserStore.addListener(this._onChange);
-	    this.setState({ loggedIn: UserStore.currentUser() });
+	    console.log(this.state.loggedIn);
 	  },
 	
 	  _onChange: function () {
-	    this.setState({ loggedIn: UserStore.currentUser() });
+	    // this.setState({loggedIn: UserStore.currentUser ()});
+	    // debugger
 	  },
 	
 	  goHome: function () {
@@ -32588,11 +32619,11 @@
 	  userMenuToggle: function () {
 	    var farRightButton;
 	    if (this.state.loggedIn) {
+	      console.log(this.state.loggedIn);
 	      farRightButton = React.createElement(
 	        'div',
 	        null,
-	        React.createElement(NavbarItem, { id: 'user-dropdown-menu', actions: this.dropdownActions, text: 'User Icon' }),
-	        ';'
+	        React.createElement(NavbarItem, { id: 'user-dropdown-menu', actions: this.dropdownActions, text: 'User Icon' })
 	      );
 	    } else {
 	      farRightButton = React.createElement(LoginForm, null);
@@ -32602,7 +32633,7 @@
 	
 	  // TODO: ? A bunch of conditional logic?
 	  render: function () {
-	    var alwaysPresentButton = React.createElement(
+	    var alwaysPresentHeaders = React.createElement(
 	      'div',
 	      null,
 	      React.createElement(NavbarItem, { id: 'logo', actions: this.goHome, text: 'Logo' })
@@ -32611,7 +32642,7 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'nav-on-landing' },
-	      alwaysPresentButton,
+	      alwaysPresentHeaders,
 	      this.userMenuToggle()
 	    );
 	  }

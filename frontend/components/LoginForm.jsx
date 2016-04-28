@@ -10,10 +10,9 @@ var SignUp = require("./SignupForm");
 //LoginForm Styles
 
 
-
 var LoginForm = React.createClass({
 	getInitialState: function(){
-		return({ modalOpen: false, userErrors: "", username: "", password: ""});
+		return({ modalOpen: false, userErrors: "", username: "", password: "", loggedIn: false});
 	},
 
 	// Modal Functions
@@ -45,11 +44,21 @@ var LoginForm = React.createClass({
 		this.listener.remove();
 	},
 
+	// _onChange: function() {
+	// 	var currentUser = UserStore.currentUser();
+	// 	console.log(currentUser);
+	// 	var errors = UserStore.errors();
+	// 	this.setState({currentUser: currentUser, userErrors: errors});
+	// },
+
 	_onChange: function() {
-		var currentUser = UserStore.currentUser();
 		var errors = UserStore.errors();
-		console.log(errors);
-		this.setState({currentUser: currentUser, userErrors: errors});
+		var loggedIn = false;
+		if (UserStore.currentUser()) {
+			loggedIn = true;
+		}
+
+		this.setState({userErrors: errors, loggedIn: loggedIn});
 	},
 
 	errors: function(){
@@ -81,26 +90,30 @@ var LoginForm = React.createClass({
 	},
 
 	form: function(){
-		if (this.state.currentUser) {
-			return;
-		}
-		return(
-				<form class="login-form" onSubmit={this.handleSubmit}>
-					<section>
-						<input className="form-box" type="text"
-							placeholder="Username"
-							value={this.state.username} onChange={this.updateUsername}/>
-						<br/>
-						<input className="form-box" type="password" placeholder="Password" value={this.state.password} onChange={this.updatePassword}/>
-					</section>
+		// if (this.state.currentUser) {
+		// 	console.log(this.state.currentUser);
+		// 	return;
+		// };
+
+		return (
+			<form class="login-form" onSubmit={this.handleSubmit}>
+				<section id="form-inputs">
+					<input className="form-box" type="text"
+						placeholder="Username"
+						value={this.state.username} onChange={this.updateUsername}/>
 					<br/>
-					<input id="login-button" type="Submit" value="Log In" readOnly="true"/>
-					<hr/>
-					<Link to="/" className="" onClick={this.signUpLink}>Sign Up</Link>
-				</form>
+					<input className="form-box" type="password" placeholder="Password" value={this.state.password} onChange={this.updatePassword}/>
+				</section>
+				<br/>
+				<input id="login-button" type="Submit" value="Log In" readOnly="true"/>
+				<hr/>
+			</form>
 		);
 	},
 
+	guestLogin: function() {
+
+	},
 
 	render: function(){
 		//Modal Styles
@@ -118,12 +131,12 @@ var LoginForm = React.createClass({
 		  content : {
 		    position        : 'fixed',
 		    top             : '250px',
-		    left            : '250px',
-		    right           : '250px',
+		    left            : '2em',
+		    right           : '2em',
 		    bottom          : '250px',
 		    border          : '1px solid #ccc',
 				// Whydis? TODO: see right margin
-		    padding         : '25px 25px 25px 25px',
+		    padding         : '25px 35px 25px 35px',
 		    zIndex					: 11
 		  }
 		};
@@ -131,10 +144,12 @@ var LoginForm = React.createClass({
 		return (
 			<div>
 				<NavbarItem id="login" actions={this.openModal} text="Login"></NavbarItem>
-
 				<Modal isOpen={this.state.modalOpen} onRequestClose={this.closeModal} style={style}>
 					{this.form()}
 					{this.errors()}
+					<p>Don't have an account?
+						<Link to="/" id="sign-up-link" onClick={this.signUpLink}> Sign Up</Link>
+					</p>
 				</Modal>
 			</div>
 		);

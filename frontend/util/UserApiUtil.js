@@ -10,6 +10,7 @@ module.exports = {
 			error: options.error
 		});
 	},
+
 	logout: function(success, error){
 		$.ajax({
 			url: '/api/session',
@@ -18,6 +19,7 @@ module.exports = {
 			error: error
 		});
 	},
+
 	fetchCurrentUser: function(success, error){
 		$.ajax({
 			url: '/api/session',
@@ -25,5 +27,5 @@ module.exports = {
 			success: success,
 			error: error
 		});
-	},
+	}
 };

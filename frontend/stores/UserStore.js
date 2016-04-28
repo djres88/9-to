@@ -10,6 +10,7 @@ UserStore.__onDispatch = function (payload) {
     case "LOGIN":
     	UserStore.login(payload.user);
       UserStore.__emitChange();
+      // debugger;
       break;
     case "LOGOUT":
     	UserStore.logout();
@@ -33,12 +34,10 @@ UserStore.logout = function(){
 };
 
 UserStore.currentUser = function(){
-  if (_currentUser) {
-  	return $.extend({}, _currentUser);
-  }
+  return _currentUser;
 };
 
-UserStore.setErrors = function(errors){
+UserStore.setErrors = function(errors) {
   _errors = errors;
 };
 
