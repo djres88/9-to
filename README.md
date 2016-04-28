@@ -66,25 +66,13 @@ progress. Put an x between the brackets for a checkmark: [x] -->
 
 ### Tues. 4/25
 
-#### Phase 1: Project Setup and User Accounts -- 2.5 Hours
 
-**Objective:** Create functioning project where users can create accounts and log in/out.
-- [x] New Project (9-to) w/ Core Gems
-  * gems: pry-rails, better_errors, binding_of_caller, bcrypt (for auth)
-- [x] Link up the app to Heroku
-- [ ] BONUS: point custom url to Heroku. Do this once everything else is finished.
-- [ ] `User` Model
-- [ ] Authentication
-- [ ] User Signup/Sign-In Pages (w/o Design)
-- [ ] Blank Landing Page @ Sign-In
-- [ ] Seed DB w/ Users
-
-#### Phase 2: Webpack and First Route -- 0.5 Hours
+#### Phase 1: Webpack and First Route -- 0.5 Hours
 **Objective:** Entry file renders into static_pages#root view.
-- [ ] Core node packages
+- [x] Core node packages
   * npm install webpack, react, react-dom, react-router, babel-core, babel-loader, babel-preset-react, flux
-- [ ] StaticPagesController, root.html, root to: "static_pages#root"
-- [ ] Frontend Folders (for Flux):
+- [x] StaticPagesController, root.html, root to: "static_pages#root"
+- [x] Frontend Folders (for Flux):
 ```
 frontend
   + actions
@@ -95,11 +83,27 @@ frontend
   + util
   9_to.jsx
 ```
-- [ ] Webpack Setup (config file)
-- [ ] Entry File Testing: `9-to.jsx`
-- [ ] Test that entry file content appears in root's `content` div.
+- [x] Webpack Setup (config file)
+- [x] Entry File Testing: `9-to.jsx`
+- [x] Test that entry file content appears in root's `content` div.
 
 ### Tues. 4/25 - Weds 4/26
+
+#### Phase 2: Project Setup and User Accounts -- 2.5 Hours
+
+**Objective:** Create functioning project where users can create accounts and log in/out.
+- [x] New Project (9-to) w/ Core Gems
+* gems: pry-rails, better_errors, binding_of_caller, bcrypt (for auth)
+- [x] Link up the app to Heroku
+- [ ] BONUS: point custom url to Heroku. Do this once everything else is finished.
+- [x] `User` Model
+- [ ] Authentication
+- [ ] User Signup/Sign-In Pages
+- [ ] Blank Landing Page @ Sign-In
+- [ ] Seed DB w/ Users
+- [ ] Navbar
+
+### Thurs. 4/27 - Fri. 4/28
 
 #### Phase 3: Workspace & Web API/Flux Setup -- 14 Hours
 
@@ -123,23 +127,24 @@ frontend
 - [ ] WorkspaceIndexItem component
 - [ ] Add Workspace paths to React Router
 
-##### C. Basic Styling
+##### C. Search Store/CRUD
+- [ ] Create `Search` component
+- [ ] Search Store
+- [ ] Workspaces listen to Search Store
+
+##### D. Basic Styling
 - [ ] Position Workspaces on browse page (just get them to show up in a div of the right size)
 
-### Thurs. 4/27 - Fri. 4/28
 
-#### Phase 4: `Search` & `Map` Components -- 16 Hours
+###  Fri. 4/28
+
+#### Phase 4: `Map` Component -- 16 Hours
 **Objective:** Can view/search for listings through the user interface.
-##### A) Search Form
-- [ ] Create `Search` component
 
-##### B) Search/Map Combo
+##### A) Search/Map Combo
 - [ ] Create `Map` component
 - [ ] Review google maps documentation; need API key
 - [ ] Render Map as child of `Search`
-
-##### C) Flux loop for both
-- [ ] searchStore(s) --> Dispatcher --> Actions --> API
 
 ### Sat. 4/29
 
@@ -159,6 +164,7 @@ frontend
 #### Bonus Features.
 - [ ] User Favorites
 - [ ] Workspace Reviews
-- [ ] Adding/removing listings (as owner)
+- [ ] HOST FEATURES: dding/removing listings
 - [ ] Listing Ratings
+- [ ] Messaging
 **Objective:**
