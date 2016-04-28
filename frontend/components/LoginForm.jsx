@@ -12,7 +12,7 @@ var SignUp = require("./SignupForm");
 
 var LoginForm = React.createClass({
 	getInitialState: function(){
-		return({ modalOpen: false, userErrors: "", username: "", password: "", loggedIn: false});
+		return({ modalOpen: false, userErrors: "", username: "", password: "", loggedIn: false, formType: "Login"});
 	},
 
 	// Modal Functions
@@ -35,6 +35,7 @@ var LoginForm = React.createClass({
 			username: this.state.username,
 			password: this.state.password
 		});
+		this.setState({username: "", password: ""});
 	},
 
 	componentDidMount: function() {
@@ -58,8 +59,9 @@ var LoginForm = React.createClass({
 		if (UserStore.currentUser()) {
 			loggedIn = true;
 		}
-		console.log(UserStore.currentUser());
-		console.log(loggedIn);
+		debugger;
+		// console.log(UserStore.currentUser());
+		// console.log(loggedIn);
 		this.setState({userErrors: errors, loggedIn: loggedIn});
 	},
 
@@ -90,6 +92,23 @@ var LoginForm = React.createClass({
 	signUpLink: function() {
 		return <SignUp />;
 	},
+
+	// formType: function() {
+	// 	var formType = (formType ? formType : "Login");
+	// 	return formType;
+	// },
+	//
+	// formHeader: function() {
+	// 	var type = formTy
+	// 	if (form === "Login") {
+	// 		this.setState({formType: "SignUp"});
+	// 		return "Sign Up";
+	// 	} else {
+	// 		this.setState({formType: "Login"});
+	// 		return "Welcome Back";
+	// 	}
+	// },
+	// <h1>{this.formHeader()}</h1>
 
 	form: function(){
 		// if (this.state.currentUser) {
@@ -132,10 +151,10 @@ var LoginForm = React.createClass({
 
 		  content : {
 		    position        : 'fixed',
-		    top             : '250px',
-		    left            : '2em',
-		    right           : '2em',
-		    bottom          : '250px',
+		    top             : '120px',
+		    left            : '400px',
+		    right           : '400px',
+		    bottom          : '200px',
 		    border          : '1px solid #ccc',
 				// Whydis? TODO: see right margin
 		    padding         : '25px 35px 25px 35px',

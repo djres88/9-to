@@ -31,7 +31,7 @@ class Api::SessionsController < ApplicationController
     if current_user
       render json: { username: @user.username }
     else
-      @errors = nil
+      @errors = "No current user"
       render "api/partials/_errors"
     end
   end

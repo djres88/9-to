@@ -24,8 +24,13 @@ module.exports = {
 		$.ajax({
 			url: '/api/session',
 			method: 'get',
-			success: success,
-			error: error
+			success: function(obj) {
+				if (obj.errors) {
+					error(obj);
+				} else {
+					success(obj);
+				}
+			},
 		});
 	}
 };

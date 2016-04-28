@@ -11,12 +11,10 @@ var Navbar = React.createClass({
 
   componentDidMount: function() {
     UserStore.addListener(this._onChange);
-    console.log(this.state.loggedIn);
   },
 
   _onChange: function() {
-    // this.setState({loggedIn: UserStore.currentUser ()});
-    // debugger
+    this.setState({loggedIn: UserStore.currentUser ()});
   },
 
   goHome: function() {
@@ -28,7 +26,6 @@ var Navbar = React.createClass({
   userMenuToggle: function() {
     var farRightButton;
     if (this.state.loggedIn) {
-      console.log(this.state.loggedIn);
       farRightButton =
         <div>
           <NavbarItem id="user-dropdown-menu" actions={this.dropdownActions} text="User Icon"></NavbarItem>
