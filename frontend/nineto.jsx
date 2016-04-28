@@ -35,7 +35,7 @@ var App = React.createClass({
     return (
       <div>
         <div id="above-fold-background">
-          <header><Navbar /></header>
+          <Navbar />
         </div>
         {this.props.children}
       </div>

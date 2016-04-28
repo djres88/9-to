@@ -86,11 +86,7 @@
 	      React.createElement(
 	        'div',
 	        { id: 'above-fold-background' },
-	        React.createElement(
-	          'header',
-	          null,
-	          React.createElement(Navbar, null)
-	        )
+	        React.createElement(Navbar, null)
 	      ),
 	      this.props.children
 	    );
@@ -34661,7 +34657,7 @@
 	  render: function () {
 	    return React.createElement(
 	      "a",
-	      { id: this.props.id, className: "navbar-items", onClick: this.props.actions },
+	      { id: this.props.id, className: "navbar-items", onClick: this.props.actions, onMouseOver: this.props.mouseover, onMouseLeave: this.props.mouseleave },
 	      this.props.text
 	    );
 	  }
@@ -34683,7 +34679,7 @@
 	  displayName: 'Navbar',
 	
 	  getInitialState: function () {
-	    return { route: "", loggedIn: false };
+	    return { route: "", loggedIn: false, userMenu: "hide" };
 	  },
 	
 	  componentDidMount: function () {
@@ -34700,14 +34696,39 @@
 	    this.setState({ route: window.location.hash });
 	  },
 	
-	  userMenuToggle: function () {
+	  showUserMenu: function () {
+	    this.setState({ userMenu: "show" });
+	  },
+	
+	  hideUserMenu: function () {
+	    this.setState({ userMenu: "hide" });
+	  },
+	
+	  userMenuDisplay: function () {
+	    if (!this.state.userMenu) {
+	      return;
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      { 'class': 'user-menu' },
+	      React.createElement(
+	        'li',
+	        null,
+	        'Thing'
+	      ),
+	      React.createElement(
+	        'li',
+	        null,
+	        'Thing2'
+	      )
+	    );
+	  },
+	
+	  userLoggedIn: function () {
 	    var farRightButton;
 	    if (this.state.loggedIn) {
-	      farRightButton = React.createElement(
-	        'div',
-	        null,
-	        React.createElement(NavbarItem, { id: 'user-dropdown-menu', actions: this.dropdownActions, text: 'User Icon' })
-	      );
+	      farRightButton = React.createElement(NavbarItem, { id: 'user-dropdown-menu', mouseover: this.showUserMenu, mouseleave: this.hideUserMenu, text: 'User Icon' });
 	    } else {
 	      farRightButton = React.createElement(LoginForm, null);
 	    }
@@ -34717,18 +34738,13 @@
 	  addSpace: function () {},
 	
 	  render: function () {
-	    var alwaysPresentHeaders = React.createElement(
-	      'div',
-	      null,
-	      React.createElement(NavbarItem, { id: 'logo', actions: this.goHome, text: 'Logo' }),
-	      React.createElement(NavbarItem, { id: 'list-your-space', actions: this.addSpace, text: 'List Your Space' })
-	    );
-	
 	    return React.createElement(
 	      'div',
 	      { className: 'nav-on-landing' },
-	      alwaysPresentHeaders,
-	      this.userMenuToggle()
+	      React.createElement(NavbarItem, { id: 'nav-logo', className: 'logo', actions: this.goHome, text: 'Logo' }),
+	      React.createElement(NavbarItem, { id: 'list-your-space', actions: this.addSpace, text: 'List Your Space' }),
+	      this.userLoggedIn(),
+	      this.userMenuDisplay()
 	    );
 	  }
 	});

@@ -6,7 +6,7 @@ var LoginForm = require('../LoginForm');
 
 var Navbar = React.createClass({
   getInitialState: function() {
-    return {route: "", loggedIn: false};
+    return {route: "", loggedIn: false, userMenu: "hide"};
   },
 
   componentDidMount: function() {
@@ -23,13 +23,32 @@ var Navbar = React.createClass({
     this.setState({route: window.location.hash});
   },
 
-  userMenuToggle: function() {
+  showUserMenu: function() {
+    this.setState({userMenu: "show"});
+  },
+
+  hideUserMenu: function() {
+    this.setState({userMenu: "hide"});
+  },
+
+  userMenuDisplay: function() {
+    if (!this.state.userMenu) {
+      return;
+    }
+
+    return (
+      <div class="user-menu">
+        <li>Thing</li>
+        <li>Thing2</li>
+      </div>
+    );
+  },
+
+  userLoggedIn: function() {
     var farRightButton;
     if (this.state.loggedIn) {
       farRightButton =
-        <div>
-          <NavbarItem id="user-dropdown-menu" actions={this.dropdownActions} text="User Icon"></NavbarItem>
-        </div>;
+          <NavbarItem id="user-dropdown-menu" mouseover={this.showUserMenu} mouseleave={this.hideUserMenu} text="User Icon"></NavbarItem>;
     } else {
       farRightButton = <LoginForm></LoginForm>;
     }
@@ -41,17 +60,12 @@ var Navbar = React.createClass({
   },
 
   render: function() {
-    var alwaysPresentHeaders = (
-      <div>
-        <NavbarItem id="logo" actions={this.goHome} text="Logo"></NavbarItem>
-        <NavbarItem id="list-your-space" actions={this.addSpace} text="List Your Space"></NavbarItem>
-      </div>
-    );
-
     return (
       <div className="nav-on-landing">
-        {alwaysPresentHeaders}
-        {this.userMenuToggle()}
+        <NavbarItem id="nav-logo" className="logo" actions={this.goHome} text="Logo"></NavbarItem>
+        <NavbarItem id="list-your-space" actions={this.addSpace} text="List Your Space"></NavbarItem>
+        {this.userLoggedIn()}
+        {this.userMenuDisplay()}
       </div>
     );
   }

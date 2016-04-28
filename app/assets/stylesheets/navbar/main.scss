@@ -1,45 +1,37 @@
 #above-fold-background {
   height: 600px;
   width: 100%;
-  background-color: black;
-  padding: 0px;
-  margin: 0px;
+  background-color: gray;
 }
 
 .nav-on-landing {
   z-index:1000;
-  background: #eee;
-  height: 60px;
   width: 100%;
-  justify-content: space-between;
-  position: fixed;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .navbar-items {
   font-weight: 400;
   background: none;
-  color: gray;
-  padding: 2rem;
+  color: white;
   max-width: 150px;
-  padding-top: 0;
-
-
-  margin: 2rem;
-  margin-top: 0;
-  font-size: 1.2rem;
-  float: right;
-  position: relative;
-  // border: 3px solid white;
+  text-align: center;
+  padding: 10px 5px;
+  margin-top: 10px;
+  font-size: 1rem;
   width: 20%;
-
   max-height: 60px;
-  justify-content: space-between;
 }
 
-#logo, #list-your-space {
-  float: left;
+#list-your-space {
+  border: 2px solid white;
 }
 
-#login, #user-dropdown-menu {
-  float: right;
+#nav-logo {
+  margin-right: auto;
+}
+
+#user-dropdown-menu {
+
 }
