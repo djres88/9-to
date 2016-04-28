@@ -1,36 +1,62 @@
-var AppDispatcher = require('../dispatcher/Dispatcher');
+var ServerActions = require('../actions/ServerActions');
 
 module.exports = {
-	post: function(options){
-		$.ajax({
-			url: options.url,
-			type: "post",
-			data: {user: options.user},
-			success: options.success,
-			error: options.error
-		});
-	},
-
-	logout: function(success, error){
-		$.ajax({
-			url: '/api/session',
-			method: 'delete',
-			success: success,
-			error: error
-		});
-	},
-
-	fetchCurrentUser: function(success, error){
+	fetchCurrentUser: function(){
 		$.ajax({
 			url: '/api/session',
 			method: 'get',
-			success: function(obj) {
-				if (obj.errors) {
-					error(obj);
-				} else {
-					success(obj);
+			dataType: 'json',
+			success: function(data) {
+				console.log(data);
+				if (!data.errors) {
+					// debugger;
+					ServerActions.receiveCurrentUser(data);
 				}
 			},
+		});
+	},
+
+	signup: function(data){
+		$.ajax({
+			url: "/api/user",
+			method: "post",
+			data: {user: data},
+			dataType: 'json',
+			success: function(data) {
+				ServerActions.receiveCurrentUser(data);
+			},
+			error: function(data) {
+				ServerActions.handleError(data);
+			}
+		});
+	},
+
+	login: function(data){
+		$.ajax({
+			url: "/api/session",
+			method: "post",
+			data: {user: data},
+			dataType: 'json',
+			success: function(data) {
+				ServerActions.receiveCurrentUser(data);
+			},
+			error: function(data) {
+				ServerActions.handleError(data);
+			}
+		});
+	},
+
+	logout: function(){
+		$.ajax({
+			url: '/api/session',
+			method: 'delete',
+			dataType: 'json',
+			success: function() {
+				ServerActions.removeCurrentUser();
+			},
+			error: function(data) {
+				ServerActions.handleError(data);
+			}
 		});
 	}
 };

@@ -6,36 +6,12 @@ var NavbarItem = require("./Navbar/NavbarItem");
 var Modal = require("react-modal");
 var ReactRouter = require("react-router");
 var Link = ReactRouter.Link;
-var SignUp = require("./SignupForm");
 //LoginForm Styles
 
 
 var LoginForm = React.createClass({
 	getInitialState: function(){
-		return({ modalOpen: false, userErrors: "", username: "", password: "", loggedIn: false, formType: "Login"});
-	},
-
-	// Modal Functions
-	closeModal: function(){
-		this.setState({ modalOpen: false });
-	},
-	openModal: function(){
-		this.setState({ modalOpen: true });
-	},
-
-	// Form Functions
-	setForm: function(e){
-		e.preventDefault();
-		this.setState({form: e.currentTarget.value});
-	},
-
-	handleSubmit: function(e){
-		e.preventDefault();
-		UserActions.login({
-			username: this.state.username,
-			password: this.state.password
-		});
-		this.setState({username: "", password: ""});
+		return({ modalOpen: false, userErrors: "", username: "", password: "", formType: "login"});
 	},
 
 	componentDidMount: function() {
@@ -46,23 +22,57 @@ var LoginForm = React.createClass({
 		this.listener.remove();
 	},
 
-	// _onChange: function() {
-	// 	var currentUser = UserStore.currentUser();
-	// 	console.log(currentUser);
-	// 	var errors = UserStore.errors();
-	// 	this.setState({currentUser: currentUser, userErrors: errors});
-	// },
-
 	_onChange: function() {
 		var errors = UserStore.errors();
 		var loggedIn = false;
 		if (UserStore.currentUser()) {
 			loggedIn = true;
 		}
-		debugger;
-		// console.log(UserStore.currentUser());
-		// console.log(loggedIn);
-		this.setState({userErrors: errors, loggedIn: loggedIn});
+		this.setState({userErrors: errors});
+	},
+
+	// Modal Functions
+	closeModal: function(){
+		this.setState({ modalOpen: false, formType: "login"});
+	},
+	openModal: function(){
+		this.setState({ modalOpen: true });
+	},
+
+	// Login Functions
+	credentials: function() {
+		return {
+			username: this.state.username,
+			password: this.state.password
+		};
+	},
+
+	loginUser: function() {
+		UserActions.login(this.credentials());
+	},
+
+	signupUser: function() {
+		UserActions.signup(this.credentials());
+	},
+
+	guestLogin: function() {
+		UserActions.guestLogin();
+	},
+
+	// Form Functions
+	setForm: function(e){
+		e.preventDefault();
+		this.setState({form: e.currentTarget.value});
+	},
+
+	handleSubmit: function(e) {
+		e.preventDefault();
+		if (this.state.formType === "login") {
+			this.loginUser();
+		} else {
+			this.signupUser();
+		}
+		this.setState({username: "", password: ""});
 	},
 
 	errors: function(){
@@ -71,11 +81,9 @@ var LoginForm = React.createClass({
 		}
 		var self = this;
 		return (<ul>
-			{
-				Object.keys(this.state.userErrors).map(function(key, i){
-					return (<li className="user-errors" key={i}>{self.state.userErrors[key]}</li>);
-				})
-			}
+			{Object.keys(this.state.userErrors).map(function(key, i){
+				return (<li className="user-errors" key={i}>{self.state.userErrors[key]}</li>);
+			})}
 		</ul>);
 	},
 
@@ -90,50 +98,78 @@ var LoginForm = React.createClass({
   },
 
 	signUpLink: function() {
-		return <SignUp />;
+		this.setState({formType: "signup", username: "", password: ""});
 	},
 
-	// formType: function() {
-	// 	var formType = (formType ? formType : "Login");
-	// 	return formType;
-	// },
-	//
-	// formHeader: function() {
-	// 	var type = formTy
-	// 	if (form === "Login") {
-	// 		this.setState({formType: "SignUp"});
-	// 		return "Sign Up";
-	// 	} else {
-	// 		this.setState({formType: "Login"});
-	// 		return "Welcome Back";
-	// 	}
-	// },
-	// <h1>{this.formHeader()}</h1>
+	loginLink: function() {
+		this.setState({formType: "login", username: "", password: ""});
+	},
 
-	form: function(){
-		// if (this.state.currentUser) {
-		// 	console.log(this.state.currentUser);
-		// 	return;
-		// };
-
+	baseFormElements: function() {
 		return (
-			<form id="login-form" onSubmit={this.handleSubmit}>
-				<section id="form-inputs">
-					<input className="form-box" type="text"
-						placeholder="Username"
-						value={this.state.username} onChange={this.updateUsername}/>
-					<br/>
-					<input className="form-box" type="password" placeholder="Password" value={this.state.password} onChange={this.updatePassword}/>
-				</section>
-				<br/>
-				<input id="login-button" type="Submit" value="Log In" readOnly="true"/>
-				<hr/>
-			</form>
+		<section className="form-inputs">
+			<input
+				className="form-box"
+				type="text"
+				placeholder="Username"
+				value={this.state.username}
+				onChange={this.updateUsername}/>
+			<br/>
+			<input
+				className="form-box"
+				type="password" placeholder="Password"
+				value={this.state.password}
+				onChange={this.updatePassword}/>
+			<br/>
+		</section>
 		);
 	},
 
-	guestLogin: function() {
+	signupFormElements: function() {
+		return {
+			formId: "signup-form",
+			header: "Get to Work!",
+			buttonId: "signup-button",
+			buttonValue: "Sign Up",
+			toggleFormElement:
+			<p>Already signed up?
+				<Link to="/" id="login-link" onClick={this.loginLink}> Log In</Link>
+			</p>
+		};
+	},
 
+	loginFormElements: function() {
+		return {
+			formId: "login-form",
+			header: "Welcome Back!",
+			buttonId: "login-button",
+			buttonValue: "Log In",
+			toggleFormElement:
+			<p>Don't have an account?
+				<Link to="/" id="sign-up-link" onClick={this.signUpLink}> Sign Up</Link>
+			</p>
+		};
+	},
+
+	form: function(){
+		var el;
+		if (this.state.formType === "login") {
+			el = this.loginFormElements();
+		} else {
+			el = this.signupFormElements();
+		}
+
+		return (
+			<form id={el.formId} onSubmit={this.handleSubmit}>
+				<h1>{el.header}</h1>
+				{this.errors()}
+				{this.baseFormElements()}
+				<input className="form-buttons" id={el.buttonId} type="Submit" value={el.buttonValue} readOnly="true"/>
+				<button className="form-buttons" id="guest-login" onClick={this.guestLogin}>Guest Login</button>
+				<hr/>
+				{el.toggleFormElement}
+			</form>
+		);
 	},
 
 	render: function(){
@@ -167,10 +203,6 @@ var LoginForm = React.createClass({
 				<NavbarItem id="login" actions={this.openModal} text="Login"></NavbarItem>
 				<Modal isOpen={this.state.modalOpen} onRequestClose={this.closeModal} style={style}>
 					{this.form()}
-					{this.errors()}
-					<p>Don't have an account?
-						<Link to="/" id="sign-up-link" onClick={this.signUpLink}> Sign Up</Link>
-					</p>
 				</Modal>
 			</div>
 		);

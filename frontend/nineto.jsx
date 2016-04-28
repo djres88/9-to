@@ -12,7 +12,7 @@ var Link = ReactRouter.Link;
 
 //Action (to populate session store)
 var UserActions = require('./actions/UserActions');
-
+var UserStore = require('./stores/UserStore');
 //React Add-Ons
 var Modal = require("react-modal");
 
@@ -22,9 +22,15 @@ var LoginForm = require('./components/LoginForm');
 var Navbar = require('./components/Navbar/Navbar');
 
 // TODO
-UserActions.fetchCurrentUser();
+
+function preloadUser() {
+  UserActions.fetchCurrentUser();
+}
 
 var App = React.createClass({
+  componentDidMount: function() {
+    preloadUser();
+  },
   render: function() {
     return (
       <div>
@@ -39,6 +45,8 @@ var App = React.createClass({
 
 // For testing
 window.hash = hashHistory;
+window.User = UserStore;
+window.UserApiUtil = require('./util/UserApiUtil');
 
 var Router = (
   <Router history={hashHistory}>

@@ -12,18 +12,26 @@
   font-size: 18px;
 }
 
-#login-button {
+.form-buttons {
   width: 100%;
   margin-top: 10px;
   min-height: 65px;
 
   font-size: 18px;
   font-weight: 300;
-  background-color: red;
-  border: 5px solid red;
   color: white;
 }
 
-#sign-up-link {
+#login-button, #signup-button {
+  background-color: red;
+  border: 5px solid red;
+}
+
+#guest-login {
+  background-color: green;
+  border: 5px solid green;
+}
+
+#sign-up-link, #login-link {
   float: right;
 }

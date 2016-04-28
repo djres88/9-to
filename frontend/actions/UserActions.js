@@ -3,52 +3,24 @@ var UserStore = require('../stores/UserStore');
 var AppDispatcher = require('../dispatcher/Dispatcher');
 
 var UserActions = {
-	fetchCurrentUser: function(){
-		UserApiUtil.fetchCurrentUser(UserActions.receiveCurrentUser, UserActions.handleError);
+	fetchCurrentUser: function() {
+		UserApiUtil.fetchCurrentUser();
 	},
 
 	signup: function(user){
-		UserApiUtil.post({
-			url: "/api/user",
-			user: user,
-			success: UserActions.receiveCurrentUser,
-			error: UserActions.handleError
-		});
+		UserApiUtil.signup(data);
 	},
 
 	login: function(user){
-		UserApiUtil.post({
-			url: "/api/session",
-			user: user,
-			success: UserActions.receiveCurrentUser,
-			error: UserActions.handleError
-		});
-	},
-	//
-	// guestLogin: function(){
-	// 	UserActions.login({username: "guest", password: "password"});
-	// },
-
-	receiveCurrentUser: function(user){
-		AppDispatcher.dispatch({
-			actionType: "LOGIN",
-			user: user
-		});
+		UserApiUtil.login(user);
 	},
 
-	handleError: function(error) {
-		AppDispatcher.dispatch({
-			actionType: "ERROR",
-			errors: JSON.parse(error.responseText)
-		});
+	guestLogin: function(){
+		UserApiUtil.login({username: "guest", password: "guestlogin"});
 	},
-	removeCurrentUser: function(){
-		AppDispatcher.dispatch({
-			actionType: "LOGOUT",
-		});
-	},
+
 	logout: function(){
-		UserApiUtil.logout(UserActions.removeCurrentUser, UserActions.handleError);
+		UserApiUtil.logout();
 	}
 };
 

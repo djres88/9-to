@@ -7,10 +7,9 @@ class Api::UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
-      session[:session_token] = @user.reset_session_token!
+      session[:session_token] = @user.reset_token!
       render "api/users/show"
     else
-      # Render an error partial?
       @errors = @user.errors.full_messages
       render "api/partials/_errors", status: 422
     end
