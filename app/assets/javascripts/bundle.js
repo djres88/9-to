@@ -25486,7 +25486,7 @@
 
 	var UserApiUtil = __webpack_require__(226);
 	var UserStore = __webpack_require__(232);
-	var AppDispatcher = __webpack_require__(227);
+	var AppDispatcher = __webpack_require__(228);
 	
 	var UserActions = {
 		fetchCurrentUser: function () {
@@ -25516,7 +25516,7 @@
 /* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ServerActions = __webpack_require__(231);
+	var ServerActions = __webpack_require__(227);
 	
 	module.exports = {
 		fetchCurrentUser: function () {
@@ -25583,12 +25583,52 @@
 /* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(228).Dispatcher;
+	var AppDispatcher = __webpack_require__(228);
+	
+	module.exports = {
+	  receiveAll: function (workspaces) {
+	    AppDispatcher.dispatch({
+	      actionType: "WORKSPACES_RECEIVED",
+	      workspaces: workspaces
+	    });
+	  },
+	
+	  receiveSingleWorkspace: function (workspace) {
+	    AppDispatcher.dispatch({
+	      actionType: "WORKSPACE_RECEIVED",
+	      workspace: workspace
+	    });
+	  },
+	  receiveCurrentUser: function (user) {
+	    AppDispatcher.dispatch({
+	      actionType: "LOGIN",
+	      user: user
+	    });
+	  },
+	  removeCurrentUser: function () {
+	    AppDispatcher.dispatch({
+	      actionType: "LOGOUT"
+	    });
+	  },
+	
+	  handleError: function (errors) {
+	    AppDispatcher.dispatch({
+	      actionType: "ERROR",
+	      errors: errors
+	    });
+	  }
+	};
+
+/***/ },
+/* 228 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(229).Dispatcher;
 	
 	module.exports = new Dispatcher();
 
 /***/ },
-/* 228 */
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25600,11 +25640,11 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Dispatcher = __webpack_require__(229);
+	module.exports.Dispatcher = __webpack_require__(230);
 
 
 /***/ },
-/* 229 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25626,7 +25666,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(230);
+	var invariant = __webpack_require__(231);
 	
 	var _prefix = 'ID_';
 	
@@ -25841,7 +25881,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 230 */
+/* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25896,50 +25936,10 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 231 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(227);
-	
-	module.exports = {
-	  receiveAll: function (workspaces) {
-	    AppDispatcher.dispatch({
-	      actionType: "WORKSPACES_RECEIVED",
-	      workspaces: workspaces
-	    });
-	  },
-	
-	  receiveSingleWorkspace: function (workspace) {
-	    AppDispatcher.dispatch({
-	      actionType: "WORKSPACE_RECEIVED",
-	      workspace: workspace
-	    });
-	  },
-	  receiveCurrentUser: function (user) {
-	    AppDispatcher.dispatch({
-	      actionType: "LOGIN",
-	      user: user
-	    });
-	  },
-	  removeCurrentUser: function () {
-	    AppDispatcher.dispatch({
-	      actionType: "LOGOUT"
-	    });
-	  },
-	
-	  handleError: function (errors) {
-	    AppDispatcher.dispatch({
-	      actionType: "ERROR",
-	      errors: errors
-	    });
-	  }
-	};
-
-/***/ },
 /* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var AppDispatcher = __webpack_require__(227);
+	var AppDispatcher = __webpack_require__(228);
 	var Store = __webpack_require__(233).Store;
 	
 	var UserStore = new Store(AppDispatcher);
@@ -26034,7 +26034,7 @@
 	
 	var FluxStoreGroup = __webpack_require__(235);
 	
-	var invariant = __webpack_require__(230);
+	var invariant = __webpack_require__(231);
 	var shallowEqual = __webpack_require__(236);
 	
 	var DEFAULT_OPTIONS = {
@@ -26212,7 +26212,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(230);
+	var invariant = __webpack_require__(231);
 	
 	/**
 	 * FluxStoreGroup allows you to execute a callback on every dispatch after
@@ -26353,7 +26353,7 @@
 	var FluxReduceStore = __webpack_require__(238);
 	var Immutable = __webpack_require__(248);
 	
-	var invariant = __webpack_require__(230);
+	var invariant = __webpack_require__(231);
 	
 	/**
 	 * This is a simple store. It allows caching key value pairs. An implementation
@@ -26503,7 +26503,7 @@
 	var FluxStore = __webpack_require__(239);
 	
 	var abstractMethod = __webpack_require__(247);
-	var invariant = __webpack_require__(230);
+	var invariant = __webpack_require__(231);
 	
 	var FluxReduceStore = (function (_FluxStore) {
 	  _inherits(FluxReduceStore, _FluxStore);
@@ -26609,7 +26609,7 @@
 	
 	var EventEmitter = _require.EventEmitter;
 	
-	var invariant = __webpack_require__(230);
+	var invariant = __webpack_require__(231);
 	
 	/**
 	 * This class should be extended by the stores in your application, like so:
@@ -27316,7 +27316,7 @@
 	
 	'use strict';
 	
-	var invariant = __webpack_require__(230);
+	var invariant = __webpack_require__(231);
 	
 	function abstractMethod(className, methodName) {
 	   true ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Subclasses of %s must override %s() with their own implementation.', className, methodName) : invariant(false) : undefined;
@@ -32329,7 +32329,7 @@
 	
 	var FluxStoreGroup = __webpack_require__(235);
 	
-	var invariant = __webpack_require__(230);
+	var invariant = __webpack_require__(231);
 	
 	/**
 	 * `FluxContainer` should be preferred over this mixin, but it requires using
