@@ -34618,12 +34618,12 @@
 				},
 	
 				content: {
-					position: 'fixed',
+					position: 'relative',
 					top: '120px',
-					left: '400px',
-					right: '400px',
-					bottom: '200px',
+					margin: 'auto auto',
+					bottom: '120px',
 					border: '1px solid #ccc',
+					width: '500px',
 					// Whydis? TODO: see right margin
 					padding: '25px 35px 25px 35px',
 					zIndex: 11
@@ -34650,15 +34650,62 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var UserStore = __webpack_require__(232);
+	var UserActions = __webpack_require__(225);
 	
 	var NavbarItem = React.createClass({
-	  displayName: "NavbarItem",
+	  displayName: 'NavbarItem',
+	
+	  logout: function () {
+	    UserActions.logout();
+	  },
+	
+	  menuDropdown: function () {
+	    if (!this.props.sendClass) {
+	      return;
+	    } else {
+	      var username = UserStore.currentUser().username;
+	      return React.createElement(
+	        'ul',
+	        { className: 'user-menu' },
+	        React.createElement(
+	          'li',
+	          { id: 'user-menu-username' },
+	          username
+	        ),
+	        React.createElement('hr', null),
+	        React.createElement(
+	          'li',
+	          null,
+	          'My Account'
+	        ),
+	        React.createElement('hr', null),
+	        React.createElement(
+	          'li',
+	          { onClick: this.logout },
+	          'Logout'
+	        )
+	      );
+	    }
+	  },
+	
+	  getClassName: function () {
+	    if (!this.props.sendClass) {
+	      return "navbar-items";
+	    } else {
+	      return this.props.sendClass;
+	    }
+	  },
 	
 	  render: function () {
 	    return React.createElement(
-	      "a",
-	      { id: this.props.id, className: "navbar-items", onClick: this.props.actions, onMouseOver: this.props.mouseover, onMouseLeave: this.props.mouseleave },
-	      this.props.text
+	      'div',
+	      {
+	        id: this.props.id,
+	        className: this.getClassName(),
+	        onClick: this.props.actions },
+	      this.props.text,
+	      this.menuDropdown()
 	    );
 	  }
 	});
@@ -34704,35 +34751,14 @@
 	    this.setState({ userMenu: "hide" });
 	  },
 	
-	  userMenuDisplay: function () {
-	    if (!this.state.userMenu) {
-	      return;
-	    }
-	
-	    return React.createElement(
-	      'div',
-	      { 'class': 'user-menu' },
-	      React.createElement(
-	        'li',
-	        null,
-	        'Thing'
-	      ),
-	      React.createElement(
-	        'li',
-	        null,
-	        'Thing2'
-	      )
-	    );
-	  },
-	
-	  userLoggedIn: function () {
-	    var farRightButton;
+	  toggleLoginIcon: function () {
+	    var loginIcon;
 	    if (this.state.loggedIn) {
-	      farRightButton = React.createElement(NavbarItem, { id: 'user-dropdown-menu', mouseover: this.showUserMenu, mouseleave: this.hideUserMenu, text: 'User Icon' });
+	      loginIcon = React.createElement(NavbarItem, { sendClass: 'navbar-items dropdown', id: 'user-dropdown-menu', text: 'User Icon' });
 	    } else {
-	      farRightButton = React.createElement(LoginForm, null);
+	      loginIcon = React.createElement(LoginForm, null);
 	    }
-	    return farRightButton;
+	    return loginIcon;
 	  },
 	
 	  addSpace: function () {},
@@ -34743,8 +34769,7 @@
 	      { className: 'nav-on-landing' },
 	      React.createElement(NavbarItem, { id: 'nav-logo', className: 'logo', actions: this.goHome, text: 'Logo' }),
 	      React.createElement(NavbarItem, { id: 'list-your-space', actions: this.addSpace, text: 'List Your Space' }),
-	      this.userLoggedIn(),
-	      this.userMenuDisplay()
+	      this.toggleLoginIcon()
 	    );
 	  }
 	});

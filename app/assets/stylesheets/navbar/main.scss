@@ -1,7 +1,7 @@
 #above-fold-background {
-  height: 600px;
   width: 100%;
-  background-color: gray;
+  height: 750px;
+  background:url('./main-background.jpg');
 }
 
 .nav-on-landing {
@@ -18,20 +18,32 @@
   max-width: 150px;
   text-align: center;
   padding: 10px 5px;
-  margin-top: 10px;
+  margin: 10px 20px;
   font-size: 1rem;
   width: 20%;
-  max-height: 60px;
+  height: 18px;
 }
 
 #list-your-space {
+  margin-top: 8px;
   border: 2px solid white;
+  cursor: pointer;
 }
 
 #nav-logo {
   margin-right: auto;
+  cursor: pointer;
 }
 
-#user-dropdown-menu {
+.dropdown {
+  position: relative;
+  cursor: pointer;
+}
 
+
+// When you hover over the id, you show the menu:
+.dropdown:hover .user-menu {
+  opacity: 0.95;
+  cursor: pointer;
+  visibility: visible;
 }

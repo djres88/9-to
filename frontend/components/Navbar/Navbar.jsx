@@ -31,28 +31,15 @@ var Navbar = React.createClass({
     this.setState({userMenu: "hide"});
   },
 
-  userMenuDisplay: function() {
-    if (!this.state.userMenu) {
-      return;
-    }
-
-    return (
-      <div class="user-menu">
-        <li>Thing</li>
-        <li>Thing2</li>
-      </div>
-    );
-  },
-
-  userLoggedIn: function() {
-    var farRightButton;
+  toggleLoginIcon: function() {
+    var loginIcon;
     if (this.state.loggedIn) {
-      farRightButton =
-          <NavbarItem id="user-dropdown-menu" mouseover={this.showUserMenu} mouseleave={this.hideUserMenu} text="User Icon"></NavbarItem>;
+      loginIcon =
+          <NavbarItem sendClass="navbar-items dropdown" id="user-dropdown-menu" text="User Icon"></NavbarItem>;
     } else {
-      farRightButton = <LoginForm></LoginForm>;
+      loginIcon = <LoginForm></LoginForm>;
     }
-    return farRightButton;
+    return loginIcon;
   },
 
   addSpace: function() {
@@ -64,8 +51,7 @@ var Navbar = React.createClass({
       <div className="nav-on-landing">
         <NavbarItem id="nav-logo" className="logo" actions={this.goHome} text="Logo"></NavbarItem>
         <NavbarItem id="list-your-space" actions={this.addSpace} text="List Your Space"></NavbarItem>
-        {this.userLoggedIn()}
-        {this.userMenuDisplay()}
+        {this.toggleLoginIcon()}
       </div>
     );
   }

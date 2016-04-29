@@ -186,12 +186,12 @@ var LoginForm = React.createClass({
 		  },
 
 		  content : {
-		    position        : 'fixed',
+		    position        : 'relative',
 		    top             : '120px',
-		    left            : '400px',
-		    right           : '400px',
-		    bottom          : '200px',
+		    margin          : 'auto auto',
+		    bottom          : '120px',
 		    border          : '1px solid #ccc',
+				width						: '500px',
 				// Whydis? TODO: see right margin
 		    padding         : '25px 35px 25px 35px',
 		    zIndex					: 11

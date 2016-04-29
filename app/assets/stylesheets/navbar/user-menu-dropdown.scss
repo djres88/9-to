@@ -1,0 +1,27 @@
+.user-menu {
+  opacity: 0;
+  visibility: hidden;
+  background-color: white;
+  color: black;
+  transition: all 0.5s ease;
+
+  position: absolute;
+  text-align: left;
+  width: 158px;
+  left: 0;
+  top: 40px;
+}
+
+ul.user-menu li {
+  padding: 10px 0 10px 5px;
+  //more
+}
+
+ul.user-menu hr {
+  border: 1px solid #eee;
+  margin: 0px 5px;
+}
+
+ul.user-menu #user-menu-username {
+  background-color: #eee;
+}
