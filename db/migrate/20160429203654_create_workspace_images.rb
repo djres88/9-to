@@ -1,0 +1,11 @@
+class CreateWorkspaceImages < ActiveRecord::Migration
+  def change
+    create_table :workspace_images do |t|
+      t.string :url, null: false
+      t.integer :workspace_id, null: false
+      t.timestamps null: false
+    end
+
+    add_index :workspace_images, :workspace_id
+  end
+end

@@ -17,6 +17,10 @@ class User < ActiveRecord::Base
 
   attr_reader :password
 
+  has_many :workspaces,
+   class_name: "Workspace",
+   foreign_key: :owner_id
+
   # has_many :reservations,
   #   class_name: "Reservation",
   #   foreign_key: "tenant_id"
