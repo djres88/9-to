@@ -76,15 +76,17 @@ var LoginForm = React.createClass({
 	},
 
 	errors: function(){
-		if (!this.state.userErrors){
+		var errors = this.state.userErrors;
+		if (!errors){
 			return;
 		}
-		var self = this;
-		return (<ul>
-			{Object.keys(this.state.userErrors).map(function(key, i){
-				return (<li className="user-errors" key={i}>{self.state.userErrors[key]}</li>);
-			})}
-		</ul>);
+
+		return (
+			<ul>
+				{errors.map(function(err, i) {
+					return (<li className="user-errors" key={i}>{err}</li>);
+				})}
+			</ul>);
 	},
 
   updateUsername: function(event) {
@@ -98,11 +100,11 @@ var LoginForm = React.createClass({
   },
 
 	signUpLink: function() {
-		this.setState({formType: "signup", username: "", password: ""});
+		this.setState({formType: "signup", username: "", password: "", userErrors: []});
 	},
 
 	loginLink: function() {
-		this.setState({formType: "login", username: "", password: ""});
+		this.setState({formType: "login", username: "", password: "",  userErrors: []});
 	},
 
 	baseFormElements: function() {
@@ -160,15 +162,17 @@ var LoginForm = React.createClass({
 		}
 
 		return (
-			<form id={el.formId} onSubmit={this.handleSubmit}>
-				<h1>{el.header}</h1>
-				{this.errors()}
-				{this.baseFormElements()}
-				<input className="form-buttons" id={el.buttonId} type="Submit" value={el.buttonValue} readOnly="true"/>
+			<div>
+				<form id={el.formId} onSubmit={this.handleSubmit}>
+					<h1>{el.header}</h1>
+					{this.errors()}
+					{this.baseFormElements()}
+					<input className="form-buttons" id={el.buttonId} type="Submit" value={el.buttonValue} readOnly="true"/>
+				</form>
 				<button className="form-buttons" id="guest-login" onClick={this.guestLogin}>Guest Login</button>
 				<hr/>
 				{el.toggleFormElement}
-			</form>
+			 </div>
 		);
 	},
 

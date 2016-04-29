@@ -16,7 +16,7 @@ UserStore.__onDispatch = function (payload) {
       UserStore.__emitChange();
       break;
     case "ERROR":
-      UserStore.setErrors(payload.errors);
+      UserStore.setErrors(payload.errors.responseText);
       UserStore.__emitChange();
       break;
   }
@@ -37,7 +37,7 @@ UserStore.currentUser = function(){
 };
 
 UserStore.setErrors = function(errors) {
-  _errors = errors;
+  _errors = JSON.parse(errors).errors;
 };
 
 UserStore.errors = function(){

@@ -8,7 +8,7 @@ var UserActions = {
 	},
 
 	signup: function(user){
-		UserApiUtil.signup(data);
+		UserApiUtil.signup(user);
 	},
 
 	login: function(user){

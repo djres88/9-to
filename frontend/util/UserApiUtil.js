@@ -7,7 +7,6 @@ module.exports = {
 			method: 'get',
 			dataType: 'json',
 			success: function(data) {
-				console.log(data);
 				if (!data.errors) {
 					// debugger;
 					ServerActions.receiveCurrentUser(data);

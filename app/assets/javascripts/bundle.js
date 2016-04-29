@@ -25494,7 +25494,7 @@
 		},
 	
 		signup: function (user) {
-			UserApiUtil.signup(data);
+			UserApiUtil.signup(user);
 		},
 	
 		login: function (user) {
@@ -25525,7 +25525,6 @@
 				method: 'get',
 				dataType: 'json',
 				success: function (data) {
-					console.log(data);
 					if (!data.errors) {
 						// debugger;
 						ServerActions.receiveCurrentUser(data);
@@ -25957,7 +25956,7 @@
 	      UserStore.__emitChange();
 	      break;
 	    case "ERROR":
-	      UserStore.setErrors(payload.errors);
+	      UserStore.setErrors(payload.errors.responseText);
 	      UserStore.__emitChange();
 	      break;
 	  }
@@ -25978,7 +25977,7 @@
 	};
 	
 	UserStore.setErrors = function (errors) {
-	  _errors = errors;
+	  _errors = JSON.parse(errors).errors;
 	};
 	
 	UserStore.errors = function () {
@@ -34482,18 +34481,19 @@
 		},
 	
 		errors: function () {
-			if (!this.state.userErrors) {
+			var errors = this.state.userErrors;
+			if (!errors) {
 				return;
 			}
-			var self = this;
+	
 			return React.createElement(
 				"ul",
 				null,
-				Object.keys(this.state.userErrors).map(function (key, i) {
+				errors.map(function (err, i) {
 					return React.createElement(
 						"li",
 						{ className: "user-errors", key: i },
-						self.state.userErrors[key]
+						err
 					);
 				})
 			);
@@ -34510,11 +34510,11 @@
 		},
 	
 		signUpLink: function () {
-			this.setState({ formType: "signup", username: "", password: "" });
+			this.setState({ formType: "signup", username: "", password: "", userErrors: [] });
 		},
 	
 		loginLink: function () {
-			this.setState({ formType: "login", username: "", password: "" });
+			this.setState({ formType: "login", username: "", password: "", userErrors: [] });
 		},
 	
 		baseFormElements: function () {
@@ -34584,16 +34584,20 @@
 			}
 	
 			return React.createElement(
-				"form",
-				{ id: el.formId, onSubmit: this.handleSubmit },
+				"div",
+				null,
 				React.createElement(
-					"h1",
-					null,
-					el.header
+					"form",
+					{ id: el.formId, onSubmit: this.handleSubmit },
+					React.createElement(
+						"h1",
+						null,
+						el.header
+					),
+					this.errors(),
+					this.baseFormElements(),
+					React.createElement("input", { className: "form-buttons", id: el.buttonId, type: "Submit", value: el.buttonValue, readOnly: "true" })
 				),
-				this.errors(),
-				this.baseFormElements(),
-				React.createElement("input", { className: "form-buttons", id: el.buttonId, type: "Submit", value: el.buttonValue, readOnly: "true" }),
 				React.createElement(
 					"button",
 					{ className: "form-buttons", id: "guest-login", onClick: this.guestLogin },
