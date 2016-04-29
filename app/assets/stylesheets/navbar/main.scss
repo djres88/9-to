@@ -25,9 +25,20 @@
   cursor: pointer;
 }
 
+.navbar-items:hover {
+  color: #eee;
+}
+
 #list-your-space {
   margin-top: 8px;
   border: 2px solid white;
+}
+
+#list-your-space:hover {
+  background-color: black;
+  color: white;
+  opacity: 0.5;
+  transition: all 0.5s ease;
 }
 
 #nav-logo {
