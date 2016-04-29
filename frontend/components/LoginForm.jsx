@@ -200,7 +200,7 @@ var LoginForm = React.createClass({
 
 		return (
 			<div>
-				<NavbarItem id="login" actions={this.openModal} text="Login"></NavbarItem>
+				<NavbarItem id="login" actions={this.openModal} text="Log In"></NavbarItem>
 				<Modal isOpen={this.state.modalOpen} onRequestClose={this.closeModal} style={style}>
 					{this.form()}
 				</Modal>

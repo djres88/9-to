@@ -34633,7 +34633,7 @@
 			return React.createElement(
 				"div",
 				null,
-				React.createElement(NavbarItem, { id: "login", actions: this.openModal, text: "Login" }),
+				React.createElement(NavbarItem, { id: "login", actions: this.openModal, text: "Log In" }),
 				React.createElement(
 					Modal,
 					{ isOpen: this.state.modalOpen, onRequestClose: this.closeModal, style: style },
