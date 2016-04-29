@@ -32,9 +32,9 @@ To expand on item#3 (see above), 9-to users will be able to do the following:
 progress. Put an x between the brackets for a checkmark: [x] -->
 
 1. Create Accounts
-  - [ ] Register
-  - [ ] Login
-  - [ ] Guest/Demo Login
+  - [x] Register
+  - [x] Login
+  - [x] Guest/Demo Login
 2. Browse Office Listings
   - [ ] Search Functionality (Search by Location, Dates, Price)
   - [ ] Listings Display (Photo, Price/Day, Owner "Button")
@@ -97,11 +97,11 @@ frontend
 - [x] Link up the app to Heroku
 - [ ] BONUS: point custom url to Heroku. Do this once everything else is finished.
 - [x] `User` Model
-- [ ] Authentication
-- [ ] User Signup/Sign-In Pages
-- [ ] Blank Landing Page @ Sign-In
-- [ ] Seed DB w/ Users
-- [ ] Navbar
+- [x] Authentication
+- [x] User Signup/Sign-In Pages
+- [x] Blank Landing Page @ Sign-In
+- [x] Seed DB w/ Users
+- [x] Navbar
 
 ### Thurs. 4/27 - Fri. 4/28
 
