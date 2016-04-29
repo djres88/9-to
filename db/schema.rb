@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160429203654) do
+ActiveRecord::Schema.define(version: 20160429213425) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,28 +28,29 @@ ActiveRecord::Schema.define(version: 20160429203654) do
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
   create_table "workspace_images", force: :cascade do |t|
-    t.string   "url",          null: false
-    t.integer  "workspace_id", null: false
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.string   "url",           null: false
+    t.integer  "workspace_id",  null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.string   "thumbnail_url", null: false
   end
 
   add_index "workspace_images", ["workspace_id"], name: "index_workspace_images_on_workspace_id", using: :btree
 
   create_table "workspaces", force: :cascade do |t|
-    t.string   "description", null: false
-    t.integer  "capacity",    null: false
-    t.string   "address",     null: false
-    t.float    "latitude",    null: false
-    t.float    "longitude",   null: false
-    t.integer  "price_week",  null: false
-    t.integer  "price_month", null: false
-    t.string   "photos_url",  null: false
-    t.string   "owner_id",    null: false
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.string   "description",    null: false
+    t.integer  "capacity",       null: false
+    t.string   "address",        null: false
+    t.float    "latitude",       null: false
+    t.float    "longitude",      null: false
+    t.integer  "price_week",     null: false
+    t.integer  "price_month",    null: false
+    t.string   "owner_id",       null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.string   "city"
     t.string   "officetype"
+    t.string   "main_photo_url"
   end
 
   add_index "workspaces", ["owner_id"], name: "index_workspaces_on_owner_id", using: :btree
