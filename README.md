@@ -9,7 +9,7 @@ LINK TO LIVE SITE: [9-to][heroku]
 
 9-to is an Airbnb-inspired web application built using Ruby on Rails and React.js. The service helps freelancers and small startups find their ideal office space at flexible terms, without the hassle of signing a lease. By the end of Week 9, the app will satisfy the following criteria:
 
-1. [ ] **Account Registration & Login** (including Guest/Demo Login)
+1. [x] **Account Registration & Login** (including Guest/Demo Login)
 2. [ ] **Seed Data.** Users, owners, listings, reservations, favorites. (For MVP -- see schema.)
 3. [ ] **User Features**
   - Browse Workspaces with search/map/combination of both
