@@ -11,15 +11,15 @@ var hashHistory = ReactRouter.hashHistory;
 var Link = ReactRouter.Link;
 
 //Action (to populate session store)
-var UserActions = require('./actions/UserActions');
+var UserActions = require('./actions/UserClientActions');
 var UserStore = require('./stores/UserStore');
 //React Add-Ons
 var Modal = require("react-modal");
 
 //Components
-var FakeEmptyComp = require('./components/FakeEmptyComp');
-var LoginForm = require('./components/LoginForm');
 var Navbar = require('./components/Navbar/Navbar');
+var WorkspaceIndex = require('./components/WorkspaceIndex');
+var Home = require('./components/Home');
 
 // TODO
 
@@ -34,9 +34,7 @@ var App = React.createClass({
   render: function() {
     return (
       <div>
-        <div id="above-fold-background">
-          <Navbar />
-        </div>
+        <Navbar/>
         {this.props.children}
       </div>
     );
@@ -51,8 +49,8 @@ window.UserApiUtil = require('./util/UserApiUtil');
 var Router = (
   <Router history={hashHistory}>
     <Route path="/" component={App}>
-      <Route path="/login" component={LoginForm} />
-      <Route path="/fake" component={FakeEmptyComp} />
+      <IndexRoute component={Home}/>
+      <Route path="s" component={WorkspaceIndex}/>
     </Route>
   </Router>
 );

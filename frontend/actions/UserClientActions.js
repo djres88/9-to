@@ -1,6 +1,4 @@
 var UserApiUtil = require('../util/UserApiUtil');
-var UserStore = require('../stores/UserStore');
-var AppDispatcher = require('../dispatcher/Dispatcher');
 
 var UserActions = {
 	fetchCurrentUser: function() {

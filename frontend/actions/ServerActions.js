@@ -13,23 +13,5 @@ module.exports = {
       actionType: "WORKSPACE_RECEIVED",
       workspace: workspace
     });
-  },
-  receiveCurrentUser: function(user){
-		AppDispatcher.dispatch({
-			actionType: "LOGIN",
-			user: user
-		});
-	},
-  removeCurrentUser: function(){
-    AppDispatcher.dispatch({
-      actionType: "LOGOUT",
-    });
-  },
-
-  handleError: function(errors) {
-    AppDispatcher.dispatch({
-      actionType: "ERROR",
-      errors: errors
-    });
-  },
+  }
 };

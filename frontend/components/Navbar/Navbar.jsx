@@ -1,8 +1,11 @@
 var React = require('react');
 var NavbarItem = require('./NavbarItem');
 var hashHistory = require('react-router').hashHistory;
+
 var UserStore = require('../../stores/UserStore');
+
 var LoginForm = require('../LoginForm');
+var Search = require('../Search');
 
 var Navbar = React.createClass({
   getInitialState: function() {
@@ -44,6 +47,10 @@ var Navbar = React.createClass({
 
   addSpace: function() {
 
+  },
+
+  search: function() {
+    hashHistory.push("/search");
   },
 
   render: function() {

@@ -1,5 +1,5 @@
 var React = require("react");
-var UserActions = require("../actions/UserActions");
+var UserActions = require("../actions/UserClientActions");
 var UserStore = require("../stores/UserStore");
 var hashHistory = require("react-router").hashHistory;
 var UserDropdown = require("../components/UserDropdown");

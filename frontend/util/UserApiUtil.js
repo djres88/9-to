@@ -1,4 +1,4 @@
-var ServerActions = require('../actions/ServerActions');
+var ServerActions = require('../actions/UserServerActions');
 
 module.exports = {
 	fetchCurrentUser: function(){

@@ -1,6 +1,6 @@
 var React = require('react');
 var UserStore = require('../../stores/UserStore');
-var UserActions = require('../../actions/UserActions');
+var UserActions = require('../../actions/UserClientActions');
 
 var NavbarItem = React.createClass({
   logout: function() {
