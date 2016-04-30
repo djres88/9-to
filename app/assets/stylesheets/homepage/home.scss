@@ -52,3 +52,28 @@
   cursor: pointer;
   visibility: visible;
 }
+
+#above-fold-background {
+  width: 100%;
+  height: 750px;
+  position: absolute;
+  z-index: -1000;
+  margin-top: -210px;
+  background-image: image_url('main-background.jpg');
+}
+
+.above-fold-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  position: absolute;
+  width: 100%;
+}
+
+.above-fold-text h1, h2 {
+  position: relative;
+  color: white;
+
+}

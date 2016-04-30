@@ -9,7 +9,7 @@ var WorkspaceIndexItem = React.createClass({
         <li>{workspace.address}</li>
         <li>{workspace.city}</li>
         <li>{workspace.price_week}</li>
-        <li>{workspace.main_photo_url}</li>
+        <li><img src={workspace.main_photo_url} alt={"Workspace Image" + workspace.id}></img></li>
         <br/>
       </ul>
     );
