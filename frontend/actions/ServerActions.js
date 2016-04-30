@@ -1,7 +1,7 @@
 var AppDispatcher = require('../dispatcher/Dispatcher');
 
 module.exports = {
-  receiveAll: function(workspaces){
+  receiveWorkspaces: function(workspaces){
     AppDispatcher.dispatch({
       actionType: "WORKSPACES_RECEIVED",
       workspaces: workspaces

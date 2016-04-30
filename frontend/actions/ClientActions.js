@@ -1,6 +1,6 @@
 var ApiUtil = require('../util/ApiUtil');
 
-var ClientActions = {
+module.exports = {
   fetchWorkspaces:  function() {
     ApiUtil.fetchWorkspaces();
   },
@@ -34,6 +34,4 @@ var ClientActions = {
   // cancelReservation: function(id) {
   //   ApiUtil.deleteReservation(id);
   // }
-
-
 };

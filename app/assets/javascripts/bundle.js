@@ -34781,19 +34781,33 @@
 
 	var React = __webpack_require__(1);
 	var WorkspaceStore = __webpack_require__(276);
-	// var WorkspaceIndexItem = require('./WorkspaceIndexItem')
+	var ClientActions = __webpack_require__(278);
+	var WorkspaceIndexItem = __webpack_require__(281);
 	
 	var WorkspaceIndex = React.createClass({
 	  displayName: 'WorkspaceIndex',
 	
-	  getAllWorkspaces: function () {
-	    return WorkspaceStore.all();
+	  getInitialState: function () {
+	    return { workspaces: WorkspaceStore.all() };
+	  },
+	
+	  componentDidMount: function () {
+	    this.listener = WorkspaceStore.addListener(this._onChange);
+	    ClientActions.fetchWorkspaces();
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.listener.remove();
+	  },
+	
+	  _onChange: function () {
+	    this.setState({ workspaces: WorkspaceStore.all() });
 	  },
 	
 	  render: function () {
-	    var workspaces = this.getAllWorkspaces();
-	    var workspaceComponents = workspaces.map(function (space, i) {
-	      return React.createElement(WorkspaceIndexItem, { key: i, workspace: workspace });
+	    var workspaces = this.state.workspaces;
+	    var workspaceComponents = Object.keys(workspaces).map(function (key, i) {
+	      return React.createElement(WorkspaceIndexItem, { key: i, workspace: workspaces[key] });
 	    });
 	    return React.createElement(
 	      'div',
@@ -34827,7 +34841,9 @@
 	WorkspaceStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case "WORKSPACES_RECEIVED":
-	      _workspaces = payload.workspaces;
+	      payload.workspaces.forEach(function (space) {
+	        _workspaces[space.id] = space;
+	      });
 	      this.__emitChange();
 	      break;
 	    case "WORKSPACE_RECEIVED":
@@ -34860,6 +34876,159 @@
 	});
 	
 	module.exports = Home;
+
+/***/ },
+/* 278 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ApiUtil = __webpack_require__(279);
+	
+	module.exports = {
+	  fetchWorkspaces: function () {
+	    ApiUtil.fetchWorkspaces();
+	  },
+	
+	  fetchSingleWorkspace: function (id) {
+	    ApiUtil.fetchSingleUser(id);
+	  }
+	
+	  // WORKSPACE COMPLETE CRUD (HOST ACTIONS)
+	  // listWorkspace: function(workspace) {
+	  //   ApiUtil.listWorkspace(workpsace);
+	  // },
+	  //
+	  // editWorkspace: function(workspace) {
+	  //   ApiUtil.editWorkspace(workspace)
+	  // },
+	  //
+	  // removeWorkspace: function(id) {
+	  //   ApiUtil.removeWorkspace(id)
+	  // },
+	
+	  // RESERVATION ACTIONS
+	  // createReservation: function(reservation) {
+	  //   ApiUtil.createReservation(reservation);
+	  // },
+	  //
+	  // changeReservation: function(reservation) {
+	  //   ApiUtil.updateReservation(reservation);
+	  // },
+	  //
+	  // cancelReservation: function(id) {
+	  //   ApiUtil.deleteReservation(id);
+	  // }
+	};
+
+/***/ },
+/* 279 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ServerActions = __webpack_require__(280);
+	
+	module.exports = {
+	
+		// WORKSPACE VIEWS (TENANT REQUESTS)
+		fetchWorkspaces: function () {
+			$.ajax({
+				url: 'api/workspaces',
+				method: 'get',
+				dataType: 'json',
+				success: function (workspacesData) {
+					ServerActions.receiveWorkspaces(workspacesData);
+				},
+				error: function (data) {
+					ServerActions.handleError(data);
+				}
+			});
+		},
+	
+		fetchSingleWorkspace: function (id) {
+			$.ajax({
+				url: 'api/workspace' + id,
+				method: 'get',
+				dataType: 'json',
+				success: function (workspaceDetails) {
+					ServerActions.receiveWorkspaces(workspaceDetails);
+				},
+				error: function (data) {
+					ServerActions.handleError(data);
+				}
+			});
+		}
+	
+		// WORKSPACE CRUD (HOST REQUESTS)
+	
+		// RESERVATIONS
+	
+	};
+
+/***/ },
+/* 280 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(226);
+	
+	module.exports = {
+	  receiveWorkspaces: function (workspaces) {
+	    AppDispatcher.dispatch({
+	      actionType: "WORKSPACES_RECEIVED",
+	      workspaces: workspaces
+	    });
+	  },
+	
+	  receiveSingleWorkspace: function (workspace) {
+	    AppDispatcher.dispatch({
+	      actionType: "WORKSPACE_RECEIVED",
+	      workspace: workspace
+	    });
+	  }
+	};
+
+/***/ },
+/* 281 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var WorkspaceIndexItem = React.createClass({
+	  displayName: 'WorkspaceIndexItem',
+	
+	  render: function () {
+	    var workspace = this.props.workspace;
+	    return React.createElement(
+	      'ul',
+	      null,
+	      React.createElement(
+	        'li',
+	        null,
+	        workspace.description
+	      ),
+	      React.createElement(
+	        'li',
+	        null,
+	        workspace.address
+	      ),
+	      React.createElement(
+	        'li',
+	        null,
+	        workspace.city
+	      ),
+	      React.createElement(
+	        'li',
+	        null,
+	        workspace.price_week
+	      ),
+	      React.createElement(
+	        'li',
+	        null,
+	        workspace.main_photo_url
+	      ),
+	      React.createElement('br', null)
+	    );
+	  }
+	});
+	
+	module.exports = WorkspaceIndexItem;
 
 /***/ }
 /******/ ]);
