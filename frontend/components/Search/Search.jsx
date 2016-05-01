@@ -1,6 +1,14 @@
 var React = require('react');
+var HashHistory = require('react-router').hashHistory;
+
+var ClientActions = require('../../actions/ClientActions.js');
 
 var Search = React.createClass({
+  handleSubmit: function() {
+    // ClientActions.search...
+    HashHistory.push("s");
+  },
+
   render: function() {
     return (
       <form className="search-container" onSubmit={this.handleSubmit}>

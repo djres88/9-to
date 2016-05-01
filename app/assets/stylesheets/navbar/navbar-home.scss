@@ -1,0 +1,61 @@
+.nav-home {
+  z-index:1000;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+}
+
+.navbar-items {
+  padding: 8px 0px;
+  margin: 10px 0px;
+  height: 18px;
+  min-width: 80px;
+
+  line-height: 19px;
+  text-align: center;
+
+  font-weight: 300;
+  background: none;
+  color: white;
+  font-size: 0.85em;
+  cursor: pointer;
+}
+
+.navbar-items:hover {
+  color: #eee;
+}
+
+#list-your-space {
+  min-width: 110px;
+  margin: 8px 15px 0 0;
+  border: 2px solid white;
+}
+
+#list-your-space:hover {
+  background-color: black;
+  color: white;
+  opacity: 0.5;
+  transition: all 0.5s ease;
+}
+
+#nav-logo {
+  margin-right: auto;
+}
+
+.login-and-signup {
+  display: flex;
+}
+
+
+.dropdown {
+  position: relative;
+  cursor: pointer;
+}
+
+// When you hover over the id, you show the menu:
+.dropdown:hover .user-menu {
+  opacity: 0.95;
+  cursor: pointer;
+  visibility: visible;
+}

@@ -1,65 +1,10 @@
-.nav-on-landing {
-  z-index:1000;
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.navbar-items {
-  font-weight: 400;
-  background: none;
-  color: white;
-  max-width: 150px;
-  text-align: center;
-  padding: 10px 5px;
-  margin: 10px 0px;
-  font-size: 1rem;
-  width: 180px;
-  height: 18px;
-  cursor: pointer;
-}
-
-.navbar-items:hover {
-  color: #eee;
-}
-
-#list-your-space {
-  margin-top: 8px;
-  border: 2px solid white;
-}
-
-#list-your-space:hover {
-  background-color: black;
-  color: white;
-  opacity: 0.5;
-  transition: all 0.5s ease;
-}
-
-#nav-logo {
-  margin-right: auto;
-}
-
-.dropdown {
-  position: relative;
-  cursor: pointer;
-  // margin: 4px 10px 0 30px;
-}
-
-
-// When you hover over the id, you show the menu:
-.dropdown:hover .user-menu {
-  opacity: 0.95;
-  cursor: pointer;
-  visibility: visible;
-}
-
 #above-fold-background {
   width: 100%;
   height: 750px;
   position: absolute;
   z-index: -1000;
   margin-top: -210px;
-  background-image: image_url('main-background.jpg');
+  background-image: url('./main-background.jpeg');
 }
 
 .above-fold-text {
@@ -69,11 +14,36 @@
   align-items: center;
   align-content: center;
   position: absolute;
+  margin-top: 7em;
   width: 100%;
 }
 
 .above-fold-text h1, h2 {
   position: relative;
-  color: white;
+  color: #fff;
+}
 
+.above-fold-text h1 {
+  font-size: 60px;
+  font-weight: 600;
+}
+
+.above-fold-text h2 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.homepage-section-one {
+  position: absolute;
+  margin-top: 600px;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  text-align: center;
+}
+
+.homepage-section-one h3 {
+  justify-content: center;
+  font-size: 35px;
+  margin: auto;
 }

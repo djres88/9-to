@@ -1,7 +1,9 @@
 var React = require('react');
-var WorkspaceStore = require('../stores/WorkspaceStore');
-var ClientActions = require('../actions/ClientActions');
-var WorkspaceIndexItem = require('./WorkspaceIndexItem')
+
+var WorkspaceStore = require('../../stores/WorkspaceStore');
+var ClientActions = require('../../actions/ClientActions');
+var WorkspaceIndexItem = require('./WorkspaceIndexItem');
+var Navbar = require('../Navbar/Navbar');
 
 var WorkspaceIndex = React.createClass({
   getInitialState: function() {
@@ -21,14 +23,19 @@ var WorkspaceIndex = React.createClass({
     this.setState({workspaces: WorkspaceStore.all()});
   },
 
-
   render: function() {
     var workspaces = this.state.workspaces;
     var workspaceComponents = Object.keys(workspaces).map(function(key, i) {
       return <WorkspaceIndexItem key={i} workspace={workspaces[key]} />;
     });
+    var navStyle = {
+      color: 'black',
+    };
+
     return (
-      <div className="workspace-index">{workspaceComponents}</div>
+      <div className="search-listings-page">
+        <div className="workspace-index">{workspaceComponents}</div>
+      </div>
     );
   }
 });

@@ -18,13 +18,21 @@ var Modal = require("react-modal");
 
 //Components
 var Navbar = require('./components/Navbar/Navbar');
-var WorkspaceIndex = require('./components/WorkspaceIndex');
+var WorkspaceIndex = require('./components/Workspaces/WorkspaceIndex');
 var Home = require('./components/Home');
 
-// TODO
-
+//Check for logged in current user on page load.
 function preloadUser() {
   UserActions.fetchCurrentUser();
+}
+
+// Set nav class according to current route.
+var navClass;
+// TODO: may need to adjust how we're detecting the route here.
+if (window.location.hash[2] === "?") {
+  navClass = 'nav-home';
+} else {
+  navClass = 'nav-detail';
 }
 
 var App = React.createClass({
@@ -34,7 +42,7 @@ var App = React.createClass({
   render: function() {
     return (
       <div>
-        <Navbar/>
+        <Navbar className={navClass}/>
         {this.props.children}
       </div>
     );

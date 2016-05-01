@@ -1,13 +1,12 @@
 var React = require("react");
-var UserActions = require("../actions/UserClientActions");
-var UserStore = require("../stores/UserStore");
-var hashHistory = require("react-router").hashHistory;
-var NavbarItem = require("./Navbar/NavbarItem");
-var Modal = require("react-modal");
 var ReactRouter = require("react-router");
 var Link = ReactRouter.Link;
-//LoginForm Styles
+var hashHistory = require("react-router").hashHistory;
 
+var Modal = require("react-modal");
+var UserActions = require("../../actions/UserClientActions");
+var UserStore = require("../../stores/UserStore");
+var NavbarItem = require("../Navbar/NavbarItem");
 
 var LoginForm = React.createClass({
 	getInitialState: function(){
@@ -38,6 +37,15 @@ var LoginForm = React.createClass({
 	openModal: function(){
 		this.setState({ modalOpen: true });
 	},
+	openModalAsLogin: function(){
+		this.setState({formType: "login"});
+		this.openModal();
+	},
+	openModalAsSignup: function(){
+		this.setState({formType: "signup"});
+		this.openModal();
+	},
+
 
 	// Login Functions
 	credentials: function() {
@@ -203,8 +211,9 @@ var LoginForm = React.createClass({
 		};
 
 		return (
-			<div>
-				<NavbarItem id="login" actions={this.openModal} text="Log In"></NavbarItem>
+			<div className="login-and-signup">
+				<NavbarItem id="signup" actions={this.openModalAsSignup} text="Sign Up"></NavbarItem>
+				<NavbarItem id="login" actions={this.openModalAsLogin} text="Log In"></NavbarItem>
 				<Modal isOpen={this.state.modalOpen} onRequestClose={this.closeModal} style={style}>
 					{this.form()}
 				</Modal>

@@ -64,13 +64,21 @@
 	
 	//Components
 	var Navbar = __webpack_require__(270);
-	var WorkspaceIndex = __webpack_require__(274);
+	var WorkspaceIndex = __webpack_require__(281);
 	var Home = __webpack_require__(280);
 	
-	// TODO
-	
+	//Check for logged in current user on page load.
 	function preloadUser() {
 	  UserActions.fetchCurrentUser();
+	}
+	
+	// Set nav class according to current route.
+	var navClass;
+	// TODO: may need to adjust how we're detecting the route here.
+	if (window.location.hash[2] === "?") {
+	  navClass = 'nav-home';
+	} else {
+	  navClass = 'nav-detail';
 	}
 	
 	var App = React.createClass({
@@ -83,7 +91,7 @@
 	    return React.createElement(
 	      'div',
 	      null,
-	      React.createElement(Navbar, null),
+	      React.createElement(Navbar, { className: navClass }),
 	      this.props.children
 	    );
 	  }
@@ -34371,8 +34379,8 @@
 	
 	var UserStore = __webpack_require__(232);
 	
-	var LoginForm = __webpack_require__(272);
-	var Search = __webpack_require__(273);
+	var LoginForm = __webpack_require__(284);
+	var Search = __webpack_require__(283);
 	
 	var Navbar = React.createClass({
 	  displayName: 'Navbar',
@@ -34422,7 +34430,7 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { className: 'nav-on-landing' },
+	      { className: this.props.className },
 	      React.createElement(NavbarItem, { id: 'nav-logo', className: 'logo', actions: this.goHome, text: 'Logo' }),
 	      React.createElement(NavbarItem, { id: 'list-your-space', actions: this.addSpace, text: 'List Your Space' }),
 	      this.toggleLoginIcon()
@@ -34500,18 +34508,347 @@
 	module.exports = NavbarItem;
 
 /***/ },
-/* 272 */
+/* 272 */,
+/* 273 */,
+/* 274 */,
+/* 275 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(233).Store;
+	var AppDispatcher = __webpack_require__(228);
+	
+	var _workspaces = {};
+	
+	var WorkspaceStore = new Store(AppDispatcher);
+	
+	WorkspaceStore.all = function () {
+	  return Object.assign({}, _workspaces);
+	};
+	
+	WorkspaceStore.find = function (id) {
+	  return workspaces[id];
+	};
+	
+	WorkspaceStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case "WORKSPACES_RECEIVED":
+	      payload.workspaces.forEach(function (space) {
+	        _workspaces[space.id] = space;
+	      });
+	      this.__emitChange();
+	      break;
+	    case "WORKSPACE_RECEIVED":
+	      _workspaces[payload.workspace.id] = payload.workspace;
+	      this.__emitChange();
+	      break;
+	  }
+	};
+	
+	module.exports = WorkspaceStore;
+
+/***/ },
+/* 276 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ApiUtil = __webpack_require__(277);
+	
+	module.exports = {
+	  fetchWorkspaces: function () {
+	    ApiUtil.fetchWorkspaces();
+	  },
+	
+	  fetchSingleWorkspace: function (id) {
+	    ApiUtil.fetchSingleUser(id);
+	  }
+	
+	  // WORKSPACE COMPLETE CRUD (HOST ACTIONS)
+	  // listWorkspace: function(workspace) {
+	  //   ApiUtil.listWorkspace(workpsace);
+	  // },
+	  //
+	  // editWorkspace: function(workspace) {
+	  //   ApiUtil.editWorkspace(workspace)
+	  // },
+	  //
+	  // removeWorkspace: function(id) {
+	  //   ApiUtil.removeWorkspace(id)
+	  // },
+	
+	  // RESERVATION ACTIONS
+	  // createReservation: function(reservation) {
+	  //   ApiUtil.createReservation(reservation);
+	  // },
+	  //
+	  // changeReservation: function(reservation) {
+	  //   ApiUtil.updateReservation(reservation);
+	  // },
+	  //
+	  // cancelReservation: function(id) {
+	  //   ApiUtil.deleteReservation(id);
+	  // }
+	};
+
+/***/ },
+/* 277 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ServerActions = __webpack_require__(278);
+	
+	module.exports = {
+	
+		// WORKSPACE VIEWS (TENANT REQUESTS)
+		fetchWorkspaces: function () {
+			$.ajax({
+				url: 'api/workspaces',
+				method: 'get',
+				dataType: 'json',
+				success: function (workspacesData) {
+					ServerActions.receiveWorkspaces(workspacesData);
+				},
+				error: function (data) {
+					ServerActions.handleError(data);
+				}
+			});
+		},
+	
+		fetchSingleWorkspace: function (id) {
+			$.ajax({
+				url: 'api/workspace' + id,
+				method: 'get',
+				dataType: 'json',
+				success: function (workspaceDetails) {
+					ServerActions.receiveWorkspaces(workspaceDetails);
+				},
+				error: function (data) {
+					ServerActions.handleError(data);
+				}
+			});
+		}
+	
+		// WORKSPACE CRUD (HOST REQUESTS)
+	
+		// RESERVATIONS
+	
+	};
+
+/***/ },
+/* 278 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(228);
+	
+	module.exports = {
+	  receiveWorkspaces: function (workspaces) {
+	    AppDispatcher.dispatch({
+	      actionType: "WORKSPACES_RECEIVED",
+	      workspaces: workspaces
+	    });
+	  },
+	
+	  receiveSingleWorkspace: function (workspace) {
+	    AppDispatcher.dispatch({
+	      actionType: "WORKSPACE_RECEIVED",
+	      workspace: workspace
+	    });
+	  }
+	};
+
+/***/ },
+/* 279 */,
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var UserActions = __webpack_require__(225);
-	var UserStore = __webpack_require__(232);
-	var hashHistory = __webpack_require__(166).hashHistory;
-	var NavbarItem = __webpack_require__(271);
-	var Modal = __webpack_require__(250);
+	var Search = __webpack_require__(283);
+	
+	var Home = React.createClass({
+	  displayName: 'Home',
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'homepage' },
+	      React.createElement('iframe', { id: 'above-fold-background' }),
+	      React.createElement(
+	        'div',
+	        { className: 'above-fold-text' },
+	        React.createElement(
+	          'h1',
+	          null,
+	          'WHEREVER WORK TAKES YOU'
+	        ),
+	        React.createElement(
+	          'h2',
+	          null,
+	          'Find flexible-term office space for freelancers and teams.'
+	        )
+	      ),
+	      React.createElement(Search, null),
+	      React.createElement(
+	        'div',
+	        { className: 'homepage-section-one' },
+	        React.createElement(
+	          'h3',
+	          null,
+	          'TIME IS MONEY. SAVE IT.'
+	        ),
+	        React.createElement(
+	          'p',
+	          null,
+	          'Something about saving costs involved w/ finding/setting up a new office...'
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = Home;
+
+/***/ },
+/* 281 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var WorkspaceStore = __webpack_require__(275);
+	var ClientActions = __webpack_require__(276);
+	var WorkspaceIndexItem = __webpack_require__(282);
+	var Navbar = __webpack_require__(270);
+	
+	var WorkspaceIndex = React.createClass({
+	  displayName: 'WorkspaceIndex',
+	
+	  getInitialState: function () {
+	    return { workspaces: WorkspaceStore.all() };
+	  },
+	
+	  componentDidMount: function () {
+	    this.listener = WorkspaceStore.addListener(this._onChange);
+	    ClientActions.fetchWorkspaces();
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.listener.remove();
+	  },
+	
+	  _onChange: function () {
+	    this.setState({ workspaces: WorkspaceStore.all() });
+	  },
+	
+	  render: function () {
+	    var workspaces = this.state.workspaces;
+	    var workspaceComponents = Object.keys(workspaces).map(function (key, i) {
+	      return React.createElement(WorkspaceIndexItem, { key: i, workspace: workspaces[key] });
+	    });
+	    var navStyle = {
+	      color: 'black'
+	    };
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'search-listings-page' },
+	      React.createElement(
+	        'div',
+	        { className: 'workspace-index' },
+	        workspaceComponents
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = WorkspaceIndex;
+
+/***/ },
+/* 282 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var WorkspaceIndexItem = React.createClass({
+	  displayName: "WorkspaceIndexItem",
+	
+	  render: function () {
+	    var workspace = this.props.workspace;
+	    return React.createElement(
+	      "ul",
+	      null,
+	      React.createElement(
+	        "li",
+	        null,
+	        workspace.description
+	      ),
+	      React.createElement(
+	        "li",
+	        null,
+	        workspace.address
+	      ),
+	      React.createElement(
+	        "li",
+	        null,
+	        workspace.city
+	      ),
+	      React.createElement(
+	        "li",
+	        null,
+	        workspace.price_week
+	      ),
+	      React.createElement(
+	        "li",
+	        null,
+	        React.createElement("img", { src: workspace.main_photo_url, alt: "Workspace Image" + workspace.id })
+	      ),
+	      React.createElement("br", null)
+	    );
+	  }
+	});
+	
+	module.exports = WorkspaceIndexItem;
+
+/***/ },
+/* 283 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var HashHistory = __webpack_require__(166).hashHistory;
+	
+	var ClientActions = __webpack_require__(276);
+	
+	var Search = React.createClass({
+	  displayName: 'Search',
+	
+	  handleSubmit: function () {
+	    // ClientActions.search...
+	    HashHistory.push("s");
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'form',
+	      { className: 'search-container', onSubmit: this.handleSubmit },
+	      React.createElement('input', { className: 'search-field', type: 'text' }),
+	      React.createElement('input', { className: 'date-dropdown', type: 'text' }),
+	      React.createElement('input', { className: 'date-dropdown', type: 'text' }),
+	      React.createElement('input', { className: 'capacity-dropdown', type: 'text' }),
+	      React.createElement('input', { className: 'search-button', type: 'submit', value: 'Search' })
+	    );
+	  }
+	});
+	
+	module.exports = Search;
+
+/***/ },
+/* 284 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
 	var ReactRouter = __webpack_require__(166);
 	var Link = ReactRouter.Link;
-	//LoginForm Styles
+	var hashHistory = __webpack_require__(166).hashHistory;
+	
+	var Modal = __webpack_require__(250);
+	var UserActions = __webpack_require__(225);
+	var UserStore = __webpack_require__(232);
+	var NavbarItem = __webpack_require__(271);
 	
 	var LoginForm = React.createClass({
 		displayName: "LoginForm",
@@ -34543,6 +34880,14 @@
 		},
 		openModal: function () {
 			this.setState({ modalOpen: true });
+		},
+		openModalAsLogin: function () {
+			this.setState({ formType: "login" });
+			this.openModal();
+		},
+		openModalAsSignup: function () {
+			this.setState({ formType: "signup" });
+			this.openModal();
 		},
 	
 		// Login Functions
@@ -34737,8 +35082,9 @@
 	
 			return React.createElement(
 				"div",
-				null,
-				React.createElement(NavbarItem, { id: "login", actions: this.openModal, text: "Log In" }),
+				{ className: "login-and-signup" },
+				React.createElement(NavbarItem, { id: "signup", actions: this.openModalAsSignup, text: "Sign Up" }),
+				React.createElement(NavbarItem, { id: "login", actions: this.openModalAsLogin, text: "Log In" }),
 				React.createElement(
 					Modal,
 					{ isOpen: this.state.modalOpen, onRequestClose: this.closeModal, style: style },
@@ -34749,299 +35095,6 @@
 	});
 	
 	module.exports = LoginForm;
-
-/***/ },
-/* 273 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	
-	var Search = React.createClass({
-	  displayName: "Search",
-	
-	  render: function () {
-	    return React.createElement(
-	      "form",
-	      { className: "search-container", onSubmit: this.handleSubmit },
-	      React.createElement("input", { className: "search-field", type: "text" }),
-	      React.createElement("input", { className: "date-dropdown", type: "text" }),
-	      React.createElement("input", { className: "date-dropdown", type: "text" }),
-	      React.createElement("input", { className: "capacity-dropdown", type: "text" }),
-	      React.createElement("input", { className: "search-button", type: "submit", value: "Search" })
-	    );
-	  }
-	});
-	
-	module.exports = Search;
-
-/***/ },
-/* 274 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var WorkspaceStore = __webpack_require__(275);
-	var ClientActions = __webpack_require__(276);
-	var WorkspaceIndexItem = __webpack_require__(279);
-	
-	var WorkspaceIndex = React.createClass({
-	  displayName: 'WorkspaceIndex',
-	
-	  getInitialState: function () {
-	    return { workspaces: WorkspaceStore.all() };
-	  },
-	
-	  componentDidMount: function () {
-	    this.listener = WorkspaceStore.addListener(this._onChange);
-	    ClientActions.fetchWorkspaces();
-	  },
-	
-	  componentWillUnmount: function () {
-	    this.listener.remove();
-	  },
-	
-	  _onChange: function () {
-	    this.setState({ workspaces: WorkspaceStore.all() });
-	  },
-	
-	  render: function () {
-	    var workspaces = this.state.workspaces;
-	    var workspaceComponents = Object.keys(workspaces).map(function (key, i) {
-	      return React.createElement(WorkspaceIndexItem, { key: i, workspace: workspaces[key] });
-	    });
-	    return React.createElement(
-	      'div',
-	      { className: 'workspace-index' },
-	      workspaceComponents
-	    );
-	  }
-	});
-	
-	module.exports = WorkspaceIndex;
-
-/***/ },
-/* 275 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Store = __webpack_require__(233).Store;
-	var AppDispatcher = __webpack_require__(228);
-	
-	var _workspaces = {};
-	
-	var WorkspaceStore = new Store(AppDispatcher);
-	
-	WorkspaceStore.all = function () {
-	  return Object.assign({}, _workspaces);
-	};
-	
-	WorkspaceStore.find = function (id) {
-	  return workspaces[id];
-	};
-	
-	WorkspaceStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case "WORKSPACES_RECEIVED":
-	      payload.workspaces.forEach(function (space) {
-	        _workspaces[space.id] = space;
-	      });
-	      this.__emitChange();
-	      break;
-	    case "WORKSPACE_RECEIVED":
-	      _workspaces[payload.workspace.id] = payload.workspace;
-	      this.__emitChange();
-	      break;
-	  }
-	};
-	
-	module.exports = WorkspaceStore;
-
-/***/ },
-/* 276 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var ApiUtil = __webpack_require__(277);
-	
-	module.exports = {
-	  fetchWorkspaces: function () {
-	    ApiUtil.fetchWorkspaces();
-	  },
-	
-	  fetchSingleWorkspace: function (id) {
-	    ApiUtil.fetchSingleUser(id);
-	  }
-	
-	  // WORKSPACE COMPLETE CRUD (HOST ACTIONS)
-	  // listWorkspace: function(workspace) {
-	  //   ApiUtil.listWorkspace(workpsace);
-	  // },
-	  //
-	  // editWorkspace: function(workspace) {
-	  //   ApiUtil.editWorkspace(workspace)
-	  // },
-	  //
-	  // removeWorkspace: function(id) {
-	  //   ApiUtil.removeWorkspace(id)
-	  // },
-	
-	  // RESERVATION ACTIONS
-	  // createReservation: function(reservation) {
-	  //   ApiUtil.createReservation(reservation);
-	  // },
-	  //
-	  // changeReservation: function(reservation) {
-	  //   ApiUtil.updateReservation(reservation);
-	  // },
-	  //
-	  // cancelReservation: function(id) {
-	  //   ApiUtil.deleteReservation(id);
-	  // }
-	};
-
-/***/ },
-/* 277 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var ServerActions = __webpack_require__(278);
-	
-	module.exports = {
-	
-		// WORKSPACE VIEWS (TENANT REQUESTS)
-		fetchWorkspaces: function () {
-			$.ajax({
-				url: 'api/workspaces',
-				method: 'get',
-				dataType: 'json',
-				success: function (workspacesData) {
-					ServerActions.receiveWorkspaces(workspacesData);
-				},
-				error: function (data) {
-					ServerActions.handleError(data);
-				}
-			});
-		},
-	
-		fetchSingleWorkspace: function (id) {
-			$.ajax({
-				url: 'api/workspace' + id,
-				method: 'get',
-				dataType: 'json',
-				success: function (workspaceDetails) {
-					ServerActions.receiveWorkspaces(workspaceDetails);
-				},
-				error: function (data) {
-					ServerActions.handleError(data);
-				}
-			});
-		}
-	
-		// WORKSPACE CRUD (HOST REQUESTS)
-	
-		// RESERVATIONS
-	
-	};
-
-/***/ },
-/* 278 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(228);
-	
-	module.exports = {
-	  receiveWorkspaces: function (workspaces) {
-	    AppDispatcher.dispatch({
-	      actionType: "WORKSPACES_RECEIVED",
-	      workspaces: workspaces
-	    });
-	  },
-	
-	  receiveSingleWorkspace: function (workspace) {
-	    AppDispatcher.dispatch({
-	      actionType: "WORKSPACE_RECEIVED",
-	      workspace: workspace
-	    });
-	  }
-	};
-
-/***/ },
-/* 279 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	
-	var WorkspaceIndexItem = React.createClass({
-	  displayName: "WorkspaceIndexItem",
-	
-	  render: function () {
-	    var workspace = this.props.workspace;
-	    return React.createElement(
-	      "ul",
-	      null,
-	      React.createElement(
-	        "li",
-	        null,
-	        workspace.description
-	      ),
-	      React.createElement(
-	        "li",
-	        null,
-	        workspace.address
-	      ),
-	      React.createElement(
-	        "li",
-	        null,
-	        workspace.city
-	      ),
-	      React.createElement(
-	        "li",
-	        null,
-	        workspace.price_week
-	      ),
-	      React.createElement(
-	        "li",
-	        null,
-	        React.createElement("img", { src: workspace.main_photo_url, alt: "Workspace Image" + workspace.id })
-	      ),
-	      React.createElement("br", null)
-	    );
-	  }
-	});
-	
-	module.exports = WorkspaceIndexItem;
-
-/***/ },
-/* 280 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var Search = __webpack_require__(273);
-	
-	var Home = React.createClass({
-	  displayName: 'Home',
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'homepage' },
-	      React.createElement('iframe', { id: 'above-fold-background' }),
-	      React.createElement(
-	        'div',
-	        { className: 'above-fold-text' },
-	        React.createElement(
-	          'h1',
-	          null,
-	          'ROOM TO GROW'
-	        ),
-	        React.createElement(
-	          'h2',
-	          null,
-	          'Flexible office space for wherever work takes you.'
-	        )
-	      ),
-	      React.createElement(Search, null)
-	    );
-	  }
-	});
-	
-	module.exports = Home;
 
 /***/ }
 /******/ ]);

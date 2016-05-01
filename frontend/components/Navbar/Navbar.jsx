@@ -4,8 +4,8 @@ var hashHistory = require('react-router').hashHistory;
 
 var UserStore = require('../../stores/UserStore');
 
-var LoginForm = require('../LoginForm');
-var Search = require('../Search');
+var LoginForm = require('../Forms/LoginForm');
+var Search = require('../Search/Search');
 
 var Navbar = React.createClass({
   getInitialState: function() {
@@ -55,7 +55,7 @@ var Navbar = React.createClass({
 
   render: function() {
     return (
-      <div className="nav-on-landing">
+      <div className={this.props.className}>
         <NavbarItem id="nav-logo" className="logo" actions={this.goHome} text="Logo"></NavbarItem>
         <NavbarItem id="list-your-space" actions={this.addSpace} text="List Your Space"></NavbarItem>
         {this.toggleLoginIcon()}
