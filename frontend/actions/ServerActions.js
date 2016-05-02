@@ -9,9 +9,17 @@ module.exports = {
   },
 
   receiveSingleWorkspace: function(workspace){
+    // debugger;
     AppDispatcher.dispatch({
       actionType: "WORKSPACE_RECEIVED",
       workspace: workspace
+    });
+  },
+
+  handleError: function(errors) {
+    AppDispatcher.dispatch({
+      actionType: "ERROR",
+      errors: errors
     });
   }
 };

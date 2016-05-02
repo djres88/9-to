@@ -6,7 +6,7 @@ module.exports = {
   },
 
   fetchSingleWorkspace: function(id) {
-    ApiUtil.fetchSingleUser(id);
+    ApiUtil.fetchSingleWorkspace(id);
   }
 
   // WORKSPACE COMPLETE CRUD (HOST ACTIONS)

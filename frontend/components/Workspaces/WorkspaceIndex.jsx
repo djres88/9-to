@@ -27,6 +27,7 @@ var WorkspaceIndex = React.createClass({
 
   render: function() {
     var workspaces = this.state.workspaces;
+    console.log(workspaces[1]);
     var workspaceComponents = Object.keys(workspaces).map(function(key, i) {
       return <WorkspaceIndexItem key={i} workspace={workspaces[key]} />;
     });

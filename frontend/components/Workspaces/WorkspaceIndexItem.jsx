@@ -3,7 +3,7 @@ var HashHistory = require('react-router').hashHistory;
 
 var WorkspaceIndexItem = React.createClass({
   showListingDetail: function() {
-    HashHistory.push("s/" + this.props.workspace.id);
+    HashHistory.push("workspaces/" + this.props.workspace.id);
   },
 
   render: function() {

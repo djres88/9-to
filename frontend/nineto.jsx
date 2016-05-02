@@ -18,8 +18,10 @@ var Modal = require("react-modal");
 
 //Components
 var Navbar = require('./components/Navbar/Navbar');
-var WorkspaceIndex = require('./components/Workspaces/WorkspaceIndex');
 var Home = require('./components/Home');
+var WorkspaceIndex = require('./components/Workspaces/WorkspaceIndex');
+var WorkspaceShow = require('./components/Workspaces/WorkspaceShow');
+var ReservationForm = require('./components/Forms/ReservationForm');
 
 //Check for logged in current user on page load.
 function preloadUser() {
@@ -41,7 +43,7 @@ var App = React.createClass({
     // Check for current user.
     preloadUser();
   },
-  
+
   render: function() {
     return (
       <div>
@@ -62,6 +64,8 @@ var Router = (
     <Route path="/" component={App}>
       <IndexRoute component={Home}/>
       <Route path="s" component={WorkspaceIndex}/>
+      <Route path="workspaces/:workspaceId" component={WorkspaceShow}/>
+        <Route path="reservation"/>
     </Route>
   </Router>
 );

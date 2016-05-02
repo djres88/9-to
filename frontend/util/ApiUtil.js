@@ -19,11 +19,11 @@ module.exports = {
 
 	fetchSingleWorkspace: function(id) {
 		$.ajax({
-			url: 'api/workspace' + id,
+			url: 'api/workspaces/' + id,
 			method: 'get',
 			dataType: 'json',
 			success: function(workspaceDetails) {
-				ServerActions.receiveWorkspaces(workspaceDetails);
+				ServerActions.receiveSingleWorkspace(workspaceDetails);
 			},
 			error: function(data) {
 				ServerActions.handleError(data);

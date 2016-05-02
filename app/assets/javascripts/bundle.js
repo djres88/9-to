@@ -64,8 +64,10 @@
 	
 	//Components
 	var Navbar = __webpack_require__(270);
-	var WorkspaceIndex = __webpack_require__(277);
 	var Home = __webpack_require__(282);
+	var WorkspaceIndex = __webpack_require__(277);
+	var WorkspaceShow = __webpack_require__(283);
+	var ReservationForm = __webpack_require__(284);
 	
 	//Check for logged in current user on page load.
 	function preloadUser() {
@@ -112,7 +114,9 @@
 	    Route,
 	    { path: '/', component: App },
 	    React.createElement(IndexRoute, { component: Home }),
-	    React.createElement(Route, { path: 's', component: WorkspaceIndex })
+	    React.createElement(Route, { path: 's', component: WorkspaceIndex }),
+	    React.createElement(Route, { path: 'workspaces/:workspaceId', component: WorkspaceShow }),
+	    React.createElement(Route, { path: 'reservation' })
 	  )
 	);
 	
@@ -34818,7 +34822,7 @@
 	  },
 	
 	  fetchSingleWorkspace: function (id) {
-	    ApiUtil.fetchSingleUser(id);
+	    ApiUtil.fetchSingleWorkspace(id);
 	  }
 	
 	  // WORKSPACE COMPLETE CRUD (HOST ACTIONS)
@@ -34873,11 +34877,11 @@
 	
 		fetchSingleWorkspace: function (id) {
 			$.ajax({
-				url: 'api/workspace' + id,
+				url: 'api/workspaces/' + id,
 				method: 'get',
 				dataType: 'json',
 				success: function (workspaceDetails) {
-					ServerActions.receiveWorkspaces(workspaceDetails);
+					ServerActions.receiveSingleWorkspace(workspaceDetails);
 				},
 				error: function (data) {
 					ServerActions.handleError(data);
@@ -34906,9 +34910,17 @@
 	  },
 	
 	  receiveSingleWorkspace: function (workspace) {
+	    // debugger;
 	    AppDispatcher.dispatch({
 	      actionType: "WORKSPACE_RECEIVED",
 	      workspace: workspace
+	    });
+	  },
+	
+	  handleError: function (errors) {
+	    AppDispatcher.dispatch({
+	      actionType: "ERROR",
+	      errors: errors
 	    });
 	  }
 	};
@@ -34948,6 +34960,7 @@
 	
 	  render: function () {
 	    var workspaces = this.state.workspaces;
+	    console.log(workspaces[1]);
 	    var workspaceComponents = Object.keys(workspaces).map(function (key, i) {
 	      return React.createElement(WorkspaceIndexItem, { key: i, workspace: workspaces[key] });
 	    });
@@ -34984,7 +34997,7 @@
 	};
 	
 	WorkspaceStore.find = function (id) {
-	  return workspaces[id];
+	  return _workspaces[id];
 	};
 	
 	WorkspaceStore.__onDispatch = function (payload) {
@@ -35015,7 +35028,7 @@
 	  displayName: 'WorkspaceIndexItem',
 	
 	  showListingDetail: function () {
-	    HashHistory.push("s/" + this.props.workspace.id);
+	    HashHistory.push("workspaces/" + this.props.workspace.id);
 	  },
 	
 	  render: function () {
@@ -35140,6 +35153,233 @@
 	});
 	
 	module.exports = Home;
+
+/***/ },
+/* 283 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReservationForm = __webpack_require__(284);
+	var WorkspaceStore = __webpack_require__(278);
+	var ClientActions = __webpack_require__(274);
+	
+	var WorkspaceShow = React.createClass({
+	  displayName: 'WorkspaceShow',
+	
+	  getInitialState: function () {
+	    return { space: "" };
+	  },
+	
+	  componentDidMount: function () {
+	    this.listener = WorkspaceStore.addListener(this._onChange);
+	    ClientActions.fetchSingleWorkspace(this.props.params.workspaceId);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.listener.remove();
+	  },
+	
+	  _onChange: function () {
+	    this.setState({ space: WorkspaceStore.find(parseInt(this.props.params.workspaceId)) });
+	  },
+	
+	  render: function () {
+	    var detail = this.state.space;
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'listing-detail' },
+	      React.createElement('img', { className: 'listing-detail-background-image', src: detail.main_photo_url, alt: 'Main Photo' }),
+	      React.createElement(
+	        'div',
+	        { className: 'highlights-bar' },
+	        React.createElement('div', { className: 'owner-pog' }),
+	        React.createElement(
+	          'div',
+	          { className: 'highlights-description' },
+	          React.createElement(
+	            'h3',
+	            null,
+	            detail.description
+	          ),
+	          React.createElement(
+	            'p',
+	            null,
+	            detail.city
+	          ),
+	          React.createElement(
+	            'ul',
+	            { className: 'glyphs' },
+	            React.createElement(
+	              'li',
+	              null,
+	              React.createElement(
+	                'h3',
+	                null,
+	                detail.officetype
+	              ),
+	              React.createElement(
+	                'p',
+	                null,
+	                'Office Type'
+	              )
+	            ),
+	            React.createElement(
+	              'li',
+	              null,
+	              React.createElement(
+	                'h3',
+	                null,
+	                detail.capacity
+	              ),
+	              React.createElement(
+	                'p',
+	                null,
+	                'Capacity'
+	              )
+	            )
+	          )
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'details-box' },
+	        React.createElement(
+	          'h3',
+	          null,
+	          'About'
+	        ),
+	        React.createElement(
+	          'p',
+	          null,
+	          detail.description
+	        ),
+	        React.createElement(
+	          'p',
+	          null,
+	          React.createElement(
+	            'a',
+	            null,
+	            'Contact Host'
+	          )
+	        ),
+	        React.createElement('hr', null),
+	        React.createElement(
+	          'h4',
+	          null,
+	          'Details'
+	        ),
+	        React.createElement(
+	          'ul',
+	          { className: 'details' },
+	          React.createElement(
+	            'li',
+	            null,
+	            'Hours: '
+	          ),
+	          React.createElement(
+	            'li',
+	            null,
+	            'Property Type: '
+	          ),
+	          React.createElement(
+	            'li',
+	            null,
+	            'Office Type: '
+	          )
+	        ),
+	        React.createElement('hr', null),
+	        React.createElement(
+	          'h4',
+	          null,
+	          'Amenities'
+	        ),
+	        React.createElement(
+	          'ul',
+	          { className: 'amenities' },
+	          React.createElement(
+	            'li',
+	            null,
+	            'Coffee'
+	          ),
+	          React.createElement(
+	            'li',
+	            null,
+	            'Conference Room'
+	          ),
+	          React.createElement(
+	            'li',
+	            null,
+	            'WIFI'
+	          ),
+	          React.createElement(
+	            'li',
+	            null,
+	            'Print/Ship Center'
+	          ),
+	          React.createElement(
+	            'li',
+	            null,
+	            'Security'
+	          ),
+	          React.createElement(
+	            'li',
+	            null,
+	            'Parking'
+	          )
+	        ),
+	        React.createElement('hr', null),
+	        React.createElement(
+	          'h4',
+	          null,
+	          'Prices'
+	        ),
+	        React.createElement(
+	          'ul',
+	          { className: 'prices' },
+	          React.createElement(
+	            'li',
+	            null,
+	            'Week: '
+	          ),
+	          React.createElement(
+	            'li',
+	            null,
+	            'Month: '
+	          )
+	        ),
+	        React.createElement('hr', null),
+	        React.createElement(
+	          'div',
+	          { className: 'photos' },
+	          ' '
+	        )
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = WorkspaceShow;
+
+/***/ },
+/* 284 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	
+	var ReservationForm = React.createClass({
+	  displayName: 'ReservationForm',
+	
+	
+	  render: function () {
+	    return React.createElement('div', null);
+	  }
+	
+	});
+	
+	module.exports = ReservationForm;
 
 /***/ }
 /******/ ]);

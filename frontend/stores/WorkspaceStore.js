@@ -10,7 +10,7 @@ WorkspaceStore.all = function () {
 };
 
 WorkspaceStore.find = function(id) {
-  return workspaces[id];
+  return _workspaces[id];
 };
 
 WorkspaceStore.__onDispatch = function (payload) {
