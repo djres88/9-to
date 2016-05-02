@@ -72,26 +72,29 @@
 	  UserActions.fetchCurrentUser();
 	}
 	
-	// Set nav class according to current route.
-	var navClass;
-	// TODO: may need to adjust how we're detecting the route here.
-	if (window.location.hash[2] === "?") {
-	  navClass = 'nav-home';
-	} else {
-	  navClass = 'nav-detail';
-	}
-	
 	var App = React.createClass({
 	  displayName: 'App',
 	
+	  // Set nav class according to current route.
+	  // TODO: may need to adjust how we're detecting the route here.
+	  determineNavClass: function () {
+	    if (window.location.hash[2] === "?") {
+	      return 'nav-home';
+	    } else {
+	      return 'nav-detail';
+	    }
+	  },
+	
 	  componentDidMount: function () {
+	    // Check for current user.
 	    preloadUser();
 	  },
+	
 	  render: function () {
 	    return React.createElement(
 	      'div',
 	      null,
-	      React.createElement(Navbar, { className: navClass }),
+	      React.createElement(Navbar, { className: this.determineNavClass() }),
 	      this.props.children
 	    );
 	  }
@@ -34923,7 +34926,7 @@
 	  displayName: 'WorkspaceIndex',
 	
 	  getInitialState: function () {
-	    return { workspaces: WorkspaceStore.all() };
+	    return { workspaces: "" };
 	  },
 	
 	  componentDidMount: function () {
@@ -34944,9 +34947,6 @@
 	    var workspaceComponents = Object.keys(workspaces).map(function (key, i) {
 	      return React.createElement(WorkspaceIndexItem, { key: i, workspace: workspaces[key] });
 	    });
-	    var navStyle = {
-	      color: 'black'
-	    };
 	
 	    return React.createElement(
 	      'div',
@@ -35033,8 +35033,7 @@
 	        'li',
 	        null,
 	        workspace.description
-	      ),
-	      React.createElement('br', null)
+	      )
 	    );
 	  }
 	});

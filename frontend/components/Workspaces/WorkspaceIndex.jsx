@@ -9,7 +9,7 @@ var SearchParams = require('../Search/SearchParams');
 
 var WorkspaceIndex = React.createClass({
   getInitialState: function() {
-    return {workspaces: WorkspaceStore.all()};
+    return {workspaces: ""};
   },
 
   componentDidMount: function () {
@@ -30,9 +30,6 @@ var WorkspaceIndex = React.createClass({
     var workspaceComponents = Object.keys(workspaces).map(function(key, i) {
       return <WorkspaceIndexItem key={i} workspace={workspaces[key]} />;
     });
-    var navStyle = {
-      color: 'black',
-    };
 
     return (
       <div className="search-listings-page">
