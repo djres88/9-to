@@ -65,7 +65,7 @@
 	//Components
 	var Navbar = __webpack_require__(270);
 	var WorkspaceIndex = __webpack_require__(277);
-	var Home = __webpack_require__(280);
+	var Home = __webpack_require__(282);
 	
 	//Check for logged in current user on page load.
 	function preloadUser() {
@@ -34916,8 +34916,8 @@
 	var ClientActions = __webpack_require__(274);
 	var WorkspaceIndexItem = __webpack_require__(279);
 	var Navbar = __webpack_require__(270);
-	var Map = __webpack_require__(281);
-	var SearchParams = __webpack_require__(282);
+	var Map = __webpack_require__(280);
+	var SearchParams = __webpack_require__(281);
 	
 	var WorkspaceIndex = React.createClass({
 	  displayName: 'WorkspaceIndex',
@@ -35044,6 +35044,46 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	
+	var Map = React.createClass({
+	  displayName: "Map",
+	
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { "class": "" },
+	      " "
+	    );
+	  }
+	});
+	
+	module.exports = Map;
+
+/***/ },
+/* 281 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var SearchParams = React.createClass({
+	  displayName: "SearchParams",
+	
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { className: "search-params" },
+	      "Search Params"
+	    );
+	  }
+	});
+	
+	module.exports = SearchParams;
+
+/***/ },
+/* 282 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
 	var Search = __webpack_require__(273);
 	
 	var Home = React.createClass({
@@ -35088,46 +35128,6 @@
 	});
 	
 	module.exports = Home;
-
-/***/ },
-/* 281 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	
-	var Map = React.createClass({
-	  displayName: "Map",
-	
-	  render: function () {
-	    return React.createElement(
-	      "div",
-	      { "class": "" },
-	      " "
-	    );
-	  }
-	});
-	
-	module.exports = Map;
-
-/***/ },
-/* 282 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	
-	var SearchParams = React.createClass({
-	  displayName: "SearchParams",
-	
-	  render: function () {
-	    return React.createElement(
-	      "div",
-	      { className: "search-params" },
-	      "Search Params"
-	    );
-	  }
-	});
-	
-	module.exports = SearchParams;
 
 /***/ }
 /******/ ]);
