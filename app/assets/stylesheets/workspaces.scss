@@ -19,14 +19,14 @@
 .workspace-index-item {
   width: 46%;
   height: 29%;
-  margin: 1.5%;
+  margin: 25px 1.5%;
   border: 1px solid black;
 }
 
-// Want the picture to be in the backrground, absolutely positioned w/ overlay text.
+// Want the picture to be in the backrground, absolutely positioned w/ overlay text. TODO: How to make this responsive???
 .workspace-index-item img {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
 }
 
 //Overlay text:
@@ -40,7 +40,12 @@
   vertical-align: middle;
 }
 
-
+#image-overlay-price span {
+  padding-top: 3px;
+  display: inline-block;
+  line-height: normal;
+  vertical-align: middle;
+}
 
 .search-params {
   height: 260px;

@@ -12,7 +12,7 @@ var WorkspaceIndexItem = React.createClass({
       <ul className="workspace-index-item">
         <li onClick={this.showListingDetail}>
           <img src={workspace.main_photo_url} alt={"Workspace Image" + workspace.id}/>
-          <p id="image-overlay-price">{"$" + workspace.price_week + "/wk"}</p>
+          <div id="image-overlay-price"><span id="test">{"$" + workspace.price_week + "/wk"}</span></div>
         </li>
         <li>{workspace.description}</li>
       </ul>

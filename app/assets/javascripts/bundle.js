@@ -34502,8 +34502,12 @@
 	        id: this.props.id,
 	        className: this.getClassName(),
 	        onClick: this.props.actions },
-	      this.props.text,
-	      this.menuDropdown()
+	      React.createElement(
+	        'span',
+	        { id: 'navbar-text' },
+	        this.props.text,
+	        this.menuDropdown()
+	      )
 	    );
 	  }
 	});
@@ -35024,9 +35028,13 @@
 	        { onClick: this.showListingDetail },
 	        React.createElement('img', { src: workspace.main_photo_url, alt: "Workspace Image" + workspace.id }),
 	        React.createElement(
-	          'p',
+	          'div',
 	          { id: 'image-overlay-price' },
-	          "$" + workspace.price_week + "/wk"
+	          React.createElement(
+	            'span',
+	            { id: 'test' },
+	            "$" + workspace.price_week + "/wk"
+	          )
 	        )
 	      ),
 	      React.createElement(

@@ -38,8 +38,10 @@ var NavbarItem = React.createClass({
         id={this.props.id}
         className={this.getClassName()}
         onClick={this.props.actions}>
-          {this.props.text}
-          {this.menuDropdown()}
+          <span id="navbar-text">
+            {this.props.text}
+            {this.menuDropdown()}
+          </span>
       </div>
     );
   }
