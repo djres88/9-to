@@ -35022,7 +35022,7 @@
 	      React.createElement(
 	        'li',
 	        { onClick: this.showListingDetail },
-	        React.createElement('img', { src: 'http://res.cloudinary.com/dyzqtq32z/image/upload/v1461964455/npwq6yzdqyww8oekng7o.jpg', alt: "Workspace Image" + workspace.id }),
+	        React.createElement('img', { src: workspace.main_photo_url, alt: "Workspace Image" + workspace.id }),
 	        React.createElement(
 	          'p',
 	          { id: 'image-overlay-price' },
