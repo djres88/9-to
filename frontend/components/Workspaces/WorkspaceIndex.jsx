@@ -34,9 +34,9 @@ var WorkspaceIndex = React.createClass({
 
     return (
       <div className="search-listings-page">
+        <Map spaces={workspaces}/>
         <SearchParams />
         <div className="workspace-index">{workspaceComponents}</div>
-        <Map />
       </div>
     );
   }

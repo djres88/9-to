@@ -1,0 +1,13 @@
+.map-box {
+  position: fixed;
+  height: 400px;
+  width: 100%;
+  margin-left: auto;
+  z-index: 1000;
+}
+
+#map {
+  width: 40%;
+  height: 715px;
+  float: right;
+}
