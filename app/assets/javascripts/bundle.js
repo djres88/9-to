@@ -34386,7 +34386,7 @@
 	  displayName: 'Navbar',
 	
 	  getInitialState: function () {
-	    return { route: "", loggedIn: false, userMenu: "hide" };
+	    return { route: window.location.hash, loggedIn: false, userMenu: "hide" };
 	  },
 	
 	  componentDidMount: function () {
@@ -35005,31 +35005,36 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var HashHistory = __webpack_require__(166).hashHistory;
 	
 	var WorkspaceIndexItem = React.createClass({
-	  displayName: "WorkspaceIndexItem",
+	  displayName: 'WorkspaceIndexItem',
+	
+	  showListingDetail: function () {
+	    HashHistory.push("s/" + this.props.workspace.id);
+	  },
 	
 	  render: function () {
 	    var workspace = this.props.workspace;
 	    return React.createElement(
-	      "ul",
-	      { className: "workspace-index-item" },
+	      'ul',
+	      { className: 'workspace-index-item' },
 	      React.createElement(
-	        "li",
-	        null,
-	        React.createElement("img", { src: "http://res.cloudinary.com/dyzqtq32z/image/upload/v1461964455/npwq6yzdqyww8oekng7o.jpg", alt: "Workspace Image" + workspace.id }),
+	        'li',
+	        { onClick: this.showListingDetail },
+	        React.createElement('img', { src: 'http://res.cloudinary.com/dyzqtq32z/image/upload/v1461964455/npwq6yzdqyww8oekng7o.jpg', alt: "Workspace Image" + workspace.id }),
 	        React.createElement(
-	          "p",
-	          { id: "image-overlay-price" },
+	          'p',
+	          { id: 'image-overlay-price' },
 	          "$" + workspace.price_week + "/wk"
 	        )
 	      ),
 	      React.createElement(
-	        "li",
+	        'li',
 	        null,
 	        workspace.description
 	      ),
-	      React.createElement("br", null)
+	      React.createElement('br', null)
 	    );
 	  }
 	});
