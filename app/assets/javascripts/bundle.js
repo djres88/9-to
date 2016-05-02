@@ -34916,6 +34916,8 @@
 	var ClientActions = __webpack_require__(274);
 	var WorkspaceIndexItem = __webpack_require__(279);
 	var Navbar = __webpack_require__(270);
+	var Map = __webpack_require__(281);
+	var SearchParams = __webpack_require__(282);
 	
 	var WorkspaceIndex = React.createClass({
 	  displayName: 'WorkspaceIndex',
@@ -34949,11 +34951,13 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'search-listings-page' },
+	      React.createElement(SearchParams, null),
 	      React.createElement(
 	        'div',
 	        { className: 'workspace-index' },
 	        workspaceComponents
-	      )
+	      ),
+	      React.createElement(Map, null)
 	    );
 	  }
 	});
@@ -35009,31 +35013,21 @@
 	    var workspace = this.props.workspace;
 	    return React.createElement(
 	      "ul",
-	      null,
+	      { className: "workspace-index-item" },
+	      React.createElement(
+	        "li",
+	        null,
+	        React.createElement("img", { src: "http://res.cloudinary.com/dyzqtq32z/image/upload/v1461964455/npwq6yzdqyww8oekng7o.jpg", alt: "Workspace Image" + workspace.id }),
+	        React.createElement(
+	          "p",
+	          { id: "image-overlay-price" },
+	          "$" + workspace.price_week + "/wk"
+	        )
+	      ),
 	      React.createElement(
 	        "li",
 	        null,
 	        workspace.description
-	      ),
-	      React.createElement(
-	        "li",
-	        null,
-	        workspace.address
-	      ),
-	      React.createElement(
-	        "li",
-	        null,
-	        workspace.city
-	      ),
-	      React.createElement(
-	        "li",
-	        null,
-	        workspace.price_week
-	      ),
-	      React.createElement(
-	        "li",
-	        null,
-	        React.createElement("img", { src: workspace.main_photo_url, alt: "Workspace Image" + workspace.id })
 	      ),
 	      React.createElement("br", null)
 	    );
@@ -35041,6 +35035,9 @@
 	});
 	
 	module.exports = WorkspaceIndexItem;
+	//
+	// <li>{workspace.address}</li>
+	// <li>{workspace.city}</li>
 
 /***/ },
 /* 280 */
@@ -35091,6 +35088,46 @@
 	});
 	
 	module.exports = Home;
+
+/***/ },
+/* 281 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var Map = React.createClass({
+	  displayName: "Map",
+	
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { "class": "" },
+	      " "
+	    );
+	  }
+	});
+	
+	module.exports = Map;
+
+/***/ },
+/* 282 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var SearchParams = React.createClass({
+	  displayName: "SearchParams",
+	
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { className: "search-params" },
+	      "Search Params"
+	    );
+	  }
+	});
+	
+	module.exports = SearchParams;
 
 /***/ }
 /******/ ]);

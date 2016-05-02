@@ -1,9 +1,38 @@
 .nav-detail {
-  background: black;
+  background: white;
   z-index:1000;
   width: 100%;
   display: flex;
   justify-content: flex-end;
   flex-direction: row;
-  border: 1px solid gray;
+  border: 2px solid #eee;
+  color: black;
+}
+
+.nav-detail div {
+  border-right: 2px solid #eee;
+  margin: 0px;
+  height: 45px;
+  text-align: center;
+}
+
+.nav-detail #nav-logo {
+  width: 140px;
+}
+
+.nav-detail #signup {
+  border-left: 2px solid #eee;
+}
+
+.nav-detail #list-your-space {
+  align-content: center;
+  border: 2px solid #eee;
+  padding: 0px;
+  margin-top: 6px;
+  margin-left: 15px;
+}
+
+.nav-detail .navbar-items:hover {
+  background-color: #eee;
+  color: black;
 }

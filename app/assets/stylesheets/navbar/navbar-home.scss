@@ -4,6 +4,7 @@
   display: flex;
   justify-content: flex-end;
   flex-direction: row;
+  color: white;
 }
 
 .navbar-items {
@@ -17,7 +18,6 @@
 
   font-weight: 300;
   background: none;
-  color: white;
   font-size: 0.85em;
   cursor: pointer;
 }
@@ -32,7 +32,7 @@
   border: 2px solid white;
 }
 
-#list-your-space:hover {
+.nav-home #list-your-space:hover {
   background-color: black;
   color: white;
   opacity: 0.5;

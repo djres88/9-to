@@ -4,6 +4,8 @@ var WorkspaceStore = require('../../stores/WorkspaceStore');
 var ClientActions = require('../../actions/ClientActions');
 var WorkspaceIndexItem = require('./WorkspaceIndexItem');
 var Navbar = require('../Navbar/Navbar');
+var Map = require('../Map/Map');
+var SearchParams = require('../Search/SearchParams');
 
 var WorkspaceIndex = React.createClass({
   getInitialState: function() {
@@ -34,7 +36,9 @@ var WorkspaceIndex = React.createClass({
 
     return (
       <div className="search-listings-page">
+        <SearchParams />
         <div className="workspace-index">{workspaceComponents}</div>
+        <Map />
       </div>
     );
   }

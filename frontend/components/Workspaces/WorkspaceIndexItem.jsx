@@ -4,12 +4,13 @@ var WorkspaceIndexItem = React.createClass({
   render: function() {
     var workspace = this.props.workspace;
     return (
-      <ul>
+      <ul className="workspace-index-item">
+        <li>
+          <img src="http://res.cloudinary.com/dyzqtq32z/image/upload/v1461964455/npwq6yzdqyww8oekng7o.jpg" alt={"Workspace Image" + workspace.id}></img>
+          <p id="image-overlay-price">{"$" + workspace.price_week + "/wk"}</p>
+        </li>
+
         <li>{workspace.description}</li>
-        <li>{workspace.address}</li>
-        <li>{workspace.city}</li>
-        <li>{workspace.price_week}</li>
-        <li><img src={workspace.main_photo_url} alt={"Workspace Image" + workspace.id}></img></li>
         <br/>
       </ul>
     );
@@ -17,3 +18,6 @@ var WorkspaceIndexItem = React.createClass({
 });
 
 module.exports = WorkspaceIndexItem;
+//
+// <li>{workspace.address}</li>
+// <li>{workspace.city}</li>
