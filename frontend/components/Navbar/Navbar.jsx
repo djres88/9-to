@@ -9,7 +9,7 @@ var Search = require('../Search/Search');
 
 var Navbar = React.createClass({
   getInitialState: function() {
-    return {route: "", loggedIn: false, userMenu: "hide"};
+    return {route: window.location.hash, loggedIn: false, userMenu: "hide"};
   },
 
   componentDidMount: function() {

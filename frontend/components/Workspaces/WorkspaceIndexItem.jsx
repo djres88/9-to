@@ -1,11 +1,16 @@
 var React = require('react');
+var HashHistory = require('react-router').hashHistory;
 
 var WorkspaceIndexItem = React.createClass({
+  showListingDetail: function() {
+    HashHistory.push("s/" + this.props.workspace.id);
+  },
+
   render: function() {
     var workspace = this.props.workspace;
     return (
       <ul className="workspace-index-item">
-        <li>
+        <li onClick={this.showListingDetail}>
           <img src="http://res.cloudinary.com/dyzqtq32z/image/upload/v1461964455/npwq6yzdqyww8oekng7o.jpg" alt={"Workspace Image" + workspace.id}></img>
           <p id="image-overlay-price">{"$" + workspace.price_week + "/wk"}</p>
         </li>

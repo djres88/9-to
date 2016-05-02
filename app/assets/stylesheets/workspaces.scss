@@ -2,7 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-div .workspace-index {
+.workspace-index {
   display: flex;
   width: 60%;
   flex-wrap: wrap;
@@ -16,7 +16,7 @@ div .workspace-index {
 // TODO: I thought REM made for responsive??
 // width: 25rem;
 // height: 16.6rem;
-div .workspace-index-item {
+.workspace-index-item {
   width: 46%;
   height: 29%;
   margin: 1.5%;
