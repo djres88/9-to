@@ -62,7 +62,7 @@ var Map = React.createClass({
 
   _handleClick: function(coords){
     HashHistory.push({
-      pathname: "s/",
+      pathname: "s",
       query: coords
     });
   },

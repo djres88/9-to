@@ -1,11 +1,19 @@
 .nav-home {
-  position: fixed;
   z-index:1000;
   width: 100%;
   display: flex;
   justify-content: flex-end;
   flex-direction: row;
   color: white;
+  height: 64px;
+  position: absolute;
+}
+
+#scroll-nav-on {
+  position: fixed;
+  background-color: black;
+  opacity: 0.5;
+  transition: all 0.5s ease;
 }
 
 .navbar-items {

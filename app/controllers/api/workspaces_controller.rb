@@ -1,3 +1,5 @@
+require "byebug"
+
 class Api::WorkspacesController < ApplicationController
   def index
     # Add the boundaries so your query can specify something like "where lat between, long between"
@@ -7,8 +9,9 @@ class Api::WorkspacesController < ApplicationController
   end
 
   def show
-    @workspace = Workspace.includes(:owner).find(params[:id])
-    render json: @workspace
+    @workspace = Workspace.find(params[:id])
+    @owner = @workspace.owner
+    render "api/workspaces/show"
   end
 
   private

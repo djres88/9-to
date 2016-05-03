@@ -9,11 +9,32 @@ var Search = require('../Search/Search');
 
 var Navbar = React.createClass({
   getInitialState: function() {
-    return {route: window.location.hash, loggedIn: false, userMenu: "hide"};
+    return {route: window.location.hash, loggedIn: false, userMenu: "hide", scrollNavAction: "off"};
   },
 
   componentDidMount: function() {
-    UserStore.addListener(this._onChange);
+    this.listener = UserStore.addListener(this._onChange);
+    if (this.state.route[2] !== "s") {
+      window.addEventListener('scroll', this.handleScroll);
+    }
+  },
+
+  componentWillUnmount: function() {
+    this.listener.remove();
+    if (this.state.route[2] !== "s") {
+      window.removeEventListener('scroll', this.handleScroll);
+    }
+  },
+
+  handleScroll: function(event) {
+    event.preventDefault();
+    if (event.srcElement.body.scrollTop > 585 && this.state.scrollNavAction === "off") {
+      this.setState({scrollNavAction: "on"});
+    } else if (event.srcElement.body.scrollTop <= 585 && this.state.scrollNavAction === "on") {
+      this.setState({scrollNavAction: "off"});
+    } else {
+      return;
+    }
   },
 
   _onChange: function() {
@@ -49,13 +70,9 @@ var Navbar = React.createClass({
 
   },
 
-  search: function() {
-    hashHistory.push("/search");
-  },
-
   render: function() {
     return (
-      <div className={this.props.className}>
+      <div id={"scroll-nav-" + this.state.scrollNavAction} className={this.props.className}>
         <NavbarItem id="nav-logo" className="logo" actions={this.goHome} text="Logo"></NavbarItem>
         <NavbarItem id="list-your-space" actions={this.addSpace} text="List Your Space"></NavbarItem>
         {this.toggleLoginIcon()}

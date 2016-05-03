@@ -55,8 +55,10 @@
 }
 
 .nav-detail ul.user-menu {
-  padding-left: 10px;
+  padding: 0 10px;
   border: 1px solid #eee;
+  margin-left: -105px;
+  width: 300px;
 }
 
 .nav-detail ul.user-menu #user-menu-username {

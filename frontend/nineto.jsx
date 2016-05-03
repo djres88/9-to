@@ -55,9 +55,9 @@ var App = React.createClass({
 });
 
 // For testing
-window.hash = hashHistory;
-window.User = UserStore;
-window.UserApiUtil = require('./util/UserApiUtil');
+// window.hash = hashHistory;
+// window.User = UserStore;
+// window.UserApiUtil = require('./util/UserApiUtil');
 
 var Router = (
   <Router history={hashHistory}>
