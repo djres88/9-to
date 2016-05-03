@@ -29,8 +29,24 @@
 
 #list-your-space {
   min-width: 110px;
-  margin: 8px 15px 0 0;
+  margin-top: 16px;
+  height: 10px;
+}
+
+#list-your-space span {
+  margin-top: -4px;
+}
+
+.nav-home #list-your-space {
   border: 2px solid white;
+}
+
+.nav-home .dropdown {
+  padding-right: 40px;
+}
+
+.nav-home .user-menu {
+  margin-top: -16px;
 }
 
 .nav-home #list-your-space:hover {

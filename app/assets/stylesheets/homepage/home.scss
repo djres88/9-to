@@ -33,7 +33,7 @@
   font-weight: 600;
 }
 
-.homepage-section-one {
+.below-fold {
   position: absolute;
   margin-top: 600px;
   display: flex;
@@ -42,8 +42,13 @@
   text-align: center;
 }
 
-.homepage-section-one h3 {
+.below-fold div {
   justify-content: center;
   font-size: 35px;
-  margin: auto;
+  margin: 0px auto 40px auto;
+  height: 500px;
+}
+
+.below-fold p {
+  font-size: 18px;
 }

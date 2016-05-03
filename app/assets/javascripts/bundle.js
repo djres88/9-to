@@ -35317,22 +35317,75 @@
 	        React.createElement(
 	          'h2',
 	          null,
-	          'Find flexible-term office space for freelancers and teams.'
+	          'Flexible-term office space for freelancers and teams.'
 	        )
 	      ),
 	      React.createElement(Search, null),
 	      React.createElement(
 	        'div',
-	        { className: 'homepage-section-one' },
+	        { className: 'below-fold' },
 	        React.createElement(
-	          'h3',
-	          null,
-	          'TIME IS MONEY. SAVE IT.'
+	          'div',
+	          { className: 'homepage-section-one' },
+	          React.createElement(
+	            'h3',
+	            null,
+	            'Time is money. Save it.'
+	          ),
+	          React.createElement(
+	            'p',
+	            null,
+	            'Something about saving costs involved w/ finding/setting up a new office...'
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'image-gallery' },
+	            React.createElement('img', { 'class': '', src: '', alt: '' }),
+	            React.createElement('img', { 'class': '', src: '', alt: '' }),
+	            React.createElement('img', { 'class': '', src: '', alt: '' })
+	          )
 	        ),
 	        React.createElement(
-	          'p',
-	          null,
-	          'Something about saving costs involved w/ finding/setting up a new office...'
+	          'div',
+	          { className: 'homepage-section-two' },
+	          React.createElement(
+	            'h3',
+	            null,
+	            'Productivity Near You'
+	          ),
+	          React.createElement(
+	            'p',
+	            null,
+	            'City guides?'
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'image-gallery' },
+	            React.createElement('img', { 'class': '', src: '', alt: '' }),
+	            React.createElement('img', { 'class': '', src: '', alt: '' }),
+	            React.createElement('img', { 'class': '', src: '', alt: '' })
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'homepage-section-three' },
+	          React.createElement(
+	            'h3',
+	            null,
+	            'Some kinda gallery!'
+	          ),
+	          React.createElement(
+	            'p',
+	            null,
+	            'hmmmmdaf adsfdasfdsadas'
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'image-gallery' },
+	            React.createElement('img', { 'class': '', src: '', alt: '' }),
+	            React.createElement('img', { 'class': '', src: '', alt: '' }),
+	            React.createElement('img', { 'class': '', src: '', alt: '' })
+	          )
 	        )
 	      )
 	    );
