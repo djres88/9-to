@@ -34960,7 +34960,6 @@
 	
 	  render: function () {
 	    var workspaces = this.state.workspaces;
-	    console.log(workspaces[1]);
 	    var workspaceComponents = Object.keys(workspaces).map(function (key, i) {
 	      return React.createElement(WorkspaceIndexItem, { key: i, workspace: workspaces[key] });
 	    });
@@ -35208,7 +35207,84 @@
 	    return React.createElement(
 	      "div",
 	      { className: "search-params" },
-	      "Search Params"
+	      React.createElement(
+	        "ul",
+	        null,
+	        React.createElement(
+	          "li",
+	          null,
+	          React.createElement(
+	            "h4",
+	            null,
+	            "Dates"
+	          ),
+	          React.createElement(
+	            "p",
+	            null,
+	            "Date Field1"
+	          ),
+	          React.createElement(
+	            "p",
+	            null,
+	            "Date Field2"
+	          )
+	        ),
+	        React.createElement("hr", null),
+	        React.createElement(
+	          "li",
+	          null,
+	          React.createElement(
+	            "h4",
+	            null,
+	            "Capacity"
+	          ),
+	          React.createElement(
+	            "p",
+	            null,
+	            "Dropdown"
+	          )
+	        ),
+	        React.createElement("hr", null),
+	        React.createElement(
+	          "li",
+	          null,
+	          React.createElement(
+	            "h4",
+	            null,
+	            "Office Type"
+	          ),
+	          React.createElement(
+	            "p",
+	            null,
+	            "Radio1"
+	          ),
+	          React.createElement(
+	            "p",
+	            null,
+	            "Radio2"
+	          ),
+	          React.createElement(
+	            "p",
+	            null,
+	            "Radio3"
+	          )
+	        ),
+	        React.createElement("hr", null),
+	        React.createElement(
+	          "li",
+	          null,
+	          React.createElement(
+	            "h4",
+	            null,
+	            "Price"
+	          ),
+	          React.createElement(
+	            "p",
+	            null,
+	            "Slider"
+	          )
+	        )
+	      )
 	    );
 	  }
 	});

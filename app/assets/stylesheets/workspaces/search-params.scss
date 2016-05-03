@@ -1,0 +1,37 @@
+.search-params {
+  position: relative;
+  display: inline-block;
+  padding-top: 65px;
+  height: 100px;
+  width: 40%;
+}
+
+.search-params ul {
+  margin: 20px 20px;
+  font-size: 14px;
+  font-weight: 300;
+  display: flex;
+  justify-content: flex-start;
+
+  flex-direction: column;
+}
+
+.search-params hr {
+  margin: 10px 0;
+  border: 1px solid #eee;
+}
+
+.search-params li {
+  padding: 10px 0;
+  display: flex;
+}
+
+.search-params li h4 {
+  width: 100px;
+  margin-right: 60px;
+  font-weight: 400;
+}
+
+.search-params li p {
+  margin-right: 80px;
+}
