@@ -16,7 +16,6 @@ var WorkspaceIndex = React.createClass({
     console.log("WorkspaceIndex props", this.props);
     this.listener = WorkspaceStore.addListener(this._onChange);
     // TODO: this also listens to filters store, passes relevant props to map and search params
-    ClientActions.fetchWorkspaces();
   },
 
   componentWillUnmount: function() {

@@ -16,6 +16,7 @@ WorkspaceStore.find = function(id) {
 WorkspaceStore.__onDispatch = function (payload) {
   switch(payload.actionType) {
     case "WORKSPACES_RECEIVED":
+      _workspaces = {};
       payload.workspaces.forEach(function(space) {
         _workspaces[space.id] = space;
       });

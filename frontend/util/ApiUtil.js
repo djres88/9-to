@@ -4,11 +4,10 @@ module.exports = {
 
 	// WORKSPACE VIEWS (TENANT REQUESTS)
 	fetchWorkspaces: function(searchParams) {
-		console.log(searchParams);
 		$.ajax({
 			url: 'api/workspaces',
 			method: 'get',
-			data: searchParams,
+			data: {map_bounds: searchParams},
 			dataType: 'json',
 			success: function(workspacesData) {
 				ServerActions.receiveWorkspaces(workspacesData);

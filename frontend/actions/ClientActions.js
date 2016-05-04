@@ -10,8 +10,8 @@ module.exports = {
   // }
 
   //NOTE: fetch workspaces based on map bounds. Use the searchbox as a starting point for the map (i.e. translate the city input to map coordinates).
-  fetchWorkspaces: function(params) { 
-    ApiUtil.fetchWorkspaces(params);
+  fetchWorkspaces: function(bounds) {
+    ApiUtil.fetchWorkspaces(bounds);
   },
 
   fetchSingleWorkspace: function(id) {

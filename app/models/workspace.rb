@@ -29,17 +29,17 @@ class Workspace < ActiveRecord::Base
     self.where("latitude < ?", bounds[:NE][:lat])
         .where("latitude > ?", bounds[:SW][:lat])
         .where("longitude > ?", bounds[:SW][:lng])
-        .where("longitude > ?", bounds[:NE][:lng])
+        .where("longitude < ?", bounds[:NE][:lng])
   end
 
 
-  def self.filter_params(options)
-    self.where("capacity > ?", options[:capacity])
-        # TODO: WILL THIS WORK???
-        .where("office-type IN (?, ?, ?)", options[:office_types].join(",")
-        .where("price => ?", options[:price][:low])
-        .where("price <= ?", options[:price][:high])
-  end
+  # def self.filter_params(options)
+  #   self.where("capacity > ?", options[:capacity])
+  #       # TODO: WILL THIS WORK???
+  #       .where("office-type IN (?, ?, ?)", options[:office_types].join(",")
+  #       .where("price => ?", options[:price][:low])
+  #       .where("price <= ?", options[:price][:high])
+  # end
 
   # TODO: Gonna be difficult to link this to reservations...
   # def self.date_params(dates)

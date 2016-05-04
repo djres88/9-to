@@ -34942,8 +34942,8 @@
 	  // }
 	
 	  //NOTE: fetch workspaces based on map bounds. Use the searchbox as a starting point for the map (i.e. translate the city input to map coordinates).
-	  fetchWorkspaces: function (params) {
-	    ApiUtil.fetchWorkspaces(params);
+	  fetchWorkspaces: function (bounds) {
+	    ApiUtil.fetchWorkspaces(bounds);
 	  },
 	
 	  fetchSingleWorkspace: function (id) {
@@ -34987,11 +34987,10 @@
 	
 		// WORKSPACE VIEWS (TENANT REQUESTS)
 		fetchWorkspaces: function (searchParams) {
-			console.log(searchParams);
 			$.ajax({
 				url: 'api/workspaces',
 				method: 'get',
-				data: searchParams,
+				data: { map_bounds: searchParams },
 				dataType: 'json',
 				success: function (workspacesData) {
 					ServerActions.receiveWorkspaces(workspacesData);
@@ -62970,7 +62969,6 @@
 	    console.log("WorkspaceIndex props", this.props);
 	    this.listener = WorkspaceStore.addListener(this._onChange);
 	    // TODO: this also listens to filters store, passes relevant props to map and search params
-	    ClientActions.fetchWorkspaces();
 	  },
 	
 	  componentWillUnmount: function () {
@@ -63034,6 +63032,7 @@
 	WorkspaceStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case "WORKSPACES_RECEIVED":
+	      _workspaces = {};
 	      payload.workspaces.forEach(function (space) {
 	        _workspaces[space.id] = space;
 	      });
@@ -63102,6 +63101,7 @@
 	var React = __webpack_require__(1);
 	var HashHistory = __webpack_require__(166).hashHistory;
 	var ReactDOM = __webpack_require__(32);
+	var ClientActions = __webpack_require__(274);
 	
 	function _getCoordsObj(latLng) {
 	  return {
@@ -63145,7 +63145,7 @@
 	    var removeMarkers = [];
 	    //Collect markers to remove
 	    this.markers.forEach(function (marker) {
-	      if (!this.props.workspaces.hasOwnProperty(marker.workspaceId)) {
+	      if (!this.props.spaces.hasOwnProperty(marker.workspaceId)) {
 	        removeMarkers.push(marker);
 	      }
 	    }.bind(this));
@@ -63180,10 +63180,10 @@
 	      var southWest = _getCoordsObj(bounds.getSouthWest());
 	      //actually issue the request
 	      bounds = {
-	        northEast: northEast,
-	        southWest: southWest
+	        NE: northEast,
+	        SW: southWest
 	      };
-	      // FilterActions.updateBounds(bounds);
+	      ClientActions.fetchWorkspaces(bounds);
 	    });
 	    google.maps.event.addListener(this.map, 'click', function (event) {
 	      var coords = { lat: event.latLng.lat(), lng: event.latLng.lng() };

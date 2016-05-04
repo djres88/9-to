@@ -2,13 +2,12 @@ require "byebug"
 
 class Api::WorkspacesController < ApplicationController
   def index
-    @workspaces = Workspace.all
-
+    workspaces = Workspace.all
+    # byebug
     if (map_bounds)
-      @workspaces.in_bounds(map_bounds)
+      @workspaces = workspaces.in_map_bounds(map_bounds)
     end
-
-    @workspaces.filter_params(filter_params)
+    # @workspaces.filter_params(filter_params)
 
     render json: @workspaces
   end
@@ -28,7 +27,7 @@ class Api::WorkspacesController < ApplicationController
     params.permit(:capacity, :office_types, :price)
     # capacity: send data as a number, 1-5
     # params[:capacity]
-    
+
     # office_types: send data as {office_types: []}
     # params[:office_types]
 

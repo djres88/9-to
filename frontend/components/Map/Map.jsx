@@ -1,6 +1,7 @@
 var React = require('react');
 var HashHistory = require('react-router').hashHistory;
 var ReactDOM = require('react-dom');
+var ClientActions = require('../../actions/ClientActions');
 
 function _getCoordsObj(latLng) {
   return {
@@ -42,7 +43,7 @@ var Map = React.createClass({
     var removeMarkers = [];
     //Collect markers to remove
     this.markers.forEach(function(marker){
-      if (!this.props.workspaces.hasOwnProperty(marker.workspaceId)){
+      if (!this.props.spaces.hasOwnProperty(marker.workspaceId)){
         removeMarkers.push(marker);
       }
     }.bind(this));
@@ -77,10 +78,10 @@ var Map = React.createClass({
       var southWest = _getCoordsObj(bounds.getSouthWest());
       //actually issue the request
       bounds = {
-        northEast: northEast,
-        southWest: southWest
+        NE: northEast,
+        SW: southWest
       };
-      // FilterActions.updateBounds(bounds);
+      ClientActions.fetchWorkspaces(bounds);
     });
     google.maps.event.addListener(this.map, 'click', function(event) {
       var coords = { lat: event.latLng.lat(), lng: event.latLng.lng() };
