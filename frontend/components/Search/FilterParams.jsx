@@ -1,7 +1,8 @@
 var React = require('react');
 var Dates = require('./Dates');
 
-var SearchParams = React.createClass({
+// TODO: All this needs to do is listen to a FILTER store that updates (selects) workspaces that the WorkspaceIndex has retrieved.
+var FilterParams = React.createClass({
   getInitialState: function() {
     return {location: "", capacity: 1, office_types: ["Coworking Space", "Private Office", "Home Office"]};
   },
@@ -36,13 +37,13 @@ var SearchParams = React.createClass({
           <li>
             <h4>Office Type</h4>
               <label>Coworking Space
-                <input onChange={this.updateOfficeType} type="checkbox" value="Coworking" checked/>
+                <input className="office-type" onChange={this.updateOfficeType} type="checkbox" value="Coworking" checked/>
               </label>
               <label>Private Office
-                <input onChange={this.updateOfficeType} type="checkbox" value="Private Office" checked/>
+                <input className="office-type" onChange={this.updateOfficeType} type="checkbox" value="Private Office" checked/>
               </label>
               <label>Home Office
-                <input onChange={this.updateOfficeType} type="checkbox" value="Home Office" checked/>
+                <input className="office-type" onChange={this.updateOfficeType} type="checkbox" value="Home Office" checked/>
               </label>
           </li>
           <hr/>
@@ -57,4 +58,4 @@ var SearchParams = React.createClass({
   }
 });
 
-module.exports = SearchParams;
+module.exports = FilterParams;

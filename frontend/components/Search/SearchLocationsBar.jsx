@@ -16,7 +16,7 @@ var SearchLocationsBar = React.createClass({
 
   render: function() {
     return (
-      <input id="searchTextField"/>
+      <input id="searchTextField" className={this.props.className}/>
     );
   }
 

@@ -6,6 +6,7 @@ var UserStore = require('../../stores/UserStore');
 
 var LoginForm = require('../Forms/LoginForm');
 var Search = require('../Search/Search');
+var SearchLocationsBar = require('../Search/SearchLocationsBar');
 
 var Navbar = React.createClass({
   getInitialState: function() {
@@ -13,6 +14,7 @@ var Navbar = React.createClass({
   },
 
   componentDidMount: function() {
+    console.log("Navbar props", this.props);
     this.listener = UserStore.addListener(this._onChange);
     if (this.state.route[2] !== "s") {
       window.addEventListener('scroll', this.handleScroll);
@@ -39,6 +41,7 @@ var Navbar = React.createClass({
 
   _onChange: function() {
     this.setState({loggedIn: UserStore.currentUser ()});
+    this.setState({route: window.location.hash});
   },
 
   goHome: function() {
@@ -66,14 +69,24 @@ var Navbar = React.createClass({
     return loginIcon;
   },
 
+  toggleSearchBar: function() {
+    if (window.location.hash[2] === "?") {
+      return;
+    } else {
+      return <SearchLocationsBar className="searchbar-nav"/>;
+    }
+  },
+
   addSpace: function() {
 
   },
 
   render: function() {
+
     return (
       <div id={"scroll-nav-" + this.state.scrollNavAction} className={this.props.className}>
         <NavbarItem id="nav-logo" className="logo" actions={this.goHome} text="Logo"></NavbarItem>
+        {this.toggleSearchBar()}
         <NavbarItem id="list-your-space" actions={this.addSpace} text="List Your Space"></NavbarItem>
         {this.toggleLoginIcon()}
       </div>

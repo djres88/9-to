@@ -5,7 +5,7 @@ var ClientActions = require('../../actions/ClientActions');
 var WorkspaceIndexItem = require('./WorkspaceIndexItem');
 var Navbar = require('../Navbar/Navbar');
 var Map = require('../Map/Map');
-var SearchParams = require('../Search/SearchParams');
+var FilterParams = require('../Search/FilterParams');
 
 var WorkspaceIndex = React.createClass({
   getInitialState: function() {
@@ -13,7 +13,7 @@ var WorkspaceIndex = React.createClass({
   },
 
   componentDidMount: function () {
-    console.log(this.props);
+    console.log("WorkspaceIndex props", this.props);
     this.listener = WorkspaceStore.addListener(this._onChange);
     // TODO: this also listens to filters store, passes relevant props to map and search params
     ClientActions.fetchWorkspaces();
@@ -28,7 +28,7 @@ var WorkspaceIndex = React.createClass({
   },
 
   _fetchFilteredWorkspaces: function(event) {
-    // TODO: Goal is to fetch the workspaces that are (a) bound by the map and (b) meet the criteria in the SearchParams.
+    // TODO: Goal is to fetch the workspaces that are (a) bound by the map and (b) meet the criteria in the FilterParams.
     // (1) looks at filter store
     // (2) executed some function that retrieved bounds of map: GlobalMap.getBounds
     // (3) Construct params object combining 1/2
@@ -45,7 +45,7 @@ var WorkspaceIndex = React.createClass({
     return (
       <div className="search-listings-page">
         <Map spaces={workspaces} fetchSpaces={this._fetchFilteredWorkspaces}/>
-        <SearchParams />
+        <FilterParams />
         <div className="workspace-index">{workspaceComponents}</div>
       </div>
     );

@@ -34388,6 +34388,7 @@
 	
 	var LoginForm = __webpack_require__(272);
 	var Search = __webpack_require__(273);
+	var SearchLocationsBar = __webpack_require__(485);
 	
 	var Navbar = React.createClass({
 	  displayName: 'Navbar',
@@ -34397,6 +34398,7 @@
 	  },
 	
 	  componentDidMount: function () {
+	    console.log("Navbar props", this.props);
 	    this.listener = UserStore.addListener(this._onChange);
 	    if (this.state.route[2] !== "s") {
 	      window.addEventListener('scroll', this.handleScroll);
@@ -34423,6 +34425,7 @@
 	
 	  _onChange: function () {
 	    this.setState({ loggedIn: UserStore.currentUser() });
+	    this.setState({ route: window.location.hash });
 	  },
 	
 	  goHome: function () {
@@ -34449,13 +34452,23 @@
 	    return loginIcon;
 	  },
 	
+	  toggleSearchBar: function () {
+	    if (window.location.hash[2] === "?") {
+	      return;
+	    } else {
+	      return React.createElement(SearchLocationsBar, { className: 'searchbar-nav' });
+	    }
+	  },
+	
 	  addSpace: function () {},
 	
 	  render: function () {
+	
 	    return React.createElement(
 	      'div',
 	      { id: "scroll-nav-" + this.state.scrollNavAction, className: this.props.className },
 	      React.createElement(NavbarItem, { id: 'nav-logo', className: 'logo', actions: this.goHome, text: 'Logo' }),
+	      this.toggleSearchBar(),
 	      React.createElement(NavbarItem, { id: 'list-your-space', actions: this.addSpace, text: 'List Your Space' }),
 	      this.toggleLoginIcon()
 	    );
@@ -34874,7 +34887,7 @@
 	    return React.createElement(
 	      'form',
 	      { className: 'search-container', onSubmit: this.handleSubmit },
-	      React.createElement(SearchLocationsBar, { value: this.state.inputVal, action: this.getCity }),
+	      React.createElement(SearchLocationsBar, { value: this.state.inputVal, action: this.getCity, className: 'searchbar-home' }),
 	      React.createElement(Dates, { onClick: this.getStartDate, placeholder: 'Start Date' }),
 	      React.createElement(Dates, { onClick: this.getEndDate, placeholder: 'End Date' }),
 	      React.createElement(
@@ -34928,6 +34941,7 @@
 	  //   ApiUtil.fetchSingleWorkspace(id);
 	  // }
 	
+	  //NOTE: fetch workspaces based on map bounds. Use the searchbox as a starting point for the map (i.e. translate the city input to map coordinates).
 	  fetchWorkspaces: function (params) {
 	    ApiUtil.fetchWorkspaces(params);
 	  },
@@ -62811,7 +62825,7 @@
 	  },
 	
 	  render: function () {
-	    return React.createElement('input', { id: 'searchTextField' });
+	    return React.createElement('input', { id: 'searchTextField', className: this.props.className });
 	  }
 	
 	});
@@ -62943,7 +62957,7 @@
 	var WorkspaceIndexItem = __webpack_require__(489);
 	var Navbar = __webpack_require__(270);
 	var Map = __webpack_require__(490);
-	var SearchParams = __webpack_require__(491);
+	var FilterParams = __webpack_require__(494);
 	
 	var WorkspaceIndex = React.createClass({
 	  displayName: 'WorkspaceIndex',
@@ -62953,7 +62967,7 @@
 	  },
 	
 	  componentDidMount: function () {
-	    console.log(this.props);
+	    console.log("WorkspaceIndex props", this.props);
 	    this.listener = WorkspaceStore.addListener(this._onChange);
 	    // TODO: this also listens to filters store, passes relevant props to map and search params
 	    ClientActions.fetchWorkspaces();
@@ -62968,7 +62982,7 @@
 	  },
 	
 	  _fetchFilteredWorkspaces: function (event) {
-	    // TODO: Goal is to fetch the workspaces that are (a) bound by the map and (b) meet the criteria in the SearchParams.
+	    // TODO: Goal is to fetch the workspaces that are (a) bound by the map and (b) meet the criteria in the FilterParams.
 	    // (1) looks at filter store
 	    // (2) executed some function that retrieved bounds of map: GlobalMap.getBounds
 	    // (3) Construct params object combining 1/2
@@ -62986,7 +63000,7 @@
 	      'div',
 	      { className: 'search-listings-page' },
 	      React.createElement(Map, { spaces: workspaces, fetchSpaces: this._fetchFilteredWorkspaces }),
-	      React.createElement(SearchParams, null),
+	      React.createElement(FilterParams, null),
 	      React.createElement(
 	        'div',
 	        { className: 'workspace-index' },
@@ -63215,133 +63229,7 @@
 	module.exports = Map;
 
 /***/ },
-/* 491 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var Dates = __webpack_require__(277);
-	
-	var SearchParams = React.createClass({
-	  displayName: 'SearchParams',
-	
-	  getInitialState: function () {
-	    return { location: "", capacity: 1, office_types: ["Coworking Space", "Private Office", "Home Office"] };
-	  },
-	
-	  updateOfficeType: function (e) {
-	    // e.preventDefault();
-	    // console.log(e.currentTarget);
-	  },
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'search-params' },
-	      React.createElement(
-	        'ul',
-	        null,
-	        React.createElement(
-	          'li',
-	          null,
-	          React.createElement(
-	            'h4',
-	            null,
-	            'Dates'
-	          ),
-	          React.createElement(Dates, { placeholder: 'Start Date' }),
-	          React.createElement(Dates, { placeholder: 'End Date' })
-	        ),
-	        React.createElement('hr', null),
-	        React.createElement(
-	          'li',
-	          null,
-	          React.createElement(
-	            'h4',
-	            null,
-	            'Capacity'
-	          ),
-	          'Spaces Needed:',
-	          React.createElement(
-	            'select',
-	            { className: 'capacity-dropdown' },
-	            React.createElement(
-	              'option',
-	              { onChange: this.getCapacity },
-	              '1'
-	            ),
-	            React.createElement(
-	              'option',
-	              { onChange: this.getCapacity },
-	              '2'
-	            ),
-	            React.createElement(
-	              'option',
-	              { onChange: this.getCapacity },
-	              '3'
-	            ),
-	            React.createElement(
-	              'option',
-	              { onChange: this.getCapacity },
-	              '4'
-	            ),
-	            React.createElement(
-	              'option',
-	              { onChange: this.getCapacity },
-	              '5+'
-	            )
-	          )
-	        ),
-	        React.createElement('hr', null),
-	        React.createElement(
-	          'li',
-	          null,
-	          React.createElement(
-	            'h4',
-	            null,
-	            'Office Type'
-	          ),
-	          React.createElement(
-	            'label',
-	            null,
-	            'Coworking Space',
-	            React.createElement('input', { onChange: this.updateOfficeType, type: 'checkbox', value: 'Coworking', checked: true })
-	          ),
-	          React.createElement(
-	            'label',
-	            null,
-	            'Private Office',
-	            React.createElement('input', { onChange: this.updateOfficeType, type: 'checkbox', value: 'Private Office', checked: true })
-	          ),
-	          React.createElement(
-	            'label',
-	            null,
-	            'Home Office',
-	            React.createElement('input', { onChange: this.updateOfficeType, type: 'checkbox', value: 'Home Office', checked: true })
-	          )
-	        ),
-	        React.createElement('hr', null),
-	        React.createElement(
-	          'li',
-	          null,
-	          React.createElement(
-	            'h4',
-	            null,
-	            'Price'
-	          ),
-	          React.createElement(
-	            'p',
-	            null,
-	            'Slider'
-	          )
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = SearchParams;
-
-/***/ },
+/* 491 */,
 /* 492 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -63567,6 +63455,134 @@
 	});
 	
 	module.exports = ReservationForm;
+
+/***/ },
+/* 494 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var Dates = __webpack_require__(277);
+	
+	// TODO: All this needs to do is listen to a FILTER store that updates (selects) workspaces that the WorkspaceIndex has retrieved.
+	var FilterParams = React.createClass({
+	  displayName: 'FilterParams',
+	
+	  getInitialState: function () {
+	    return { location: "", capacity: 1, office_types: ["Coworking Space", "Private Office", "Home Office"] };
+	  },
+	
+	  updateOfficeType: function (e) {
+	    // e.preventDefault();
+	    // console.log(e.currentTarget);
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'search-params' },
+	      React.createElement(
+	        'ul',
+	        null,
+	        React.createElement(
+	          'li',
+	          null,
+	          React.createElement(
+	            'h4',
+	            null,
+	            'Dates'
+	          ),
+	          React.createElement(Dates, { placeholder: 'Start Date' }),
+	          React.createElement(Dates, { placeholder: 'End Date' })
+	        ),
+	        React.createElement('hr', null),
+	        React.createElement(
+	          'li',
+	          null,
+	          React.createElement(
+	            'h4',
+	            null,
+	            'Capacity'
+	          ),
+	          'Spaces Needed:',
+	          React.createElement(
+	            'select',
+	            { className: 'capacity-dropdown' },
+	            React.createElement(
+	              'option',
+	              { onChange: this.getCapacity },
+	              '1'
+	            ),
+	            React.createElement(
+	              'option',
+	              { onChange: this.getCapacity },
+	              '2'
+	            ),
+	            React.createElement(
+	              'option',
+	              { onChange: this.getCapacity },
+	              '3'
+	            ),
+	            React.createElement(
+	              'option',
+	              { onChange: this.getCapacity },
+	              '4'
+	            ),
+	            React.createElement(
+	              'option',
+	              { onChange: this.getCapacity },
+	              '5+'
+	            )
+	          )
+	        ),
+	        React.createElement('hr', null),
+	        React.createElement(
+	          'li',
+	          null,
+	          React.createElement(
+	            'h4',
+	            null,
+	            'Office Type'
+	          ),
+	          React.createElement(
+	            'label',
+	            null,
+	            'Coworking Space',
+	            React.createElement('input', { className: 'office-type', onChange: this.updateOfficeType, type: 'checkbox', value: 'Coworking', checked: true })
+	          ),
+	          React.createElement(
+	            'label',
+	            null,
+	            'Private Office',
+	            React.createElement('input', { className: 'office-type', onChange: this.updateOfficeType, type: 'checkbox', value: 'Private Office', checked: true })
+	          ),
+	          React.createElement(
+	            'label',
+	            null,
+	            'Home Office',
+	            React.createElement('input', { className: 'office-type', onChange: this.updateOfficeType, type: 'checkbox', value: 'Home Office', checked: true })
+	          )
+	        ),
+	        React.createElement('hr', null),
+	        React.createElement(
+	          'li',
+	          null,
+	          React.createElement(
+	            'h4',
+	            null,
+	            'Price'
+	          ),
+	          React.createElement(
+	            'p',
+	            null,
+	            'Slider'
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = FilterParams;
 
 /***/ }
 /******/ ]);
