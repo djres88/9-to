@@ -62856,7 +62856,7 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'homepage' },
-	      React.createElement('iframe', { id: 'above-fold-background' }),
+	      React.createElement('div', { id: 'above-fold-background' }),
 	      React.createElement(
 	        'div',
 	        { className: 'above-fold-text' },

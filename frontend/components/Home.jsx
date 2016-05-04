@@ -5,7 +5,7 @@ var Home = React.createClass({
   render: function() {
     return (
       <div className="homepage">
-        <iframe id="above-fold-background"></iframe>
+        <div id="above-fold-background"></div>
         <div className="above-fold-text">
           <h1>WHEREVER WORK TAKES YOU</h1>
           <h2>Flexible-term office space for freelancers and teams.</h2>
