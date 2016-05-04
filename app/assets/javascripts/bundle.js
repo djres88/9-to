@@ -34805,23 +34805,117 @@
 	var ClientActions = __webpack_require__(274);
 	
 	var Dates = __webpack_require__(277);
+	var SearchLocationsBar = __webpack_require__(493);
 	
 	var Search = React.createClass({
 	  displayName: 'Search',
 	
-	  handleSubmit: function () {
-	    // ClientActions.search...
+	  getInitialState: function () {
+	    return { inputVal: "", matchingCities: [], startDate: null, endDate: null, spacesNeeded: null };
+	  },
+	
+	  // componentDidMount: function() {
+	  //   // Better to just have a table w/ all the cities (matched to their main coordinates) and load that up?
+	  //   this.listener = WorkspaceStore.addListener(this._onChange);
+	  //
+	  // },
+	
+	  getCity: function (event) {
+	    event.preventDefault();
+	    this.setState({
+	      inputVal: event.currentTarget.value,
+	      // matchingCities: ClientActions.matchCities(e.currentTarget.value)
+	      matchingCities: ["test1", "test2"]
+	    });
+	  },
+	
+	  getStartDate: function (e) {
+	    e.preventDefault();
+	    console.log(e.currentTarget);
+	  },
+	
+	  getEndDate: function (e) {
+	    e.preventDefault();
+	  },
+	
+	  getCapacity: function (e) {
+	    e.preventDefault();
+	    console.log(e.currentTarget);
+	  },
+	
+	  updateSearchField: function (e) {
+	    console.log(e.currentTarget.innerHTML);
+	  },
+	
+	  handleSubmit: function (event) {
+	    event.preventDefault();
+	    ClientActions.fetchWorkspaces({
+	      city: this.state.inputVal,
+	      startDate: this.state.startDate,
+	      endDate: this.state.endDate,
+	      spacesNeeded: this.state.spacesNeeded
+	    });
 	    HashHistory.push("s");
 	  },
 	
+	  dropdown: function () {
+	    this.setState({ dropdown: "block" });
+	  },
+	
 	  render: function () {
+	    var context = this;
+	    var LocationMatches = this.state.matchingCities.map(function (city, idx) {
+	      return React.createElement(
+	        'li',
+	        { key: idx, onClick: context.updateSearchField, className: 'city-matches' },
+	        city
+	      );
+	    });
 	    return React.createElement(
 	      'form',
 	      { className: 'search-container', onSubmit: this.handleSubmit },
-	      React.createElement('input', { className: 'search-field', type: 'text' }),
-	      React.createElement(Dates, { name: 'Start Date' }),
-	      React.createElement(Dates, { name: 'End Date' }),
-	      React.createElement('input', { className: 'capacity-dropdown', type: 'text' }),
+	      React.createElement(
+	        'div',
+	        { className: 'searchbar' },
+	        React.createElement('input', { id: 'search-field-text', placeholder: 'Location', className: 'search-field', type: 'text', value: this.state.inputVal, onChange: this.getCity }),
+	        React.createElement(
+	          'ul',
+	          { display: 'none' },
+	          LocationMatches
+	        )
+	      ),
+	      React.createElement(SearchLocationsBar, { value: this.state.inputVal, action: this.getCity }),
+	      React.createElement(Dates, { onClick: this.getStartDate, placeholder: 'Start Date' }),
+	      React.createElement(Dates, { onClick: this.getEndDate, placeholder: 'End Date' }),
+	      React.createElement(
+	        'select',
+	        { className: 'capacity-dropdown' },
+	        React.createElement(
+	          'option',
+	          { onChange: this.getCapacity },
+	          'Spaces Needed: 1'
+	        ),
+	        React.createElement(
+	          'option',
+	          { onChange: this.getCapacity },
+	          'Spaces Needed: 2'
+	        ),
+	        React.createElement(
+	          'option',
+	          { onChange: this.getCapacity },
+	          'Spaces Needed: 3'
+	        ),
+	        React.createElement(
+	          'option',
+	          { onChange: this.getCapacity },
+	          'Spaces Needed: 4'
+	        ),
+	        React.createElement(
+	          'option',
+	          { onChange: this.getCapacity },
+	          'Spaces Needed: 5+'
+	        )
+	      ),
 	      React.createElement('input', { className: 'search-button', type: 'submit', value: 'Search' })
 	    );
 	  }
@@ -34836,8 +34930,16 @@
 	var ApiUtil = __webpack_require__(275);
 	
 	module.exports = {
-	  fetchWorkspaces: function () {
-	    ApiUtil.fetchWorkspaces();
+	  // fetchWorkspaces:  function() {
+	  //   ApiUtil.fetchWorkspaces();
+	  // },
+	  //
+	  // fetchSingleWorkspace: function(id) {
+	  //   ApiUtil.fetchSingleWorkspace(id);
+	  // }
+	
+	  fetchWorkspaces: function (params) {
+	    ApiUtil.fetchWorkspaces(params);
 	  },
 	
 	  fetchSingleWorkspace: function (id) {
@@ -34880,10 +34982,12 @@
 	module.exports = {
 	
 		// WORKSPACE VIEWS (TENANT REQUESTS)
-		fetchWorkspaces: function () {
+		fetchWorkspaces: function (searchParams) {
+			console.log(searchParams);
 			$.ajax({
 				url: 'api/workspaces',
 				method: 'get',
+				data: searchParams,
 				dataType: 'json',
 				success: function (workspacesData) {
 					ServerActions.receiveWorkspaces(workspacesData);
@@ -34956,23 +35060,21 @@
 	
 	
 	  getInitialState: function () {
-	    return { date: moment() };
+	    return { date: null };
 	  },
 	
 	  handleChange: function (date) {
-	    console.log(this.state);
 	    this.setState({
 	      date: date
 	    });
-	    console.log(this.state);
 	  },
 	
 	  render: function () {
-	    console.log(this.props);
 	    return React.createElement(DatePicker, {
 	      selected: this.state.date,
 	      onChange: this.handleChange,
-	      className: 'date-dropdown'
+	      className: 'date-dropdown',
+	      placeholderText: this.props.placeholder
 	    });
 	  }
 	
@@ -62824,7 +62926,9 @@
 	  },
 	
 	  componentDidMount: function () {
+	    console.log(this.props);
 	    this.listener = WorkspaceStore.addListener(this._onChange);
+	    // TODO: this also listens to filters store, passes relevant props to map and search params
 	    ClientActions.fetchWorkspaces();
 	  },
 	
@@ -62836,6 +62940,14 @@
 	    this.setState({ workspaces: WorkspaceStore.all() });
 	  },
 	
+	  _fetchFilteredWorkspaces: function (event) {
+	    // TODO: Goal is to fetch the workspaces that are (a) bound by the map and (b) meet the criteria in the SearchParams.
+	    // (1) looks at filter store
+	    // (2) executed some function that retrieved bounds of map: GlobalMap.getBounds
+	    // (3) Construct params object combining 1/2
+	    // (4) Invoke client action, send params to DB, retrieve workspaces
+	  },
+	
 	  render: function () {
 	    var workspaces = this.state.workspaces;
 	    var workspaceComponents = Object.keys(workspaces).map(function (key, i) {
@@ -62845,7 +62957,8 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'search-listings-page' },
-	      React.createElement(Map, { spaces: workspaces }),
+	      React.createElement(Map, { spaces: workspaces, fetchSpaces: this._fetchFilteredWorkspaces }),
+	      '// TODO: pass filter props to search params',
 	      React.createElement(SearchParams, null),
 	      React.createElement(
 	        'div',
@@ -62966,7 +63079,9 @@
 	
 	  componentDidMount: function () {
 	    var map = ReactDOM.findDOMNode(this.refs.map);
-	    this.map = new google.maps.Map(map, mapOptions);
+	    this.map = window.GlobalMap = new google.maps.Map(map, mapOptions);
+	    // GlobalMap.addEventListener(this.props.fetchSpaces);
+	    // TODO: figure out google maps' syntax for adding an e listener; on idle state
 	    this.registerListeners();
 	    this.markers = [];
 	    this.eachSpace(this.createMarker);
@@ -63077,89 +63192,119 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var Dates = __webpack_require__(277);
 	
 	var SearchParams = React.createClass({
-	  displayName: "SearchParams",
+	  displayName: 'SearchParams',
+	
+	  getInitialState: function () {
+	    return { location: "", capacity: 1, office_types: ["Coworking Space", "Private Office", "Home Office"] };
+	  },
+	
+	  updateOfficeType: function (e) {
+	    // e.preventDefault();
+	    // console.log(e.currentTarget);
+	  },
 	
 	  render: function () {
 	    return React.createElement(
-	      "div",
-	      { className: "search-params" },
+	      'div',
+	      { className: 'search-params' },
 	      React.createElement(
-	        "ul",
+	        'ul',
 	        null,
 	        React.createElement(
-	          "li",
+	          'li',
 	          null,
 	          React.createElement(
-	            "h4",
+	            'h4',
 	            null,
-	            "Dates"
+	            'Dates'
 	          ),
+	          React.createElement(Dates, { placeholder: 'Start Date' }),
+	          React.createElement(Dates, { placeholder: 'End Date' })
+	        ),
+	        React.createElement('hr', null),
+	        React.createElement(
+	          'li',
+	          null,
 	          React.createElement(
-	            "p",
+	            'h4',
 	            null,
-	            "Date Field1"
+	            'Capacity'
 	          ),
+	          'Spaces Needed:',
 	          React.createElement(
-	            "p",
-	            null,
-	            "Date Field2"
+	            'select',
+	            { className: 'capacity-dropdown' },
+	            React.createElement(
+	              'option',
+	              { onChange: this.getCapacity },
+	              '1'
+	            ),
+	            React.createElement(
+	              'option',
+	              { onChange: this.getCapacity },
+	              '2'
+	            ),
+	            React.createElement(
+	              'option',
+	              { onChange: this.getCapacity },
+	              '3'
+	            ),
+	            React.createElement(
+	              'option',
+	              { onChange: this.getCapacity },
+	              '4'
+	            ),
+	            React.createElement(
+	              'option',
+	              { onChange: this.getCapacity },
+	              '5+'
+	            )
 	          )
 	        ),
-	        React.createElement("hr", null),
+	        React.createElement('hr', null),
 	        React.createElement(
-	          "li",
+	          'li',
 	          null,
 	          React.createElement(
-	            "h4",
+	            'h4',
 	            null,
-	            "Capacity"
+	            'Office Type'
 	          ),
 	          React.createElement(
-	            "p",
+	            'label',
 	            null,
-	            "Dropdown"
+	            'Coworking Space',
+	            React.createElement('input', { onChange: this.updateOfficeType, type: 'checkbox', value: 'Coworking', checked: true })
+	          ),
+	          React.createElement(
+	            'label',
+	            null,
+	            'Private Office',
+	            React.createElement('input', { onChange: this.updateOfficeType, type: 'checkbox', value: 'Private Office', checked: true })
+	          ),
+	          React.createElement(
+	            'label',
+	            null,
+	            'Home Office',
+	            React.createElement('input', { onChange: this.updateOfficeType, type: 'checkbox', value: 'Home Office', checked: true })
 	          )
 	        ),
-	        React.createElement("hr", null),
+	        React.createElement('hr', null),
 	        React.createElement(
-	          "li",
+	          'li',
 	          null,
 	          React.createElement(
-	            "h4",
+	            'h4',
 	            null,
-	            "Office Type"
+	            'Price'
 	          ),
 	          React.createElement(
-	            "p",
+	            'p',
 	            null,
-	            "Radio1"
-	          ),
-	          React.createElement(
-	            "p",
-	            null,
-	            "Radio2"
-	          ),
-	          React.createElement(
-	            "p",
-	            null,
-	            "Radio3"
-	          )
-	        ),
-	        React.createElement("hr", null),
-	        React.createElement(
-	          "li",
-	          null,
-	          React.createElement(
-	            "h4",
-	            null,
-	            "Price"
-	          ),
-	          React.createElement(
-	            "p",
-	            null,
-	            "Slider"
+	            'Slider'
 	          )
 	        )
 	      )
@@ -63395,6 +63540,33 @@
 	});
 	
 	module.exports = ReservationForm;
+
+/***/ },
+/* 493 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var SearchLocationsBar = React.createClass({
+	  displayName: "SearchLocationsBar",
+	
+	
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { className: "searchbar" },
+	      React.createElement("input", { id: "search-field-text", placeholder: "Location", className: "search-field", type: "text", value: this.props.value, onChange: this.props.action }),
+	      React.createElement(
+	        "ul",
+	        { display: "none" },
+	        LocationMatches
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = SearchLocationsBar;
 
 /***/ }
 /******/ ]);

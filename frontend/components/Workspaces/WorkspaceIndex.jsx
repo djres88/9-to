@@ -13,7 +13,9 @@ var WorkspaceIndex = React.createClass({
   },
 
   componentDidMount: function () {
+    console.log(this.props);
     this.listener = WorkspaceStore.addListener(this._onChange);
+    // TODO: this also listens to filters store, passes relevant props to map and search params
     ClientActions.fetchWorkspaces();
   },
 
@@ -25,6 +27,14 @@ var WorkspaceIndex = React.createClass({
     this.setState({workspaces: WorkspaceStore.all()});
   },
 
+  _fetchFilteredWorkspaces: function(event) {
+    // TODO: Goal is to fetch the workspaces that are (a) bound by the map and (b) meet the criteria in the SearchParams.
+    // (1) looks at filter store
+    // (2) executed some function that retrieved bounds of map: GlobalMap.getBounds
+    // (3) Construct params object combining 1/2
+    // (4) Invoke client action, send params to DB, retrieve workspaces
+  },
+
   render: function() {
     var workspaces = this.state.workspaces;
     var workspaceComponents = Object.keys(workspaces).map(function(key, i) {
@@ -33,7 +43,8 @@ var WorkspaceIndex = React.createClass({
 
     return (
       <div className="search-listings-page">
-        <Map spaces={workspaces}/>
+        <Map spaces={workspaces} fetchSpaces={this._fetchFilteredWorkspaces}/>
+        // TODO: pass filter props to search params
         <SearchParams />
         <div className="workspace-index">{workspaceComponents}</div>
       </div>

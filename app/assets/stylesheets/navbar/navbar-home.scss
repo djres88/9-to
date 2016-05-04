@@ -83,3 +83,20 @@
   cursor: pointer;
   visibility: visible;
 }
+
+ul.user-menu {
+  padding: 0;
+  border: 1px solid #eee;
+  margin-left: -105px;
+  width: 225px;
+  top: 50px;
+}
+
+// ul.user-menu li span{
+//   padding-left: 10px;
+// }
+
+ul.user-menu li:hover {
+  transition: all 0.4s ease;
+  padding-left: 15px;
+}

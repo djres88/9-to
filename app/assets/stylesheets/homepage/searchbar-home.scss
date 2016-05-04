@@ -9,22 +9,34 @@
   background-color: rgba(0, 0, 0, 0.5)
 }
 
+.search-container .date-dropdown {
+  max-width: 6em;
+  padding-left: 1em;
+  background: white;
+}
+
 .search-container input {
   position: relative;
-  background: white;
   opacity: 1;
   height: 35px;
   border: 0px 1px solid #eee;
   font-size: 16px;
+  font-family: 'Hind';
+}
+
+.capacity-dropdown {
+  background: white;
+  opacity: 1;
+  height: 41px;
+  border: 0px 1px solid #eee;
+  font-size: 16px;
+  width: 150px;
+  font-family: 'Hind';
 }
 
 .search-container .search-field {
-  width: 24em;
-}
-
-.search-container .date-dropdown, .capacity-dropdown {
-  max-width: 7em;
-  text-align: center;
+  width: 23em;
+  padding-left: 1em;
 }
 
 .search-container .search-button {
@@ -37,4 +49,23 @@
   color: white;
   font-size: 16px;
   font-weight: 400;
+}
+
+.searchbar {
+  display: flex;
+  flex-direction: column;
+}
+
+.searchbar ul {
+  position: absolute;
+  margin-top: -3px;
+  border: 1px solid #eee;
+}
+
+.searchbar li {
+  background-color: white;
+  padding: 1em 0 0 1em;
+  width: 23em;
+  display: block;
+  cursor: pointer;
 }

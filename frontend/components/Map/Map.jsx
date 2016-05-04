@@ -17,7 +17,9 @@ var mapOptions = {
 var Map = React.createClass({
   componentDidMount: function(){
     var map = ReactDOM.findDOMNode(this.refs.map);
-    this.map = new google.maps.Map(map, mapOptions);
+    this.map = window.GlobalMap = new google.maps.Map(map, mapOptions);
+    // GlobalMap.addEventListener(this.props.fetchSpaces);
+    // TODO: figure out google maps' syntax for adding an e listener; on idle state
     this.registerListeners();
     this.markers = [];
     this.eachSpace(this.createMarker);

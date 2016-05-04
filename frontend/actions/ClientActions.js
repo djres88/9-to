@@ -1,13 +1,22 @@
 var ApiUtil = require('../util/ApiUtil');
 
 module.exports = {
-  fetchWorkspaces:  function() {
-    ApiUtil.fetchWorkspaces();
+  // fetchWorkspaces:  function() {
+  //   ApiUtil.fetchWorkspaces();
+  // },
+  //
+  // fetchSingleWorkspace: function(id) {
+  //   ApiUtil.fetchSingleWorkspace(id);
+  // }
+
+  fetchWorkspaces: function(params) {
+    ApiUtil.fetchWorkspaces(params);
   },
 
   fetchSingleWorkspace: function(id) {
     ApiUtil.fetchSingleWorkspace(id);
   }
+
 
   // WORKSPACE COMPLETE CRUD (HOST ACTIONS)
   // listWorkspace: function(workspace) {

@@ -3,10 +3,12 @@ var ServerActions = require('../actions/ServerActions');
 module.exports = {
 
 	// WORKSPACE VIEWS (TENANT REQUESTS)
-	fetchWorkspaces: function() {
+	fetchWorkspaces: function(searchParams) {
+		console.log(searchParams);
 		$.ajax({
 			url: 'api/workspaces',
 			method: 'get',
+			data: searchParams,
 			dataType: 'json',
 			success: function(workspacesData) {
 				ServerActions.receiveWorkspaces(workspacesData);

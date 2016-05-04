@@ -5,24 +5,22 @@ var moment = require('moment');
 var Dates = React.createClass({
 
   getInitialState: function() {
-    return {date: moment() };
+    return {date: null };
   },
 
   handleChange: function(date) {
-    console.log(this.state);
     this.setState({
       date: date
     });
-    console.log(this.state);
   },
 
   render: function() {
-    console.log(this.props);
     return (
       <DatePicker
         selected={this.state.date}
         onChange={this.handleChange}
         className="date-dropdown"
+        placeholderText={this.props.placeholder}
       />
     );
   }
