@@ -9,16 +9,17 @@ function _getCoordsObj(latLng) {
     lng: latLng.lng()
   };
 }
-
 var mapOptions = {
   center: {lat: 37.773972, lng: -122.431297}, //San Francisco
   zoom: 13
 };
 
+
 var Map = React.createClass({
   componentDidMount: function(){
     var map = ReactDOM.findDOMNode(this.refs.map);
     this.map = window.GlobalMap = new google.maps.Map(map, mapOptions);
+    
     // GlobalMap.addEventListener(this.props.fetchSpaces);
     // TODO: figure out google maps' syntax for adding an e listener; on idle state
     this.registerListeners();
@@ -114,7 +115,7 @@ var Map = React.createClass({
   render: function(){
     return (
       <div className="map-box">
-        <div id="map" ref="map">Map</div>
+        <div id="map" ref="map"></div>
        </div>
     );
   }

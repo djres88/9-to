@@ -34824,7 +34824,7 @@
 	  displayName: 'Search',
 	
 	  getInitialState: function () {
-	    return { inputVal: "", matchingCities: [], startDate: null, endDate: null, spacesNeeded: null };
+	    return { startDate: null, endDate: null, spacesNeeded: null };
 	  },
 	
 	  // componentDidMount: function() {
@@ -34832,15 +34832,6 @@
 	  //   this.listener = WorkspaceStore.addListener(this._onChange);
 	  //
 	  // },
-	
-	  getCity: function (event) {
-	    event.preventDefault();
-	    this.setState({
-	      inputVal: event.currentTarget.value,
-	      // matchingCities: ClientActions.matchCities(e.currentTarget.value)
-	      matchingCities: ["test1", "test2"]
-	    });
-	  },
 	
 	  getStartDate: function (e) {
 	    e.preventDefault();
@@ -34887,7 +34878,7 @@
 	    return React.createElement(
 	      'form',
 	      { className: 'search-container', onSubmit: this.handleSubmit },
-	      React.createElement(SearchLocationsBar, { value: this.state.inputVal, action: this.getCity, className: 'searchbar-home' }),
+	      React.createElement(SearchLocationsBar, { className: 'searchbar-home' }),
 	      React.createElement(Dates, { onClick: this.getStartDate, placeholder: 'Start Date' }),
 	      React.createElement(Dates, { onClick: this.getEndDate, placeholder: 'End Date' }),
 	      React.createElement(
@@ -62816,11 +62807,19 @@
 	var SearchLocationsBar = React.createClass({
 	  displayName: 'SearchLocationsBar',
 	
+	  // getInitialState: function() {
+	  //   return {coord: {lat: }}
+	  // },
+	
 	  componentDidMount: function () {
-	    var defaultBounds = new google.maps.LatLngBounds(new google.maps.LatLng(-33.8902, 151.1759), new google.maps.LatLng(-33.8474, 151.2631));
+	    // var defaultBounds = new google.maps.LatLngBounds(
+	    // new google.maps.LatLng(-33.8902, 151.1759),
+	    // new google.maps.LatLng(-33.8474, 151.2631));
 	
 	    var input = document.getElementById('searchTextField');
 	    autocomplete = new google.maps.places.Autocomplete(input, { types: ['(cities)'] });
+	    console.log(window);
+	    // autocomplete.bindTo('bounds', window.GlobalMap);
 	  },
 	
 	  render: function () {
@@ -62992,7 +62991,7 @@
 	    var workspaceComponents = Object.keys(workspaces).map(function (key, i) {
 	      return React.createElement(WorkspaceIndexItem, { key: i, workspace: workspaces[key] });
 	    });
-	    console.log(this.props.params.city);
+	    // console.log(this.props.params);
 	    // TODO: pass filter props to search params
 	    return React.createElement(
 	      'div',
@@ -63109,7 +63108,6 @@
 	    lng: latLng.lng()
 	  };
 	}
-	
 	var mapOptions = {
 	  center: { lat: 37.773972, lng: -122.431297 }, //San Francisco
 	  zoom: 13
@@ -63121,6 +63119,7 @@
 	  componentDidMount: function () {
 	    var map = ReactDOM.findDOMNode(this.refs.map);
 	    this.map = window.GlobalMap = new google.maps.Map(map, mapOptions);
+	
 	    // GlobalMap.addEventListener(this.props.fetchSpaces);
 	    // TODO: figure out google maps' syntax for adding an e listener; on idle state
 	    this.registerListeners();
@@ -63217,11 +63216,7 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'map-box' },
-	      React.createElement(
-	        'div',
-	        { id: 'map', ref: 'map' },
-	        'Map'
-	      )
+	      React.createElement('div', { id: 'map', ref: 'map' })
 	    );
 	  }
 	});

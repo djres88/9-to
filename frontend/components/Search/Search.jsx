@@ -8,7 +8,7 @@ var SearchLocationsBar = require('./SearchLocationsBar');
 
 var Search = React.createClass({
   getInitialState: function() {
-    return { inputVal: "", matchingCities: [], startDate: null, endDate: null, spacesNeeded: null};
+    return { startDate: null, endDate: null, spacesNeeded: null};
   },
 
   // componentDidMount: function() {
@@ -16,15 +16,6 @@ var Search = React.createClass({
   //   this.listener = WorkspaceStore.addListener(this._onChange);
   //
   // },
-
-  getCity: function(event) {
-    event.preventDefault();
-    this.setState({
-      inputVal: event.currentTarget.value,
-      // matchingCities: ClientActions.matchCities(e.currentTarget.value)
-      matchingCities: ["test1", "test2"]
-    });
-  },
 
   getStartDate: function(e) {
     e.preventDefault();
@@ -66,7 +57,7 @@ var Search = React.createClass({
     });
     return (
       <form className="search-container" onSubmit={this.handleSubmit}>
-        <SearchLocationsBar value={this.state.inputVal} action={this.getCity} className="searchbar-home"/>
+        <SearchLocationsBar className="searchbar-home"/>
         <Dates onClick={this.getStartDate} placeholder="Start Date"/>
         <Dates onClick={this.getEndDate} placeholder="End Date"/>
         <select className="capacity-dropdown">
