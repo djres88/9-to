@@ -66,12 +66,6 @@ var Search = React.createClass({
     });
     return (
       <form className="search-container" onSubmit={this.handleSubmit}>
-        <div className="searchbar">
-          <input id="search-field-text" placeholder="Location" className="search-field" type="text" value={this.state.inputVal} onChange={this.getCity}/>
-          <ul display="none">
-            {LocationMatches}
-          </ul>
-        </div>
         <SearchLocationsBar value={this.state.inputVal} action={this.getCity}/>
         <Dates onClick={this.getStartDate} placeholder="Start Date"/>
         <Dates onClick={this.getEndDate} placeholder="End Date"/>

@@ -64,10 +64,10 @@
 	
 	//Components
 	var Navbar = __webpack_require__(270);
-	var Home = __webpack_require__(485);
-	var WorkspaceIndex = __webpack_require__(486);
-	var WorkspaceShow = __webpack_require__(491);
-	var ReservationForm = __webpack_require__(492);
+	var Home = __webpack_require__(486);
+	var WorkspaceIndex = __webpack_require__(487);
+	var WorkspaceShow = __webpack_require__(492);
+	var ReservationForm = __webpack_require__(493);
 	
 	//Check for logged in current user on page load.
 	function preloadUser() {
@@ -34805,7 +34805,7 @@
 	var ClientActions = __webpack_require__(274);
 	
 	var Dates = __webpack_require__(277);
-	var SearchLocationsBar = __webpack_require__(493);
+	var SearchLocationsBar = __webpack_require__(485);
 	
 	var Search = React.createClass({
 	  displayName: 'Search',
@@ -34874,16 +34874,6 @@
 	    return React.createElement(
 	      'form',
 	      { className: 'search-container', onSubmit: this.handleSubmit },
-	      React.createElement(
-	        'div',
-	        { className: 'searchbar' },
-	        React.createElement('input', { id: 'search-field-text', placeholder: 'Location', className: 'search-field', type: 'text', value: this.state.inputVal, onChange: this.getCity }),
-	        React.createElement(
-	          'ul',
-	          { display: 'none' },
-	          LocationMatches
-	        )
-	      ),
 	      React.createElement(SearchLocationsBar, { value: this.state.inputVal, action: this.getCity }),
 	      React.createElement(Dates, { onClick: this.getStartDate, placeholder: 'Start Date' }),
 	      React.createElement(Dates, { onClick: this.getEndDate, placeholder: 'End Date' }),
@@ -62807,6 +62797,43 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	
+	// TODO: Make this a place autocomplete w/ Google API. All the search bar needs to do is set the coordinates of the Map! https://developers.google.com/places/javascript/
+	
+	var SearchLocationsBar = React.createClass({
+	  displayName: 'SearchLocationsBar',
+	
+	  componentDidMount: function () {
+	    var defaultBounds = new google.maps.LatLngBounds(new google.maps.LatLng(-33.8902, 151.1759), new google.maps.LatLng(-33.8474, 151.2631));
+	
+	    var input = document.getElementById('searchTextField');
+	    autocomplete = new google.maps.places.Autocomplete(input, { types: ['(cities)'] });
+	  },
+	
+	  render: function () {
+	    return React.createElement('input', { id: 'searchTextField' });
+	  }
+	
+	});
+	
+	module.exports = SearchLocationsBar;
+	
+	// render: function() {
+	//   return (
+	//     <div className="searchbar">
+	//       <input id="search-field-text" placeholder="Location" className="search-field" type="text" value={this.props.value} onChange={this.props.action}/>
+	//       <ul display="none">
+	//         {LocationMatches}
+	//       </ul>
+	//     </div>
+	//   );
+	// }
+
+/***/ },
+/* 486 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
 	var Search = __webpack_require__(273);
 	
 	var Home = React.createClass({
@@ -62906,17 +62933,17 @@
 	module.exports = Home;
 
 /***/ },
-/* 486 */
+/* 487 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	
-	var WorkspaceStore = __webpack_require__(487);
+	var WorkspaceStore = __webpack_require__(488);
 	var ClientActions = __webpack_require__(274);
-	var WorkspaceIndexItem = __webpack_require__(488);
+	var WorkspaceIndexItem = __webpack_require__(489);
 	var Navbar = __webpack_require__(270);
-	var Map = __webpack_require__(489);
-	var SearchParams = __webpack_require__(490);
+	var Map = __webpack_require__(490);
+	var SearchParams = __webpack_require__(491);
 	
 	var WorkspaceIndex = React.createClass({
 	  displayName: 'WorkspaceIndex',
@@ -62954,11 +62981,11 @@
 	      return React.createElement(WorkspaceIndexItem, { key: i, workspace: workspaces[key] });
 	    });
 	
+	    // TODO: pass filter props to search params
 	    return React.createElement(
 	      'div',
 	      { className: 'search-listings-page' },
 	      React.createElement(Map, { spaces: workspaces, fetchSpaces: this._fetchFilteredWorkspaces }),
-	      '// TODO: pass filter props to search params',
 	      React.createElement(SearchParams, null),
 	      React.createElement(
 	        'div',
@@ -62972,7 +62999,7 @@
 	module.exports = WorkspaceIndex;
 
 /***/ },
-/* 487 */
+/* 488 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(233).Store;
@@ -63008,7 +63035,7 @@
 	module.exports = WorkspaceStore;
 
 /***/ },
-/* 488 */
+/* 489 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -63055,7 +63082,7 @@
 	// <li>{workspace.city}</li>
 
 /***/ },
-/* 489 */
+/* 490 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -63188,7 +63215,7 @@
 	module.exports = Map;
 
 /***/ },
-/* 490 */
+/* 491 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -63315,12 +63342,12 @@
 	module.exports = SearchParams;
 
 /***/ },
-/* 491 */
+/* 492 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var ReservationForm = __webpack_require__(492);
-	var WorkspaceStore = __webpack_require__(487);
+	var ReservationForm = __webpack_require__(493);
+	var WorkspaceStore = __webpack_require__(488);
 	var ClientActions = __webpack_require__(274);
 	
 	var WorkspaceShow = React.createClass({
@@ -63523,7 +63550,7 @@
 	module.exports = WorkspaceShow;
 
 /***/ },
-/* 492 */
+/* 493 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -63540,33 +63567,6 @@
 	});
 	
 	module.exports = ReservationForm;
-
-/***/ },
-/* 493 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	
-	var SearchLocationsBar = React.createClass({
-	  displayName: "SearchLocationsBar",
-	
-	
-	  render: function () {
-	    return React.createElement(
-	      "div",
-	      { className: "searchbar" },
-	      React.createElement("input", { id: "search-field-text", placeholder: "Location", className: "search-field", type: "text", value: this.props.value, onChange: this.props.action }),
-	      React.createElement(
-	        "ul",
-	        { display: "none" },
-	        LocationMatches
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = SearchLocationsBar;
 
 /***/ }
 /******/ ]);
