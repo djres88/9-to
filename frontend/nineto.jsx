@@ -63,7 +63,7 @@ var Router = (
   <Router history={hashHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Home}/>
-      <Route path="s" component={WorkspaceIndex}/>
+      <Route path="s(/:city)(/:dates)" component={WorkspaceIndex}/>
       <Route path="workspaces/:workspaceId" component={WorkspaceShow}/>
         <Route path="reservation"/>
     </Route>

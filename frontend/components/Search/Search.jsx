@@ -28,7 +28,7 @@ var Search = React.createClass({
 
   getStartDate: function(e) {
     e.preventDefault();
-    console.log(e.currentTarget);
+    // console.log(e.currentTarget);
   },
 
   getEndDate: function(e) {
@@ -37,11 +37,11 @@ var Search = React.createClass({
 
   getCapacity: function(e) {
     e.preventDefault();
-    console.log(e.currentTarget);
+    // console.log(e.currentTarget);
   },
 
   updateSearchField: function(e) {
-    console.log(e.currentTarget.innerHTML);
+    // console.log(e.currentTarget.innerHTML);
   },
 
   handleSubmit: function(event) {

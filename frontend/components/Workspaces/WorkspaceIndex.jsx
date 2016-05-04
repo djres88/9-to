@@ -39,11 +39,11 @@ var WorkspaceIndex = React.createClass({
     var workspaceComponents = Object.keys(workspaces).map(function(key, i) {
       return <WorkspaceIndexItem key={i} workspace={workspaces[key]} />;
     });
-
+    console.log(this.props.params.city);
     // TODO: pass filter props to search params
     return (
       <div className="search-listings-page">
-        <Map spaces={workspaces} fetchSpaces={this._fetchFilteredWorkspaces}/>
+        <Map spaces={workspaces} fetchSpaces={this._fetchFilteredWorkspaces} startingCoords="t"/>
         <FilterParams />
         <div className="workspace-index">{workspaceComponents}</div>
       </div>
