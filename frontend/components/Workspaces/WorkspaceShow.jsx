@@ -11,6 +11,7 @@ var WorkspaceShow = React.createClass({
   componentDidMount: function() {
     this.listener = WorkspaceStore.addListener(this._onChange);
     ClientActions.fetchSingleWorkspace(this.props.params.workspaceId);
+    this.setState({space: WorkspaceStore.find(parseInt(this.props.params.workspaceId))});
   },
 
   componentWillUnmount: function() {
@@ -24,9 +25,12 @@ var WorkspaceShow = React.createClass({
   render: function() {
     var detail = this.state.space;
 
+      // TODO: pass date props as default fields to ReservationForm
     return (
       <div className="listing-detail">
-        <img className="listing-detail-background-image" src={detail.main_photo_url} alt="Main Photo"/>
+        <div className="listing-detail-above-fold">
+          <img src={detail.main_photo_url} alt="Main Photo"/>
+        </div>
         <div className="highlights-bar">
           <div className="owner-pog"></div>
           <div className="highlights-description">
@@ -42,6 +46,7 @@ var WorkspaceShow = React.createClass({
                 <p>Capacity</p>
               </li>
             </ul>
+            <ReservationForm workspaceId={this.props.params.workspaceId}/>
           </div>
         </div>
         <div className="details-box">
@@ -53,7 +58,7 @@ var WorkspaceShow = React.createClass({
           <ul className="details">
             <li>Hours: </li>
             <li>Property Type: </li>
-            <li>Office Type: </li>
+            <li>{"Office Type:  " + detail.officetype}</li>
           </ul>
           <hr/>
           <h4>Amenities</h4>
@@ -68,8 +73,8 @@ var WorkspaceShow = React.createClass({
           <hr/>
           <h4>Prices</h4>
           <ul className="prices">
-            <li>Week: </li>
-            <li>Month: </li>
+            <li>{"Weekly:  $" + detail.price_week}</li>
+            <li>{"Monthly:  $" + detail.price_month}</li>
           </ul>
           <hr/>
           <div className="photos"> </div>

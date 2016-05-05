@@ -109,10 +109,10 @@ image_urls = ["http://res.cloudinary.com/dyzqtq32z/image/upload/v1461964435/wwwv
   week_price = weekly_price.sample
   month_price = week_price * 4
   Workspace.create!({
-    description: description,
+    description: Faker::Hipster.sentence,
     officetype: type.sample,
     capacity: capacity.sample,
-    address: address,
+    address: Faker::Address.street_name,
     latitude: new_place[:latitude] + randomize_coords.sample,
     longitude: new_place[:longitude] + randomize_coords.sample,
     price_week: week_price,
@@ -128,10 +128,10 @@ end
   week_price = weekly_price.sample
   month_price = week_price * 4
   Workspace.create!({
-    description: description,
+    description: Faker::Company.catch_phrase,
     officetype: type.sample,
     capacity: capacity.sample,
-    address: address,
+    address: Faker::Address.street_name,
     latitude: new_place[:latitude] + randomize_coords.sample,
     longitude: new_place[:longitude] + randomize_coords.sample,
     price_week: week_price,

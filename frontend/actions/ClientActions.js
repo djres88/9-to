@@ -16,6 +16,11 @@ module.exports = {
 
   fetchSingleWorkspace: function(id) {
     ApiUtil.fetchSingleWorkspace(id);
+  },
+
+  reserveSpace: function(id, start, end) {
+    debugger;
+    ApiUtil.createReservation(id, start, end);
   }
 
 

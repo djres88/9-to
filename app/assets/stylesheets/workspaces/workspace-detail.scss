@@ -1,5 +1,9 @@
-.listing-detail-background-image {
-  height: 34em;
+.listing-detail-above-fold {
+  height: 40em;
+}
+
+.listing-detail-above-fold img{
+  height: 95%;
   width: 100%;
 }
 
@@ -13,7 +17,7 @@
 .highlights-bar {
   font-size: 22px;
   font-weight: 400;
-  margin-top: 25px;
+  margin-top: 0;
   padding-left: 25%;
   position: absolute;
 }
@@ -87,4 +91,61 @@
 .details-box li {
   color: black;
   justify-content: flex-start;
+}
+
+.mini-reservation-form {
+  position: absolute;;
+  border: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-left: 22%;
+  margin-top: -187px;
+  background-color: white;
+  z-index: 1;
+  width: 18%;
+}
+
+.mini-reservation-form h1 {
+  padding-top: 10px;
+  background-color: black;
+  opacity: 0.7;
+  color: white;
+  font-size: 24px;
+  height: 30px;
+  text-align: center;
+  z-index: 100;
+  width: 100%;
+}
+
+.mini-reservation-form div {
+  display: flex;
+  justify-content: center;
+}
+
+.mini-reservation-form div .reservation-form-dates {
+  display: flex;
+  flex-direction: column;
+}
+
+.mini-reservation-form button {
+  background-color: #ff5a5f;
+  border-color: #ff5a5f;
+  border: none;
+  height: 41px;
+  margin: 20px 10px;
+  width: 90%;
+  color: white;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: "Hind";
+}
+
+.mini-reservation-form .date-dropdown {
+  background: white;
+  opacity: 1;
+  height: 25px;
+  margin: 5px;
+  width: 90%;
 }

@@ -21,7 +21,7 @@ FilterStore.__onDispatch = function (payload) {
       FilterStore.__emitChange();
       break;
     case "CAPACITY":
-      _params.capacity = payload.capacity;
+      _params.capacity = parseInt(payload.capacity);
       FilterStore.__emitChange();
       break;
     case "BEGIN_DATE":

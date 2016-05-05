@@ -2,6 +2,8 @@ var React = require('react');
 var HashHistory = require('react-router').hashHistory;
 var ReactDOM = require('react-dom');
 var ClientActions = require('../../actions/ClientActions');
+var FilterStore = require('../../stores/FilterStore');
+var WorkspaceStore = require('../../stores/WorkspaceStore');
 
 function _getCoordsObj(latLng) {
   return {
@@ -14,7 +16,6 @@ var Map = React.createClass({
 
   mapOptions: function() {
     return {
-      // TODO: Set lat & lng to this.props.params, as lat and lng are in the query string; but this.props.params is undefined.
       center: {lat: this.props.lat, lng: this.props.lng}, //San Francisco
       zoom: 13
     };
@@ -36,7 +37,21 @@ var Map = React.createClass({
         that._handleChange({lat: place.lat(), lng: place.lng()});
       });
     }, 500);
+    this.filterListener = FilterStore.addListener(this.updateBounds);
   },
+
+  componentWillUnmount: function() {
+    this.filterListener.remove();
+    this.idleListener.remove();
+    this.clickListener.remove();
+    this.markerListener.remove();
+  },
+
+  // _onFilterChange: function() {
+  //   this.props.params.map_bounds = bounds;
+  //   debugger;
+  //   ClientActions.fetchWorkspaces(this.props.params);
+  // },
 
   eachSpace: function(callback){
     var spaces = this.props.spaces;
@@ -49,6 +64,9 @@ var Map = React.createClass({
   componentDidUpdate: function () {
     this._onChange();
   },
+  //
+  // componentWillReceiveProps: function() {
+  // },
 
   _onChange: function(){
     var newWorkspaces = [];
@@ -73,6 +91,7 @@ var Map = React.createClass({
     //Do the adding / removing
     newWorkspaces.forEach(this.createMarker);
     removeMarkers.forEach(this.removeMarker);
+
   },
 
   _handleChange: function(coords){
@@ -82,22 +101,27 @@ var Map = React.createClass({
     });
   },
 
+  updateBounds: function() {
+    var bounds = this.map.getBounds();
+    var northEast = _getCoordsObj(bounds.getNorthEast());
+    var southWest = _getCoordsObj(bounds.getSouthWest());
+    //actually issue the request
+    bounds = {
+      NE: northEast,
+      SW: southWest
+    };
+    params = FilterStore.params();
+    params.map_bounds = bounds;
+
+    ClientActions.fetchWorkspaces(params);
+    var coords = { lat: this.map.center.lat(), lng: this.map.center.lng() };
+    this._handleChange(coords);
+  },
+
   registerListeners: function(){
     var that = this;
-    google.maps.event.addListener(this.map, 'idle', function() {
-      var bounds = that.map.getBounds();
-      var northEast = _getCoordsObj(bounds.getNorthEast());
-      var southWest = _getCoordsObj(bounds.getSouthWest());
-      //actually issue the request
-      bounds = {
-        NE: northEast,
-        SW: southWest
-      };
-      ClientActions.fetchWorkspaces({map_bounds: bounds});
-      var coords = { lat: that.map.center.lat(), lng: that.map.center.lng() };
-      that._handleChange(coords);
-    });
-    google.maps.event.addListener(this.map, 'click', function(event) {
+    this.idleListener = google.maps.event.addListener(this.map, 'idle', this.updateBounds);
+    this.clickListener = google.maps.event.addListener(this.map, 'click', function(event) {
       var coords = { lat: event.latLng.lat(), lng: event.latLng.lng() };
       that._handleChange(coords);
     });
@@ -111,7 +135,7 @@ var Map = React.createClass({
       workspaceId: workspace.id
     });
 
-    marker.addListener('click', function () {
+    this.markerListener = marker.addListener('click', function () {
       HashHistory.push("workspaces/" + workspace.id );
     });
     this.markers.push(marker);

@@ -12,25 +12,25 @@ class Api::WorkspacesController < ApplicationController
       @workspaces = @workspaces.where("capacity >= ?", capacity)
     end
 
+    # Need to check if office_types is empty
     if office_types
-
       @workspaces = @workspaces.where("officetype IN (?)", office_types)
     end
-    # if office_types
-    #   @workspaces = @workspaces.select { |w| office_types.include?(w.officetype) }
-    # end
-    #
-    # if price
-    #   @workspaces = @workspaces.select { |w| w.between?(price.low, price.high) }
-    # end
+
+    if price
+      @workspaces = @workspaces.where("price_week > ? AND price_week < ?", Integer(price[:minPrice]), Integer(price[:maxPrice]))
+    end
     #
     # if dates
     #   @workspaces = @workspaces.select do |w|
     #     w.reservation_dates.none? { |date| dates.include?(date) }
     #   end
     # end
+    # TODO: User order-by / Offset
+    # n = page*19
+    # .offset(page)
 
-    render json: @workspaces
+    render json: @workspaces.limit(18)
   end
 
   def show
@@ -41,7 +41,7 @@ class Api::WorkspacesController < ApplicationController
 
   private
   def map_bounds
-    params[:params]
+    params[:map_bounds]
   end
 
   def capacity
@@ -51,7 +51,7 @@ class Api::WorkspacesController < ApplicationController
     # params[:capacity]
     # office_types: send data as {office_types: []}
   def office_types
-    params[:office_types]
+    params[:officeTypes]
   end
 
     # price: send data as {price: {low: , high: }}
@@ -62,5 +62,9 @@ class Api::WorkspacesController < ApplicationController
   # send data as {dates: {start: 1/1/16, end: 1/1/16}}
   def dates
     params[:dates]
+  end
+
+  def page
+    params[:page]
   end
 end

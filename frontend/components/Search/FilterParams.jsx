@@ -1,6 +1,8 @@
 var React = require('react');
 var Dates = require('./Dates');
 var FilterActions = require('../../actions/FilterActions');
+var ReactSlider = require('react-slider');
+var HashHistory = require('react-router').hashHistory;
 
 // TODO: All this needs to do is listen to a FILTER store that updates (selects) workspaces that the WorkspaceIndex has retrieved.
 var FilterParams = React.createClass({
@@ -10,7 +12,9 @@ var FilterParams = React.createClass({
       capacity: 1,
       office_types: { "Coworking Space": true, "Private Office": true, "Home Office": true },
       beginDate: null,
-      endDate: null
+      endDate: null,
+      min: 0,
+      max: 10000
     };
   },
 
@@ -51,10 +55,26 @@ var FilterParams = React.createClass({
     if (end && date._d > end._d) {
       alert("End date cannot occur before start date.");
     } else {
-      FilterActions.updateBeginDate(date);
       this.setState({
         beginDate: date
       });
+
+      var endQuery;
+      if (this.state.startDate) {
+        endQuery = this.state.startDate.format("MM/DD/YYYY");
+      } else {
+        endQuery = "";
+      }
+      // 
+      // HashHistory.push({
+      //   pathname: "s/",
+      //   query:
+      //     {lat: this.props.location.query.lat,
+      //     lng: this.props.location.query.lng,
+      //     begin: date.format("MM/DD/YYYY"),
+      //     end: endQuery}
+      // });
+      // FilterActions.updateBeginDate(date);
     }
   },
 
@@ -63,14 +83,38 @@ var FilterParams = React.createClass({
     if (begin && date._d < begin._d) {
       alert("End date cannot occur before start date.");
     } else {
-      FilterActions.updateEndDate(date);
       this.setState({
         endDate: date
       });
+      var beginQuery;
+      if (this.state.beginDate) {
+        beginQuery = this.state.beginDate.format("MM/DD/YYYY");
+      } else {
+        beginQuery = "";
+      }
+
+      // HashHistory.push({
+      //   pathname: "s/",
+      //   query:
+      //     {lat: this.props.location.query.lat,
+      //     lng: this.props.location.query.lng,
+      //     begin: beginQuery,
+      //     end: date.format("MM/DD/YYYY")},
+      // });
+      // FilterActions.updateEndDate(date);
     }
   },
 
+  // updatePrices: function(e) {
+  //   console.log("engaged");
+  //   this.setState({
+  //     min: e.propTypes.value()
+  //   });
+  //   console.log(e.propTypes);
+  // },
+
   render: function() {
+
     return (
       <div className="search-params">
         <ul>
@@ -110,10 +154,12 @@ var FilterParams = React.createClass({
           <hr/>
           <li>
             <h4>Price</h4>
-            <p>Slider</p>
+              <ReactSlider onClick={FilterParams.updatePrices} withBars defaultValue={[0, 100]} className="slider">
+                <div id="left-handle" className="my-handle" onClick={FilterParams.updatePrices}>{this.state.min}</div>
+                <div id="right-handle" className="my-handle">{this.state.max}</div>
+              </ReactSlider>;
           </li>
         </ul>
-
       </div>
     );
   }

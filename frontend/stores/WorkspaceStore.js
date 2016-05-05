@@ -2,7 +2,6 @@ var Store = require('flux/utils').Store;
 var AppDispatcher = require('../dispatcher/Dispatcher.js');
 
 var _workspaces = {};
-var _workspacesAll = {};
 
 var WorkspaceStore = new Store(AppDispatcher);
 
@@ -14,18 +13,12 @@ WorkspaceStore.find = function(id) {
   return _workspaces[id];
 };
 
-WorkspaceStore.resetWorkspaces = function() {
-  _workspaces = _workspacesAll;
-};
-
 WorkspaceStore.__onDispatch = function (payload) {
   switch(payload.actionType) {
     case "WORKSPACES_RECEIVED":
       _workspaces = {};
-      _workspacesAll = {};
       payload.workspaces.forEach(function(space) {
         _workspaces[space.id] = space;
-        _workspacesAll[space.id] = space;
       });
       this.__emitChange();
       break;
