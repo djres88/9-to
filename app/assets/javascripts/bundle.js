@@ -34979,10 +34979,11 @@
 	
 		// WORKSPACE VIEWS (TENANT REQUESTS)
 		fetchWorkspaces: function (searchParams) {
+			console.log(searchParams);
 			$.ajax({
 				url: 'api/workspaces',
 				method: 'get',
-				data: { map_bounds: searchParams },
+				data: searchParams,
 				dataType: 'json',
 				success: function (workspacesData) {
 					ServerActions.receiveWorkspaces(workspacesData);
@@ -62961,6 +62962,7 @@
 	var Navbar = __webpack_require__(270);
 	var Map = __webpack_require__(490);
 	var FilterParams = __webpack_require__(491);
+	var FilterStore = __webpack_require__(495);
 	// var SearchLocationsBar = require('../Search/SearchLocationsBar');
 	
 	var WorkspaceIndex = React.createClass({
@@ -62971,29 +62973,24 @@
 	  },
 	
 	  componentDidMount: function () {
-	    console.log("WorkspaceIndex props", this.props);
+	    // console.log("WorkspaceIndex props", this.props);
 	    this.listener = WorkspaceStore.addListener(this._onChange);
 	    // TODO: this also listens to filters store, passes relevant props to map and search params
-	    // this.filtersListener = FilterStore.addListener(this._updateSearch);
+	    this.filtersListener = FilterStore.addListener(this._onUpdateFilters);
 	  },
 	
 	  componentWillUnmount: function () {
 	    this.listener.remove();
+	    this.filtersListener.remove();
 	  },
 	
 	  _onChange: function () {
 	    this.setState({ workspaces: WorkspaceStore.all() });
 	  },
 	
-	  // TODO
-	  updateSearch: function () {},
-	
-	  _fetchFilteredWorkspaces: function (event) {
-	    // TODO: Goal is to fetch the workspaces that are (a) bound by the map and (b) meet the criteria in the FilterParams.
-	    // (1) looks at filter store
-	    // (2) executed some function that retrieved bounds of map: GlobalMap.getBounds
-	    // (3) Construct params object combining 1/2
-	    // (4) Invoke client action, send params to DB, retrieve workspaces
+	  _onUpdateFilters: function () {
+	    this.params = FilterStore.params();
+	    ClientActions.fetchWorkspaces(this.params);
 	  },
 	
 	  render: function () {
@@ -63043,24 +63040,6 @@
 	  _workspaces = _workspacesAll;
 	};
 	
-	var filterOffices = function (office_types) {
-	  for (var i = 0; i < office_types.length; i++) {
-	    _workspaces.forEach(function (space) {
-	      if (space.office.indexOf(office_types[i]) !== -1) {
-	        _workspaces[space.id] = space;
-	      }
-	    });
-	  }
-	};
-	
-	var filterCapacity = function (capacity) {};
-	
-	var filterBeginDate = function (beginDate) {};
-	
-	var filterEndDate = function (endDate) {};
-	
-	var filterPrice = function (price) {};
-	
 	WorkspaceStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case "WORKSPACES_RECEIVED":
@@ -63076,23 +63055,23 @@
 	      _workspaces[payload.workspace.id] = payload.workspace;
 	      this.__emitChange();
 	      break;
-	    case "OFFICE_TYPES":
-	      this.resetWorkspaces();
-	      filterOffices(payload.types);
-	      this.__emitChange();
-	      break;
-	    case "CAPACITY":
-	      this.resetWorkspaces();
-	      this.__emitChange();
-	      break;
-	    case "BEGIN_DATE":
-	      this.resetWorkspaces();
-	      this.__emitChange();
-	      break;
-	    case "END_DATE":
-	      this.resetWorkspaces();
-	      this.__emitChange();
-	      break;
+	    // case "OFFICE_TYPES":
+	    //   this.resetWorkspaces();
+	    //   filterOffices(payload.types);
+	    //   this.__emitChange();
+	    //   break;
+	    // case "CAPACITY":
+	    //   this.resetWorkspaces();
+	    //   this.__emitChange();
+	    //   break;
+	    // case "BEGIN_DATE":
+	    //   this.resetWorkspaces();
+	    //   this.__emitChange();
+	    //   break;
+	    // case "END_DATE":
+	    //   this.resetWorkspaces();
+	    //   this.__emitChange();
+	    //   break;
 	  }
 	};
 	
@@ -63246,7 +63225,7 @@
 	        NE: northEast,
 	        SW: southWest
 	      };
-	      ClientActions.fetchWorkspaces(bounds);
+	      ClientActions.fetchWorkspaces({ map_bounds: bounds });
 	      var coords = { lat: that.map.center.lat(), lng: that.map.center.lng() };
 	      that._handleChange(coords);
 	    });
@@ -63303,20 +63282,45 @@
 	  displayName: 'FilterParams',
 	
 	  getInitialState: function () {
-	    return { location: "", capacity: 1, office_types: ["Coworking Space", "Private Office", "Home Office"], beginDate: null, endDate: null };
+	    return {
+	      location: "",
+	      capacity: 1,
+	      office_types: { "Coworking Space": true, "Private Office": true, "Home Office": true },
+	      beginDate: null,
+	      endDate: null
+	    };
 	  },
 	
 	  updateOfficeType: function (e) {
-	    if (e.currentTarget.checked) {
-	      this.state.office_types.push(e.currentTarget.value);
-	    } else {}
-	    debugger;
-	    FilterActions.updateOfficeType(this.state.office_types);
+	    var that = this;
+	
+	    Object.keys(this.state.office_types).forEach(function (type) {
+	      if (type === e.currentTarget.value) {
+	        var office_types = that.state.office_types;
+	        if (that.state.office_types[type] === true) {
+	          office_types[type] = false;
+	          that.setState({ office_types: office_types });
+	        } else {
+	          office_types[type] = true;
+	          that.setState({ office_types: office_types });
+	        }
+	      }
+	    });
+	
+	    var newTypes = [];
+	    Object.keys(this.state.office_types).forEach(function (type) {
+	      if (that.state.office_types[type]) {
+	        newTypes.push(type);
+	      }
+	    });
+	
+	    FilterActions.updateOfficeType(newTypes);
 	  },
 	
 	  updateCapacity: function (e) {
 	    this.setState({ capacity: e.target.value });
-	    FilterActions.updateCapacity(this.state.capacity);
+	    FilterActions.updateCapacity(e.target.value);
+	    console.log(e.target.value);
 	  },
 	
 	  updateBeginDate: function (date) {
@@ -63324,10 +63328,10 @@
 	    if (end && date._d > end._d) {
 	      alert("End date cannot occur before start date.");
 	    } else {
+	      FilterActions.updateBeginDate(date);
 	      this.setState({
 	        beginDate: date
 	      });
-	      FilterActions.updateBeginDate(this.state.beginDate);
 	    }
 	  },
 	
@@ -63336,10 +63340,10 @@
 	    if (begin && date._d < begin._d) {
 	      alert("End date cannot occur before start date.");
 	    } else {
+	      FilterActions.updateEndDate(date);
 	      this.setState({
 	        endDate: date
 	      });
-	      FilterActions.updateEndDate(this.state.endDate);
 	    }
 	  },
 	
@@ -63417,19 +63421,19 @@
 	            'label',
 	            null,
 	            'Coworking Space',
-	            React.createElement('input', { className: 'office-type', onChange: this.updateOfficeType, type: 'checkbox', value: 'Coworking', checked: true })
+	            React.createElement('input', { className: 'office-type', onChange: this.updateOfficeType, type: 'checkbox', value: 'Coworking Space', checked: this.state.office_types["Coworking Space"] === true })
 	          ),
 	          React.createElement(
 	            'label',
 	            null,
 	            'Private Office',
-	            React.createElement('input', { className: 'office-type', onChange: this.updateOfficeType, type: 'checkbox', value: 'Private Office', checked: true })
+	            React.createElement('input', { className: 'office-type', onChange: this.updateOfficeType, type: 'checkbox', value: 'Private Office', checked: this.state.office_types["Private Office"] })
 	          ),
 	          React.createElement(
 	            'label',
 	            null,
 	            'Home Office',
-	            React.createElement('input', { className: 'office-type', onChange: this.updateOfficeType, type: 'checkbox', value: 'Home Office', checked: true })
+	            React.createElement('input', { className: 'office-type', onChange: this.updateOfficeType, type: 'checkbox', value: 'Home Office', checked: this.state.office_types["Home Office"] })
 	          )
 	        ),
 	        React.createElement('hr', null),
@@ -63698,11 +63702,12 @@
 	
 	  updateCapacity: function (capacity) {
 	    if (capacity === "5+") {
-	      AppDispatcher.dispatch({
-	        actionType: "CAPACITY",
-	        capacity: capacity
-	      });
+	      capacity = 5;
 	    }
+	    AppDispatcher.dispatch({
+	      actionType: "CAPACITY",
+	      capacity: capacity
+	    });
 	  },
 	
 	  updateBeginDate: function (beginDate) {
@@ -63719,6 +63724,49 @@
 	    });
 	  }
 	};
+
+/***/ },
+/* 495 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(233).Store;
+	var AppDispatcher = __webpack_require__(228);
+	
+	var FilterStore = new Store(AppDispatcher);
+	
+	var _params = {
+	  price: { minPrice: 0, maxPrice: 1000000 },
+	  capacity: 1,
+	  dates: { beginDate: null, endDate: null },
+	  officeTypes: ["Coworking Space", "Private Office", "Home Office"]
+	};
+	
+	FilterStore.params = function () {
+	  return Object.assign({}, _params);
+	};
+	
+	FilterStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case "OFFICE_TYPES":
+	      _params.officeTypes = payload.officeTypes;
+	      FilterStore.__emitChange();
+	      break;
+	    case "CAPACITY":
+	      _params.capacity = payload.capacity;
+	      FilterStore.__emitChange();
+	      break;
+	    case "BEGIN_DATE":
+	      _params.dates.beginDate = payload.beginDate;
+	      FilterStore.__emitChange();
+	      break;
+	    case "END_DATE":
+	      _params.dates.endDate = payload.endDate;
+	      FilterStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	module.exports = FilterStore;
 
 /***/ }
 /******/ ]);

@@ -2,13 +2,33 @@ require "byebug"
 
 class Api::WorkspacesController < ApplicationController
   def index
-    workspaces = Workspace.all
+    @workspaces = Workspace.all
     # byebug
-    if (map_bounds)
-      # TODO: Update query to request (n...n+20) workspaces.
-      @workspaces = workspaces.in_map_bounds(map_bounds).limit(20)
+    if map_bounds
+      @workspaces = @workspaces.in_map_bounds(map_bounds)
     end
-    # @workspaces.filter_params(filter_params)
+
+    if capacity
+      @workspaces = @workspaces.where("capacity >= ?", capacity)
+    end
+
+    if office_types
+
+      @workspaces = @workspaces.where("officetype IN (?)", office_types)
+    end
+    # if office_types
+    #   @workspaces = @workspaces.select { |w| office_types.include?(w.officetype) }
+    # end
+    #
+    # if price
+    #   @workspaces = @workspaces.select { |w| w.between?(price.low, price.high) }
+    # end
+    #
+    # if dates
+    #   @workspaces = @workspaces.select do |w|
+    #     w.reservation_dates.none? { |date| dates.include?(date) }
+    #   end
+    # end
 
     render json: @workspaces
   end
@@ -21,23 +41,26 @@ class Api::WorkspacesController < ApplicationController
 
   private
   def map_bounds
-    params[:map_bounds]
+    params[:params]
   end
 
-  def filter_params
-    params.permit(:capacity, :office_types, :price)
+  def capacity
+    params[:capacity]
+  end
     # capacity: send data as a number, 1-5
     # params[:capacity]
-
     # office_types: send data as {office_types: []}
-    # params[:office_types]
+  def office_types
+    params[:office_types]
+  end
 
-    # price: send data as {price: {low: 1/1/16, high: 1/1/16}}
-    # params[:price]
+    # price: send data as {price: {low: , high: }}
+  def price
+    params[:price]
   end
 
   # send data as {dates: {start: 1/1/16, end: 1/1/16}}
-  # def filter_dates
-  #   params[:dates]
-  # end
+  def dates
+    params[:dates]
+  end
 end

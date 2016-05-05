@@ -48,7 +48,7 @@ weekly_price = (200..2000).to_a
 user_ids = (1..25).to_a
 
 # Temporary Values
-type = ["private office", "shared space"]
+type = ["Coworking Space", "Private Office", "Home Office"]
 photos_url = "temp"
 address = "123 Fake Street"
 description = "Lorem ipsum"

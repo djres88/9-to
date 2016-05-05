@@ -93,7 +93,7 @@ var Map = React.createClass({
         NE: northEast,
         SW: southWest
       };
-      ClientActions.fetchWorkspaces(bounds);
+      ClientActions.fetchWorkspaces({map_bounds: bounds});
       var coords = { lat: that.map.center.lat(), lng: that.map.center.lng() };
       that._handleChange(coords);
     });

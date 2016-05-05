@@ -7,6 +7,7 @@ var WorkspaceIndexItem = require('./WorkspaceIndexItem');
 var Navbar = require('../Navbar/Navbar');
 var Map = require('../Map/Map');
 var FilterParams = require('../Search/FilterParams');
+var FilterStore = require('../../stores/FilterStore');
 // var SearchLocationsBar = require('../Search/SearchLocationsBar');
 
 var WorkspaceIndex = React.createClass({
@@ -15,31 +16,24 @@ var WorkspaceIndex = React.createClass({
   },
 
   componentDidMount: function () {
-    console.log("WorkspaceIndex props", this.props);
+    // console.log("WorkspaceIndex props", this.props);
     this.listener = WorkspaceStore.addListener(this._onChange);
     // TODO: this also listens to filters store, passes relevant props to map and search params
-    // this.filtersListener = FilterStore.addListener(this._updateSearch);
+    this.filtersListener = FilterStore.addListener(this._onUpdateFilters);
   },
 
   componentWillUnmount: function() {
     this.listener.remove();
+    this.filtersListener.remove();
   },
 
   _onChange: function() {
     this.setState({workspaces: WorkspaceStore.all()});
   },
 
-  // TODO
-  updateSearch: function() {
-
-  },
-
-  _fetchFilteredWorkspaces: function(event) {
-    // TODO: Goal is to fetch the workspaces that are (a) bound by the map and (b) meet the criteria in the FilterParams.
-    // (1) looks at filter store
-    // (2) executed some function that retrieved bounds of map: GlobalMap.getBounds
-    // (3) Construct params object combining 1/2
-    // (4) Invoke client action, send params to DB, retrieve workspaces
+  _onUpdateFilters: function() {
+    this.params = FilterStore.params();
+    ClientActions.fetchWorkspaces(this.params);
   },
 
   render: function() {
