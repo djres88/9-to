@@ -10,8 +10,10 @@ var Home = React.createClass({
           <h1>WHEREVER WORK TAKES YOU</h1>
           <h2>Flexible-term office space for freelancers and teams.</h2>
         </div>
-        <Search />
-        <div className="below-fold">
+
+        <Search location={this.props.location.pathname}/>
+
+      <div className="below-fold">
           <div className="homepage-section-one">
             <h3>Time is money. Save it.</h3>
             <p>Something about saving costs involved w/ finding/setting up a new office...</p>

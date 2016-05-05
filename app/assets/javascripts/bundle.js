@@ -114,7 +114,7 @@
 	    Route,
 	    { path: '/', component: App },
 	    React.createElement(IndexRoute, { component: Home }),
-	    React.createElement(Route, { path: 's(/:city)(/:dates)', component: WorkspaceIndex }),
+	    React.createElement(Route, { path: 's(/:coords)', component: WorkspaceIndex }),
 	    React.createElement(Route, { path: 'workspaces/:workspaceId', component: WorkspaceShow }),
 	    React.createElement(Route, { path: 'reservation' })
 	  )
@@ -34398,7 +34398,6 @@
 	  },
 	
 	  componentDidMount: function () {
-	    console.log("Navbar props", this.props);
 	    this.listener = UserStore.addListener(this._onChange);
 	    if (this.state.route[2] !== "s") {
 	      window.addEventListener('scroll', this.handleScroll);
@@ -34824,7 +34823,7 @@
 	  displayName: 'Search',
 	
 	  getInitialState: function () {
-	    return { startDate: null, endDate: null, spacesNeeded: null };
+	    return { startDate: null, endDate: null, spacesNeeded: null, coords: null };
 	  },
 	
 	  // componentDidMount: function() {
@@ -34853,13 +34852,22 @@
 	
 	  handleSubmit: function (event) {
 	    event.preventDefault();
-	    ClientActions.fetchWorkspaces({
-	      city: this.state.inputVal,
-	      startDate: this.state.startDate,
-	      endDate: this.state.endDate,
-	      spacesNeeded: this.state.spacesNeeded
+	    var coords = {
+	      lat: window.autocomplete.getPlace().geometry.location.lat(),
+	      lng: window.autocomplete.getPlace().geometry.location.lng()
+	    };
+	
+	    this.setState({ coords: coords });
+	    // ClientActions.fetchWorkspaces({
+	    //   coords: coords, == NOTE: Let map take care of the coordinates.
+	    //   // startDate: this.state.startDate,
+	    //   // endDate: this.state.endDate,
+	    //   // spacesNeeded: this.state.spacesNeeded,
+	    // });
+	    HashHistory.push({
+	      pathname: "s",
+	      query: coords
 	    });
-	    HashHistory.push("s");
 	  },
 	
 	  dropdown: function () {
@@ -34868,17 +34876,10 @@
 	
 	  render: function () {
 	    var context = this;
-	    var LocationMatches = this.state.matchingCities.map(function (city, idx) {
-	      return React.createElement(
-	        'li',
-	        { key: idx, onClick: context.updateSearchField, className: 'city-matches' },
-	        city
-	      );
-	    });
 	    return React.createElement(
 	      'form',
 	      { className: 'search-container', onSubmit: this.handleSubmit },
-	      React.createElement(SearchLocationsBar, { className: 'searchbar-home' }),
+	      React.createElement(SearchLocationsBar, { location: this.props.location, className: 'searchbar-home' }),
 	      React.createElement(Dates, { onClick: this.getStartDate, placeholder: 'Start Date' }),
 	      React.createElement(Dates, { onClick: this.getEndDate, placeholder: 'End Date' }),
 	      React.createElement(
@@ -35053,20 +35054,18 @@
 	  displayName: 'Dates',
 	
 	
-	  getInitialState: function () {
-	    return { date: null };
-	  },
-	
-	  handleChange: function (date) {
-	    this.setState({
-	      date: date
-	    });
-	  },
+	  // getInitialState: function() {
+	  //   return {date: null };
+	  // },
+	  //
+	  // this.setState({
+	  //   date: date
+	  // });
 	
 	  render: function () {
 	    return React.createElement(DatePicker, {
-	      selected: this.state.date,
-	      onChange: this.handleChange,
+	      selected: this.props.date,
+	      onChange: this.props.action,
 	      className: 'date-dropdown',
 	      placeholderText: this.props.placeholder
 	    });
@@ -62801,45 +62800,58 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var HashHistory = __webpack_require__(166).hashHistory;
 	
 	// TODO: Make this a place autocomplete w/ Google API. All the search bar needs to do is set the coordinates of the Map! https://developers.google.com/places/javascript/
 	
 	var SearchLocationsBar = React.createClass({
 	  displayName: 'SearchLocationsBar',
 	
-	  // getInitialState: function() {
-	  //   return {coord: {lat: }}
-	  // },
 	
 	  componentDidMount: function () {
-	    // var defaultBounds = new google.maps.LatLngBounds(
-	    // new google.maps.LatLng(-33.8902, 151.1759),
-	    // new google.maps.LatLng(-33.8474, 151.2631));
-	
+	    // var element
+	    // if (this.props.location === "/") {
+	    //   hidden = "hidden";
+	    // } else {
+	    //   hidden = "";
+	    // }
 	    var input = document.getElementById('searchTextField');
-	    autocomplete = new google.maps.places.Autocomplete(input, { types: ['(cities)'] });
-	    console.log(window);
-	    // autocomplete.bindTo('bounds', window.GlobalMap);
+	    // debugger;
+	    // if (!window.autocomplete) {
+	    window.autocomplete = new google.maps.places.Autocomplete(input, { types: ['(cities)'] });
+	    // }
+	    // document.getElementById('searchTextField').addEventListener(
+	    //   'submit', this.handleChange);
+	  },
+	
+	  showText: function () {
+	    if (window.autocomplete && window.autocomplete.getPlace()) {
+	      return window.autocomplete.getPlace().formatted_address;
+	    } else {
+	      return "Search";
+	    }
+	  },
+	
+	  handleSubmit: function () {
+	    var coords = {
+	      lat: window.autocomplete.getPlace().geometry.location.lat(),
+	      lng: window.autocomplete.getPlace().geometry.location.lng()
+	    };
+	
+	    HashHistory.push({
+	      pathname: "s",
+	      query: coords
+	    });
 	  },
 	
 	  render: function () {
-	    return React.createElement('input', { id: 'searchTextField', className: this.props.className });
+	
+	    return React.createElement('input', { id: 'searchTextField', className: this.props.className, placeholder: this.showText() });
 	  }
 	
 	});
 	
 	module.exports = SearchLocationsBar;
-	
-	// render: function() {
-	//   return (
-	//     <div className="searchbar">
-	//       <input id="search-field-text" placeholder="Location" className="search-field" type="text" value={this.props.value} onChange={this.props.action}/>
-	//       <ul display="none">
-	//         {LocationMatches}
-	//       </ul>
-	//     </div>
-	//   );
-	// }
 
 /***/ },
 /* 486 */
@@ -62870,7 +62882,7 @@
 	          'Flexible-term office space for freelancers and teams.'
 	        )
 	      ),
-	      React.createElement(Search, null),
+	      React.createElement(Search, { location: this.props.location.pathname }),
 	      React.createElement(
 	        'div',
 	        { className: 'below-fold' },
@@ -62951,11 +62963,13 @@
 	var React = __webpack_require__(1);
 	
 	var WorkspaceStore = __webpack_require__(488);
+	
 	var ClientActions = __webpack_require__(274);
 	var WorkspaceIndexItem = __webpack_require__(489);
 	var Navbar = __webpack_require__(270);
 	var Map = __webpack_require__(490);
 	var FilterParams = __webpack_require__(491);
+	// var SearchLocationsBar = require('../Search/SearchLocationsBar');
 	
 	var WorkspaceIndex = React.createClass({
 	  displayName: 'WorkspaceIndex',
@@ -62968,6 +62982,7 @@
 	    console.log("WorkspaceIndex props", this.props);
 	    this.listener = WorkspaceStore.addListener(this._onChange);
 	    // TODO: this also listens to filters store, passes relevant props to map and search params
+	    // this.filtersListener = FilterStore.addListener(this._updateSearch);
 	  },
 	
 	  componentWillUnmount: function () {
@@ -62977,6 +62992,9 @@
 	  _onChange: function () {
 	    this.setState({ workspaces: WorkspaceStore.all() });
 	  },
+	
+	  // TODO
+	  updateSearch: function () {},
 	
 	  _fetchFilteredWorkspaces: function (event) {
 	    // TODO: Goal is to fetch the workspaces that are (a) bound by the map and (b) meet the criteria in the FilterParams.
@@ -62996,7 +63014,7 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'search-listings-page' },
-	      React.createElement(Map, { spaces: workspaces, fetchSpaces: this._fetchFilteredWorkspaces, startingCoords: 't' }),
+	      React.createElement(Map, { lat: parseFloat(this.props.location.query.lat), lng: parseFloat(this.props.location.query.lng), spaces: workspaces, fetchSpaces: this._fetchFilteredWorkspaces }),
 	      React.createElement(FilterParams, null),
 	      React.createElement(
 	        'div',
@@ -63017,6 +63035,7 @@
 	var AppDispatcher = __webpack_require__(228);
 	
 	var _workspaces = {};
+	var _workspacesAll = {};
 	
 	var WorkspaceStore = new Store(AppDispatcher);
 	
@@ -63028,17 +63047,58 @@
 	  return _workspaces[id];
 	};
 	
+	WorkspaceStore.resetWorkspaces = function () {
+	  _workspaces = _workspacesAll;
+	};
+	
+	var filterOffices = function (office_types) {
+	  for (var i = 0; i < office_types.length; i++) {
+	    _workspaces.forEach(function (space) {
+	      if (space.office.indexOf(office_types[i]) !== -1) {
+	        _workspaces[space.id] = space;
+	      }
+	    });
+	  }
+	};
+	
+	var filterCapacity = function (capacity) {};
+	
+	var filterBeginDate = function (beginDate) {};
+	
+	var filterEndDate = function (endDate) {};
+	
+	var filterPrice = function (price) {};
+	
 	WorkspaceStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case "WORKSPACES_RECEIVED":
 	      _workspaces = {};
+	      _workspacesAll = {};
 	      payload.workspaces.forEach(function (space) {
 	        _workspaces[space.id] = space;
+	        _workspacesAll[space.id] = space;
 	      });
 	      this.__emitChange();
 	      break;
 	    case "WORKSPACE_RECEIVED":
 	      _workspaces[payload.workspace.id] = payload.workspace;
+	      this.__emitChange();
+	      break;
+	    case "OFFICE_TYPES":
+	      this.resetWorkspaces();
+	      filterOffices(payload.types);
+	      this.__emitChange();
+	      break;
+	    case "CAPACITY":
+	      this.resetWorkspaces();
+	      this.__emitChange();
+	      break;
+	    case "BEGIN_DATE":
+	      this.resetWorkspaces();
+	      this.__emitChange();
+	      break;
+	    case "END_DATE":
+	      this.resetWorkspaces();
 	      this.__emitChange();
 	      break;
 	  }
@@ -63108,23 +63168,35 @@
 	    lng: latLng.lng()
 	  };
 	}
-	var mapOptions = {
-	  center: { lat: 37.773972, lng: -122.431297 }, //San Francisco
-	  zoom: 13
-	};
 	
 	var Map = React.createClass({
 	  displayName: 'Map',
 	
+	
+	  mapOptions: function () {
+	    return {
+	      // TODO: Set lat & lng to this.props.params, as lat and lng are in the query string; but this.props.params is undefined.
+	      center: { lat: this.props.lat, lng: this.props.lng }, //San Francisco
+	      zoom: 13
+	    };
+	  },
+	
 	  componentDidMount: function () {
 	    var map = ReactDOM.findDOMNode(this.refs.map);
-	    this.map = window.GlobalMap = new google.maps.Map(map, mapOptions);
-	
-	    // GlobalMap.addEventListener(this.props.fetchSpaces);
-	    // TODO: figure out google maps' syntax for adding an e listener; on idle state
+	    this.map = new google.maps.Map(map, this.mapOptions());
+	    // window.autocomplete.bindTo('bounds', this.map);
 	    this.registerListeners();
 	    this.markers = [];
 	    this.eachSpace(this.createMarker);
+	    var that = this;
+	    setTimeout(function () {
+	      debugger;
+	      window.autocomplete.addListener('place_changed', function () {
+	        var place = window.autocomplete.getPlace();
+	        that.map.setCenter(place.geometry.location);
+	        that.map.setZoom(11);
+	      });
+	    }, 500);
 	  },
 	
 	  eachSpace: function (callback) {
@@ -63166,7 +63238,7 @@
 	
 	  _handleClick: function (coords) {
 	    HashHistory.push({
-	      pathname: "s",
+	      pathname: "s/",
 	      query: coords
 	    });
 	  },
@@ -63212,10 +63284,11 @@
 	      }
 	    }
 	  },
+	
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { className: 'map-box' },
+	      { theMap: this.map, className: 'map-box' },
 	      React.createElement('div', { id: 'map', ref: 'map' })
 	    );
 	  }
@@ -63229,18 +63302,51 @@
 
 	var React = __webpack_require__(1);
 	var Dates = __webpack_require__(277);
+	var FilterActions = __webpack_require__(494);
 	
 	// TODO: All this needs to do is listen to a FILTER store that updates (selects) workspaces that the WorkspaceIndex has retrieved.
 	var FilterParams = React.createClass({
 	  displayName: 'FilterParams',
 	
 	  getInitialState: function () {
-	    return { location: "", capacity: 1, office_types: ["Coworking Space", "Private Office", "Home Office"] };
+	    return { location: "", capacity: 1, office_types: ["Coworking Space", "Private Office", "Home Office"], beginDate: null, endDate: null };
 	  },
 	
 	  updateOfficeType: function (e) {
-	    // e.preventDefault();
-	    // console.log(e.currentTarget);
+	    if (e.currentTarget.checked) {
+	      this.state.office_types.push(e.currentTarget.value);
+	    } else {}
+	    debugger;
+	    FilterActions.updateOfficeType(this.state.office_types);
+	  },
+	
+	  updateCapacity: function (e) {
+	    this.setState({ capacity: e.target.value });
+	    FilterActions.updateCapacity(this.state.capacity);
+	  },
+	
+	  updateBeginDate: function (date) {
+	    end = this.state.endDate;
+	    if (end && date._d > end._d) {
+	      alert("End date cannot occur before start date.");
+	    } else {
+	      this.setState({
+	        beginDate: date
+	      });
+	      FilterActions.updateBeginDate(this.state.beginDate);
+	    }
+	  },
+	
+	  updateEndDate: function (date) {
+	    begin = this.state.beginDate;
+	    if (begin && date._d < begin._d) {
+	      alert("End date cannot occur before start date.");
+	    } else {
+	      this.setState({
+	        endDate: date
+	      });
+	      FilterActions.updateEndDate(this.state.endDate);
+	    }
 	  },
 	
 	  render: function () {
@@ -63258,8 +63364,8 @@
 	            null,
 	            'Dates'
 	          ),
-	          React.createElement(Dates, { placeholder: 'Start Date' }),
-	          React.createElement(Dates, { placeholder: 'End Date' })
+	          React.createElement(Dates, { date: this.state.beginDate, action: this.updateBeginDate, placeholder: 'Start Date' }),
+	          React.createElement(Dates, { date: this.state.endDate, action: this.updateEndDate, placeholder: 'End Date' })
 	        ),
 	        React.createElement('hr', null),
 	        React.createElement(
@@ -63273,30 +63379,33 @@
 	          'Spaces Needed:',
 	          React.createElement(
 	            'select',
-	            { className: 'capacity-dropdown' },
+	            {
+	              value: this.state.capacity,
+	              onChange: this.updateCapacity,
+	              className: 'capacity-dropdown' },
 	            React.createElement(
 	              'option',
-	              { onChange: this.getCapacity },
+	              null,
 	              '1'
 	            ),
 	            React.createElement(
 	              'option',
-	              { onChange: this.getCapacity },
+	              null,
 	              '2'
 	            ),
 	            React.createElement(
 	              'option',
-	              { onChange: this.getCapacity },
+	              null,
 	              '3'
 	            ),
 	            React.createElement(
 	              'option',
-	              { onChange: this.getCapacity },
+	              null,
 	              '4'
 	            ),
 	            React.createElement(
 	              'option',
-	              { onChange: this.getCapacity },
+	              null,
 	              '5+'
 	            )
 	          )
@@ -63577,6 +63686,45 @@
 	});
 	
 	module.exports = ReservationForm;
+
+/***/ },
+/* 494 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ApiUtil = __webpack_require__(275);
+	var AppDispatcher = __webpack_require__(228);
+	
+	module.exports = {
+	  updateOfficeType: function (types) {
+	    AppDispatcher.dispatch({
+	      actionType: "OFFICE_TYPES",
+	      officeTypes: types
+	    });
+	  },
+	
+	  updateCapacity: function (capacity) {
+	    if (capacity === "5+") {
+	      AppDispatcher.dispatch({
+	        actionType: "CAPACITY",
+	        capacity: capacity
+	      });
+	    }
+	  },
+	
+	  updateBeginDate: function (beginDate) {
+	    AppDispatcher.dispatch({
+	      actionType: "BEGIN_DATE",
+	      beginDate: beginDate
+	    });
+	  },
+	
+	  updateEndDate: function (endDate) {
+	    AppDispatcher.dispatch({
+	      actionType: "END_DATE",
+	      endDate: endDate
+	    });
+	  }
+	};
 
 /***/ }
 /******/ ]);

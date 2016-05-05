@@ -28,6 +28,8 @@ function preloadUser() {
   UserActions.fetchCurrentUser();
 }
 
+
+
 var App = React.createClass({
   // Set nav class according to current route.
   // TODO: may need to adjust how we're detecting the route here.
@@ -42,6 +44,7 @@ var App = React.createClass({
   componentDidMount: function() {
     // Check for current user.
     preloadUser();
+
   },
 
   render: function() {
@@ -63,7 +66,7 @@ var Router = (
   <Router history={hashHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Home}/>
-      <Route path="s(/:city)(/:dates)" component={WorkspaceIndex}/>
+      <Route path="s(/:coords)" component={WorkspaceIndex}/>
       <Route path="workspaces/:workspaceId" component={WorkspaceShow}/>
         <Route path="reservation"/>
     </Route>

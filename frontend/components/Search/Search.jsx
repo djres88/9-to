@@ -8,7 +8,7 @@ var SearchLocationsBar = require('./SearchLocationsBar');
 
 var Search = React.createClass({
   getInitialState: function() {
-    return { startDate: null, endDate: null, spacesNeeded: null};
+    return { startDate: null, endDate: null, spacesNeeded: null, coords: null};
   },
 
   // componentDidMount: function() {
@@ -37,13 +37,23 @@ var Search = React.createClass({
 
   handleSubmit: function(event) {
     event.preventDefault();
-    ClientActions.fetchWorkspaces({
-      city: this.state.inputVal,
-      startDate: this.state.startDate,
-      endDate: this.state.endDate,
-      spacesNeeded: this.state.spacesNeeded,
+    var coords = {
+      lat: window.autocomplete.getPlace().geometry.location.lat(),
+      lng: window.autocomplete.getPlace().geometry.location.lng()
+    };
+
+    this.setState({coords: coords});
+    // ClientActions.fetchWorkspaces({
+    //   coords: coords, == NOTE: Let map take care of the coordinates.
+    //   // startDate: this.state.startDate,
+    //   // endDate: this.state.endDate,
+    //   // spacesNeeded: this.state.spacesNeeded,
+    // });
+    HashHistory.push({
+      pathname: "s",
+      query: coords
     });
-    HashHistory.push("s");
+
   },
 
   dropdown: function( ) {
@@ -52,12 +62,9 @@ var Search = React.createClass({
 
   render: function() {
     var context = this;
-    var LocationMatches = this.state.matchingCities.map(function(city, idx) {
-      return <li key={idx} onClick={context.updateSearchField} className="city-matches">{city}</li>;
-    });
     return (
       <form className="search-container" onSubmit={this.handleSubmit}>
-        <SearchLocationsBar className="searchbar-home"/>
+        <SearchLocationsBar location={this.props.location} className="searchbar-home"/>
         <Dates onClick={this.getStartDate} placeholder="Start Date"/>
         <Dates onClick={this.getEndDate} placeholder="End Date"/>
         <select className="capacity-dropdown">

@@ -14,7 +14,6 @@ var Navbar = React.createClass({
   },
 
   componentDidMount: function() {
-    console.log("Navbar props", this.props);
     this.listener = UserStore.addListener(this._onChange);
     if (this.state.route[2] !== "s") {
       window.addEventListener('scroll', this.handleScroll);

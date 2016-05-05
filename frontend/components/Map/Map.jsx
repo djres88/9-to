@@ -9,22 +9,33 @@ function _getCoordsObj(latLng) {
     lng: latLng.lng()
   };
 }
-var mapOptions = {
-  center: {lat: 37.773972, lng: -122.431297}, //San Francisco
-  zoom: 13
-};
-
 
 var Map = React.createClass({
+
+  mapOptions: function() {
+    return {
+      // TODO: Set lat & lng to this.props.params, as lat and lng are in the query string; but this.props.params is undefined.
+      center: {lat: this.props.lat, lng: this.props.lng}, //San Francisco
+      zoom: 13
+    };
+  },
+
   componentDidMount: function(){
     var map = ReactDOM.findDOMNode(this.refs.map);
-    this.map = window.GlobalMap = new google.maps.Map(map, mapOptions);
-    
-    // GlobalMap.addEventListener(this.props.fetchSpaces);
-    // TODO: figure out google maps' syntax for adding an e listener; on idle state
+    this.map = new google.maps.Map(map, this.mapOptions());
+    // window.autocomplete.bindTo('bounds', this.map);
     this.registerListeners();
     this.markers = [];
     this.eachSpace(this.createMarker);
+    var that = this;
+    setTimeout(function() {
+      debugger;
+      window.autocomplete.addListener('place_changed', function() {
+        var place = window.autocomplete.getPlace();
+        that.map.setCenter(place.geometry.location);
+        that.map.setZoom(11);
+      });
+    }, 500);
   },
 
   eachSpace: function(callback){
@@ -66,7 +77,7 @@ var Map = React.createClass({
 
   _handleClick: function(coords){
     HashHistory.push({
-      pathname: "s",
+      pathname: "s/",
       query: coords
     });
   },
@@ -112,9 +123,10 @@ var Map = React.createClass({
       }
     }
   },
+
   render: function(){
     return (
-      <div className="map-box">
+      <div theMap={this.map} className="map-box">
         <div id="map" ref="map"></div>
        </div>
     );

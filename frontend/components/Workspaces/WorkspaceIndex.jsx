@@ -1,11 +1,13 @@
 var React = require('react');
 
 var WorkspaceStore = require('../../stores/WorkspaceStore');
+
 var ClientActions = require('../../actions/ClientActions');
 var WorkspaceIndexItem = require('./WorkspaceIndexItem');
 var Navbar = require('../Navbar/Navbar');
 var Map = require('../Map/Map');
 var FilterParams = require('../Search/FilterParams');
+// var SearchLocationsBar = require('../Search/SearchLocationsBar');
 
 var WorkspaceIndex = React.createClass({
   getInitialState: function() {
@@ -16,6 +18,7 @@ var WorkspaceIndex = React.createClass({
     console.log("WorkspaceIndex props", this.props);
     this.listener = WorkspaceStore.addListener(this._onChange);
     // TODO: this also listens to filters store, passes relevant props to map and search params
+    // this.filtersListener = FilterStore.addListener(this._updateSearch);
   },
 
   componentWillUnmount: function() {
@@ -24,6 +27,11 @@ var WorkspaceIndex = React.createClass({
 
   _onChange: function() {
     this.setState({workspaces: WorkspaceStore.all()});
+  },
+
+  // TODO
+  updateSearch: function() {
+
   },
 
   _fetchFilteredWorkspaces: function(event) {
@@ -43,7 +51,7 @@ var WorkspaceIndex = React.createClass({
     // TODO: pass filter props to search params
     return (
       <div className="search-listings-page">
-        <Map spaces={workspaces} fetchSpaces={this._fetchFilteredWorkspaces} startingCoords="t"/>
+        <Map lat={parseFloat(this.props.location.query.lat)} lng={parseFloat(this.props.location.query.lng)} spaces={workspaces} fetchSpaces={this._fetchFilteredWorkspaces}/>
         <FilterParams />
         <div className="workspace-index">{workspaceComponents}</div>
       </div>

@@ -1,15 +1,50 @@
 var React = require('react');
 var Dates = require('./Dates');
+var FilterActions = require('../../actions/FilterActions');
 
 // TODO: All this needs to do is listen to a FILTER store that updates (selects) workspaces that the WorkspaceIndex has retrieved.
 var FilterParams = React.createClass({
   getInitialState: function() {
-    return {location: "", capacity: 1, office_types: ["Coworking Space", "Private Office", "Home Office"]};
+    return {location: "", capacity: 1, office_types: ["Coworking Space", "Private Office", "Home Office"], beginDate: null, endDate: null};
   },
 
   updateOfficeType: function(e) {
-    // e.preventDefault();
-    // console.log(e.currentTarget);
+    if (e.currentTarget.checked) {
+      this.state.office_types.push(e.currentTarget.value);
+    } else {
+      
+    }
+    debugger;
+    FilterActions.updateOfficeType(this.state.office_types);
+  },
+
+  updateCapacity: function(e) {
+    this.setState({capacity: e.target.value});
+    FilterActions.updateCapacity(this.state.capacity);
+  },
+
+  updateBeginDate: function(date) {
+    end = this.state.endDate;
+    if (end && date._d > end._d) {
+      alert("End date cannot occur before start date.");
+    } else {
+      this.setState({
+        beginDate: date
+      });
+      FilterActions.updateBeginDate(this.state.beginDate);
+    }
+  },
+
+  updateEndDate: function(date) {
+    begin = this.state.beginDate;
+    if (begin && date._d < begin._d) {
+      alert("End date cannot occur before start date.");
+    } else {
+      this.setState({
+        endDate: date
+      });
+      FilterActions.updateEndDate(this.state.endDate);
+    }
   },
 
   render: function() {
@@ -18,19 +53,22 @@ var FilterParams = React.createClass({
         <ul>
           <li>
             <h4>Dates</h4>
-            <Dates placeholder="Start Date"/>
-            <Dates placeholder="End Date"/>
+            <Dates date={this.state.beginDate} action={this.updateBeginDate} placeholder="Start Date"/>
+            <Dates date={this.state.endDate} action={this.updateEndDate} placeholder="End Date"/>
           </li>
           <hr/>
           <li>
             <h4>Capacity</h4>
               Spaces Needed:
-              <select className="capacity-dropdown">
-                <option onChange={this.getCapacity}>1</option>
-                <option onChange={this.getCapacity}>2</option>
-                <option onChange={this.getCapacity}>3</option>
-                <option onChange={this.getCapacity}>4</option>
-                <option onChange={this.getCapacity}>5+</option>
+              <select
+                value={this.state.capacity}
+                onChange={this.updateCapacity}
+                className="capacity-dropdown">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5+</option>
               </select>
           </li>
           <hr/>

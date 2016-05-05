@@ -5,7 +5,8 @@ class Api::WorkspacesController < ApplicationController
     workspaces = Workspace.all
     # byebug
     if (map_bounds)
-      @workspaces = workspaces.in_map_bounds(map_bounds)
+      # TODO: Update query to request (n...n+20) workspaces.
+      @workspaces = workspaces.in_map_bounds(map_bounds).limit(20)
     end
     # @workspaces.filter_params(filter_params)
 
