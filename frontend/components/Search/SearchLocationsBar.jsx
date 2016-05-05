@@ -6,26 +6,19 @@ var HashHistory = require('react-router').hashHistory;
 var SearchLocationsBar = React.createClass({
 
   componentDidMount: function() {
-    // var element
-    // if (this.props.location === "/") {
-    //   hidden = "hidden";
-    // } else {
-    //   hidden = "";
-    // }
+
     var input = document.getElementById('searchTextField');
-    // debugger;
-    // if (!window.autocomplete) {
       window.autocomplete = new google.maps.places.Autocomplete(input, {types: ['(cities)']});
     // }
-    // document.getElementById('searchTextField').addEventListener(
-    //   'submit', this.handleChange);
+    document.getElementById('searchTextField').addEventListener(
+      'submit', this.handleChange);
   },
 
   showText: function() {
     if (window.autocomplete && window.autocomplete.getPlace()) {
       return window.autocomplete.getPlace().formatted_address;
     } else {
-      return "Search";
+      return "Search by Location";
     }
   },
 
@@ -45,9 +38,7 @@ var SearchLocationsBar = React.createClass({
 
 
     return (
-
-          <input id="searchTextField" className={this.props.className} placeholder={this.showText()}/>
-
+      <input id="searchTextField" className={this.props.className} placeholder={this.showText()}/>
     );
   }
 

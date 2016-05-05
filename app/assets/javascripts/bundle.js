@@ -62809,26 +62809,18 @@
 	
 	
 	  componentDidMount: function () {
-	    // var element
-	    // if (this.props.location === "/") {
-	    //   hidden = "hidden";
-	    // } else {
-	    //   hidden = "";
-	    // }
+	
 	    var input = document.getElementById('searchTextField');
-	    // debugger;
-	    // if (!window.autocomplete) {
 	    window.autocomplete = new google.maps.places.Autocomplete(input, { types: ['(cities)'] });
 	    // }
-	    // document.getElementById('searchTextField').addEventListener(
-	    //   'submit', this.handleChange);
+	    document.getElementById('searchTextField').addEventListener('submit', this.handleChange);
 	  },
 	
 	  showText: function () {
 	    if (window.autocomplete && window.autocomplete.getPlace()) {
 	      return window.autocomplete.getPlace().formatted_address;
 	    } else {
-	      return "Search";
+	      return "Search by Location";
 	    }
 	  },
 	
@@ -63190,11 +63182,11 @@
 	    this.eachSpace(this.createMarker);
 	    var that = this;
 	    setTimeout(function () {
-	      debugger;
 	      window.autocomplete.addListener('place_changed', function () {
-	        var place = window.autocomplete.getPlace();
-	        that.map.setCenter(place.geometry.location);
+	        var place = window.autocomplete.getPlace().geometry.location;
+	        that.map.setCenter(place);
 	        that.map.setZoom(11);
+	        that._handleChange({ lat: place.lat(), lng: place.lng() });
 	      });
 	    }, 500);
 	  },
@@ -63236,7 +63228,7 @@
 	    removeMarkers.forEach(this.removeMarker);
 	  },
 	
-	  _handleClick: function (coords) {
+	  _handleChange: function (coords) {
 	    HashHistory.push({
 	      pathname: "s/",
 	      query: coords
@@ -63255,10 +63247,12 @@
 	        SW: southWest
 	      };
 	      ClientActions.fetchWorkspaces(bounds);
+	      var coords = { lat: that.map.center.lat(), lng: that.map.center.lng() };
+	      that._handleChange(coords);
 	    });
 	    google.maps.event.addListener(this.map, 'click', function (event) {
 	      var coords = { lat: event.latLng.lat(), lng: event.latLng.lng() };
-	      that._handleClick(coords);
+	      that._handleChange(coords);
 	    });
 	  },
 	
