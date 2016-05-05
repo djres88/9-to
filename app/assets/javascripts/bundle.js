@@ -35018,6 +35018,7 @@
 	
 		// RESERVATIONS
 		createReservation: function (options) {
+			debugger;
 			$.ajax({
 				url: 'api/workspaces/' + options.workspaceId + "/reservations",
 				method: 'post',
@@ -64704,7 +64705,7 @@
 	
 	  handleSubmit: function (e) {
 	    e.preventDefault();
-	    var userId = UserStore.currentUser();
+	    var userId = UserStore.currentUser().id;
 	    if (!userId) {
 	      alert("User must be logged in");
 	      // TODO: open the modal

@@ -39,6 +39,7 @@ module.exports = {
 
 	// RESERVATIONS
 	createReservation: function(options) {
+		debugger;
 		$.ajax({
 			url: 'api/workspaces/' + options.workspaceId +"/reservations",
 			method: 'post',
