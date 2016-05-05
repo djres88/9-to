@@ -1,9 +1,8 @@
-require "byebug"
 
 class Api::WorkspacesController < ApplicationController
   def index
     @workspaces = Workspace.all
-    # byebug
+
     if map_bounds
       @workspaces = @workspaces.in_map_bounds(map_bounds)
     end

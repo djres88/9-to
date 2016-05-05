@@ -1,12 +1,9 @@
-require('byebug')
-
 class Api::ReservationsController < ApplicationController
   def create
     reservation_params.start_date = Date.new(reservation_params.start_date)
     reservation_params.end_date = Date.new(reservation_params.end_date)
 
     @reservation = Reservation.new(reservation_params)
-    byebug
     if @reservation.save
       render json: @reservation
     end
