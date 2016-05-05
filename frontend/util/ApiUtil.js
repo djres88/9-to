@@ -31,12 +31,30 @@ module.exports = {
 				ServerActions.handleError(data);
 			}
 		});
-	}
+	},
 
 
 	// WORKSPACE CRUD (HOST REQUESTS)
 
 
 	// RESERVATIONS
-
+	createReservation: function(options) {
+		$.ajax({
+			url: 'api/workspaces/' + options.workspaceId +"/reservations",
+			method: 'post',
+			data: { reservation: {
+				workspace_id: options.workspaceId,
+				user_id: options.tenantId,
+				start_date: options.startDate,
+				end_date: options.endDate
+			}},
+			dataType: 'json',
+			success: function(reservationDetails) {
+				ServerActions.receiveReservation(workspaceDetails);
+			},
+			error: function(data) {
+				ServerActions.handleError(data);
+			}
+		});
+	}
 };

@@ -64,8 +64,8 @@
 	
 	//Components
 	var Navbar = __webpack_require__(270);
-	var Home = __webpack_require__(486);
-	var WorkspaceIndex = __webpack_require__(487);
+	var Home = __webpack_require__(487);
+	var WorkspaceIndex = __webpack_require__(488);
 	var WorkspaceShow = __webpack_require__(495);
 	var ReservationForm = __webpack_require__(496);
 	
@@ -116,7 +116,7 @@
 	    React.createElement(IndexRoute, { component: Home }),
 	    React.createElement(Route, { path: 's(/:coords)', component: WorkspaceIndex }),
 	    React.createElement(Route, { path: 'workspaces/:workspaceId', component: WorkspaceShow }),
-	    React.createElement(Route, { path: 'reservation' })
+	    React.createElement(Route, { path: 'reservations' })
 	  )
 	);
 	
@@ -34388,7 +34388,7 @@
 	
 	var LoginForm = __webpack_require__(272);
 	var Search = __webpack_require__(273);
-	var SearchLocationsBar = __webpack_require__(485);
+	var SearchLocationsBar = __webpack_require__(486);
 	
 	var Navbar = React.createClass({
 	  displayName: 'Navbar',
@@ -34817,7 +34817,7 @@
 	var ClientActions = __webpack_require__(274);
 	
 	var Dates = __webpack_require__(277);
-	var SearchLocationsBar = __webpack_require__(485);
+	var SearchLocationsBar = __webpack_require__(486);
 	
 	var Search = React.createClass({
 	  displayName: 'Search',
@@ -34942,9 +34942,10 @@
 	    ApiUtil.fetchSingleWorkspace(id);
 	  },
 	
-	  reserveSpace: function (id, start, end) {
-	    debugger;
-	    ApiUtil.createReservation(id, start, end);
+	  reserveSpace: function (options) {
+	    options.start_date = options.start_date.format("YYYY-MM-DD");
+	    options.end_date = options.end_date.format("YYYY-MM-DD");
+	    ApiUtil.createReservation(options);
 	  }
 	
 	  // WORKSPACE COMPLETE CRUD (HOST ACTIONS)
@@ -35011,12 +35012,30 @@
 					ServerActions.handleError(data);
 				}
 			});
-		}
+		},
 	
 		// WORKSPACE CRUD (HOST REQUESTS)
 	
 		// RESERVATIONS
-	
+		createReservation: function (options) {
+			$.ajax({
+				url: 'api/workspaces/' + options.workspaceId + "/reservations",
+				method: 'post',
+				data: { reservation: {
+						workspace_id: options.workspaceId,
+						user_id: options.tenantId,
+						start_date: options.startDate,
+						end_date: options.endDate
+					} },
+				dataType: 'json',
+				success: function (reservationDetails) {
+					ServerActions.receiveReservation(workspaceDetails);
+				},
+				error: function (data) {
+					ServerActions.handleError(data);
+				}
+			});
+		}
 	};
 
 /***/ },
@@ -35040,6 +35059,10 @@
 	    });
 	  },
 	
+	  receiveReservation: function (reservation) {
+	    console.log(reservation);
+	  },
+	
 	  handleError: function (errors) {
 	    AppDispatcher.dispatch({
 	      actionType: "ERROR",
@@ -35055,7 +35078,7 @@
 	var React = __webpack_require__(1);
 	var DatePicker = __webpack_require__(278);
 	var moment = __webpack_require__(383);
-	var FilterActions = __webpack_require__(493);
+	var FilterActions = __webpack_require__(485);
 	
 	var Dates = React.createClass({
 	  displayName: 'Dates',
@@ -62836,6 +62859,46 @@
 /* 485 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var ApiUtil = __webpack_require__(275);
+	var AppDispatcher = __webpack_require__(228);
+	
+	module.exports = {
+	  updateOfficeType: function (types) {
+	    AppDispatcher.dispatch({
+	      actionType: "OFFICE_TYPES",
+	      officeTypes: types
+	    });
+	  },
+	
+	  updateCapacity: function (capacity) {
+	    if (capacity === "5+") {
+	      capacity = 5;
+	    }
+	    AppDispatcher.dispatch({
+	      actionType: "CAPACITY",
+	      capacity: capacity
+	    });
+	  },
+	
+	  updateBeginDate: function (beginDate) {
+	    AppDispatcher.dispatch({
+	      actionType: "BEGIN_DATE",
+	      beginDate: beginDate
+	    });
+	  },
+	
+	  updateEndDate: function (endDate) {
+	    AppDispatcher.dispatch({
+	      actionType: "END_DATE",
+	      endDate: endDate
+	    });
+	  }
+	};
+
+/***/ },
+/* 486 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var React = __webpack_require__(1);
 	var HashHistory = __webpack_require__(166).hashHistory;
 	
@@ -62883,7 +62946,7 @@
 	module.exports = SearchLocationsBar;
 
 /***/ },
-/* 486 */
+/* 487 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -62986,19 +63049,19 @@
 	module.exports = Home;
 
 /***/ },
-/* 487 */
+/* 488 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	
-	var WorkspaceStore = __webpack_require__(488);
+	var WorkspaceStore = __webpack_require__(489);
 	
 	var ClientActions = __webpack_require__(274);
-	var WorkspaceIndexItem = __webpack_require__(489);
+	var WorkspaceIndexItem = __webpack_require__(490);
 	var Navbar = __webpack_require__(270);
-	var Map = __webpack_require__(490);
-	var FilterParams = __webpack_require__(492);
-	var FilterStore = __webpack_require__(491);
+	var Map = __webpack_require__(491);
+	var FilterParams = __webpack_require__(493);
+	var FilterStore = __webpack_require__(492);
 	// var SearchLocationsBar = require('../Search/SearchLocationsBar');
 	
 	var WorkspaceIndex = React.createClass({
@@ -63054,7 +63117,7 @@
 	module.exports = WorkspaceIndex;
 
 /***/ },
-/* 488 */
+/* 489 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(233).Store;
@@ -63108,7 +63171,7 @@
 	module.exports = WorkspaceStore;
 
 /***/ },
-/* 489 */
+/* 490 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -63155,15 +63218,15 @@
 	// <li>{workspace.city}</li>
 
 /***/ },
-/* 490 */
+/* 491 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var HashHistory = __webpack_require__(166).hashHistory;
 	var ReactDOM = __webpack_require__(32);
 	var ClientActions = __webpack_require__(274);
-	var FilterStore = __webpack_require__(491);
-	var WorkspaceStore = __webpack_require__(488);
+	var FilterStore = __webpack_require__(492);
+	var WorkspaceStore = __webpack_require__(489);
 	
 	function _getCoordsObj(latLng) {
 	  return {
@@ -63323,7 +63386,7 @@
 	module.exports = Map;
 
 /***/ },
-/* 491 */
+/* 492 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(233).Store;
@@ -63366,12 +63429,12 @@
 	module.exports = FilterStore;
 
 /***/ },
-/* 492 */
+/* 493 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Dates = __webpack_require__(277);
-	var FilterActions = __webpack_require__(493);
+	var FilterActions = __webpack_require__(485);
 	var ReactSlider = __webpack_require__(494);
 	var HashHistory = __webpack_require__(166).hashHistory;
 	
@@ -63607,46 +63670,6 @@
 	});
 	
 	module.exports = FilterParams;
-
-/***/ },
-/* 493 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var ApiUtil = __webpack_require__(275);
-	var AppDispatcher = __webpack_require__(228);
-	
-	module.exports = {
-	  updateOfficeType: function (types) {
-	    AppDispatcher.dispatch({
-	      actionType: "OFFICE_TYPES",
-	      officeTypes: types
-	    });
-	  },
-	
-	  updateCapacity: function (capacity) {
-	    if (capacity === "5+") {
-	      capacity = 5;
-	    }
-	    AppDispatcher.dispatch({
-	      actionType: "CAPACITY",
-	      capacity: capacity
-	    });
-	  },
-	
-	  updateBeginDate: function (beginDate) {
-	    AppDispatcher.dispatch({
-	      actionType: "BEGIN_DATE",
-	      beginDate: beginDate
-	    });
-	  },
-	
-	  updateEndDate: function (endDate) {
-	    AppDispatcher.dispatch({
-	      actionType: "END_DATE",
-	      endDate: endDate
-	    });
-	  }
-	};
 
 /***/ },
 /* 494 */
@@ -64452,20 +64475,19 @@
 
 	var React = __webpack_require__(1);
 	var ReservationForm = __webpack_require__(496);
-	var WorkspaceStore = __webpack_require__(488);
+	var WorkspaceStore = __webpack_require__(489);
 	var ClientActions = __webpack_require__(274);
 	
 	var WorkspaceShow = React.createClass({
 	  displayName: 'WorkspaceShow',
 	
 	  getInitialState: function () {
-	    return { space: "" };
+	    return { space: {} };
 	  },
 	
 	  componentDidMount: function () {
 	    this.listener = WorkspaceStore.addListener(this._onChange);
 	    ClientActions.fetchSingleWorkspace(this.props.params.workspaceId);
-	    this.setState({ space: WorkspaceStore.find(parseInt(this.props.params.workspaceId)) });
 	  },
 	
 	  componentWillUnmount: function () {
@@ -64537,7 +64559,7 @@
 	              )
 	            )
 	          ),
-	          React.createElement(ReservationForm, { workspaceId: this.props.params.workspaceId })
+	          React.createElement(ReservationForm, { workspace: detail })
 	        )
 	      ),
 	      React.createElement(
@@ -64668,34 +64690,34 @@
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
 	var Dates = __webpack_require__(277);
-	var WorkspaceStore = __webpack_require__(488);
+	var WorkspaceStore = __webpack_require__(489);
 	var UserStore = __webpack_require__(232);
-	var FilterActions = __webpack_require__(493);
+	var FilterActions = __webpack_require__(485);
 	var ClientActions = __webpack_require__(274);
 	
 	var ReservationForm = React.createClass({
 	  displayName: 'ReservationForm',
 	
 	  getInitialState: function () {
-	    return { workspace: "", beginDate: null, endDate: null };
+	    return { beginDate: null, endDate: null };
 	  },
 	
 	  handleSubmit: function (e) {
 	    e.preventDefault();
-	    console.log(UserStore.currentUser());
-	    if (!UserStore.currentUser()) {
+	    var userId = UserStore.currentUser();
+	    if (!userId) {
 	      alert("User must be logged in");
 	      // TODO: open the modal
 	    } else if (!this.state.beginDate || !this.state.endDate) {
 	        alert("Please select a valid begin and end date.");
 	      } else {
-	        ClientActions.reserveSpace(this.state.workspace.id, this.state.beginDate, this.state.endDate);
+	        ClientActions.reserveSpace({
+	          workspaceId: this.props.workspace.id,
+	          tenantId: userId,
+	          start_date: this.state.beginDate,
+	          end_date: this.state.endDate
+	        });
 	      }
-	  },
-	
-	  componentDidMount: function () {
-	    ClientActions.fetchSingleWorkspace(parseInt(this.props.workspaceId));
-	    this.setState({ workspace: WorkspaceStore.find(parseInt(this.props.workspaceId)) });
 	  },
 	
 	  updateBeginDate: function (date) {
@@ -64723,7 +64745,6 @@
 	  },
 	
 	  render: function () {
-	    this.workspace = WorkspaceStore.find(parseInt(this.props.workspaceId));
 	    return React.createElement(
 	      'div',
 	      null,
@@ -64735,7 +64756,7 @@
 	          'h1',
 	          null,
 	          '$ ',
-	          this.state.workspace.price_week,
+	          this.props.workspace.price_week,
 	          ' per week'
 	        ),
 	        React.createElement(

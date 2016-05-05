@@ -15,10 +15,14 @@ module.exports = {
     });
   },
 
+  receiveReservation: function(reservation) {
+    console.log(reservation);
+  },
+
   handleError: function(errors) {
     AppDispatcher.dispatch({
       actionType: "ERROR",
       errors: errors
     });
-  },
+  }
 };

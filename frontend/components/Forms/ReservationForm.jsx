@@ -8,25 +8,25 @@ var ClientActions = require('../../actions/ClientActions');
 
 var ReservationForm = React.createClass({
   getInitialState: function() {
-    return { workspace: "", beginDate: null, endDate: null };
+    return { beginDate: null, endDate: null };
   },
 
   handleSubmit: function(e) {
     e.preventDefault();
-    console.log(UserStore.currentUser());
-    if (!UserStore.currentUser()) {
+    var userId = UserStore.currentUser();
+    if (!userId) {
       alert("User must be logged in");
       // TODO: open the modal
     } else if (!this.state.beginDate || !this.state.endDate ) {
       alert("Please select a valid begin and end date.");
     } else {
-      ClientActions.reserveSpace(this.state.workspace.id, this.state.beginDate, this.state.endDate);
+      ClientActions.reserveSpace({
+        workspaceId: this.props.workspace.id,
+        tenantId: userId,
+        start_date: this.state.beginDate,
+        end_date: this.state.endDate
+      });
     }
-  },
-
-  componentDidMount: function() {
-    ClientActions.fetchSingleWorkspace(parseInt(this.props.workspaceId));
-    this.setState({workspace: WorkspaceStore.find(parseInt(this.props.workspaceId))});
   },
 
   updateBeginDate: function(date) {
@@ -54,12 +54,11 @@ var ReservationForm = React.createClass({
   },
 
   render: function() {
-    this.workspace = WorkspaceStore.find(parseInt(this.props.workspaceId));
     return (
       <div>
         <form className="mini-reservation-form"
           onSubmit={this.handleSubmit}>
-          <h1>$ {this.state.workspace.price_week} per week</h1>
+          <h1>$ {this.props.workspace.price_week} per week</h1>
           <div>
             <div className="reservation-form-dates">
               <p>Start Date</p>

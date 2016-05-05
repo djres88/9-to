@@ -5,13 +5,12 @@ var ClientActions = require('../../actions/ClientActions');
 
 var WorkspaceShow = React.createClass({
   getInitialState: function() {
-    return {space: ""};
+    return {space: {}};
   },
 
   componentDidMount: function() {
     this.listener = WorkspaceStore.addListener(this._onChange);
     ClientActions.fetchSingleWorkspace(this.props.params.workspaceId);
-    this.setState({space: WorkspaceStore.find(parseInt(this.props.params.workspaceId))});
   },
 
   componentWillUnmount: function() {
@@ -24,7 +23,7 @@ var WorkspaceShow = React.createClass({
 
   render: function() {
     var detail = this.state.space;
-
+    
       // TODO: pass date props as default fields to ReservationForm
     return (
       <div className="listing-detail">
@@ -46,7 +45,7 @@ var WorkspaceShow = React.createClass({
                 <p>Capacity</p>
               </li>
             </ul>
-            <ReservationForm workspaceId={this.props.params.workspaceId}/>
+            <ReservationForm workspace={detail}/>
           </div>
         </div>
         <div className="details-box">

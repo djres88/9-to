@@ -18,9 +18,10 @@ module.exports = {
     ApiUtil.fetchSingleWorkspace(id);
   },
 
-  reserveSpace: function(id, start, end) {
-    debugger;
-    ApiUtil.createReservation(id, start, end);
+  reserveSpace: function(options) {
+    options.start_date = options.start_date.format("YYYY-MM-DD");
+    options.end_date = options.end_date.format("YYYY-MM-DD");
+    ApiUtil.createReservation(options);
   }
 
 
