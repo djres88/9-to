@@ -77,6 +77,7 @@
 	var App = React.createClass({
 	  displayName: 'App',
 	
+	
 	  // Set nav class according to current route.
 	  // TODO: may need to adjust how we're detecting the route here.
 	  determineNavClass: function () {
@@ -34396,7 +34397,7 @@
 	  displayName: 'Navbar',
 	
 	  getInitialState: function () {
-	    return { route: window.location.hash, loggedIn: false, userMenu: "hide", scrollNavAction: "off" };
+	    return { route: window.location.hash, loggedIn: false, userMenu: "hide", scrollNavAction: "off", searchText: "" };
 	  },
 	
 	  componentDidMount: function () {
@@ -34408,12 +34409,13 @@
 	
 	  componentWillUnmount: function () {
 	    this.listener.remove();
-	    if (this.state.route[2] !== "s") {
-	      window.removeEventListener('scroll', this.handleScroll);
-	    }
+	    window.removeEventListener('scroll', this.handleScroll);
 	  },
 	
 	  handleScroll: function (event) {
+	    if (window.location.hash[2] === "s") {
+	      return;
+	    }
 	    event.preventDefault();
 	    if (event.srcElement.body.scrollTop > 585 && this.state.scrollNavAction === "off") {
 	      this.setState({ scrollNavAction: "on" });
@@ -34446,7 +34448,13 @@
 	  toggleLoginIcon: function () {
 	    var loginIcon;
 	    if (this.state.loggedIn) {
-	      loginIcon = React.createElement(NavbarItem, { sendClass: 'navbar-items dropdown', id: 'user-dropdown-menu', text: 'User Icon' });
+	      username = UserStore.currentUser().username;
+	      faIcon = React.createElement(
+	        'i',
+	        { className: 'fa fa-user', 'aria-hidden': 'true' },
+	        '  '
+	      );
+	      loginIcon = React.createElement(NavbarItem, { icon: faIcon, text: username, sendClass: 'navbar-items dropdown', id: 'user-dropdown-menu' });
 	    } else {
 	      loginIcon = React.createElement(LoginForm, null);
 	    }
@@ -34457,7 +34465,7 @@
 	    if (window.location.hash[2] === "?") {
 	      return;
 	    } else {
-	      return React.createElement(SearchLocationsBar, { className: 'searchbar-nav' });
+	      return React.createElement(SearchLocationsBar, { text: this.state.searchText, className: 'searchbar-nav' });
 	    }
 	  },
 	
@@ -34468,7 +34476,7 @@
 	    return React.createElement(
 	      'div',
 	      { id: "scroll-nav-" + this.state.scrollNavAction, className: this.props.className },
-	      React.createElement(NavbarItem, { id: 'nav-logo', className: 'logo', actions: this.goHome, text: 'Logo' }),
+	      React.createElement(NavbarItem, { id: 'nav-logo', className: 'logo', actions: this.goHome, text: '9to' }),
 	      this.toggleSearchBar(),
 	      React.createElement(NavbarItem, { id: 'list-your-space', actions: this.addSpace, text: 'List Your Space' }),
 	      this.toggleLoginIcon()
@@ -34540,6 +34548,7 @@
 	      React.createElement(
 	        'span',
 	        { id: 'navbar-text' },
+	        this.props.icon,
 	        this.props.text,
 	        this.menuDropdown()
 	      )
@@ -34825,41 +34834,20 @@
 	  displayName: 'Search',
 	
 	  getInitialState: function () {
-	    return { spacesNeeded: null, coords: null };
+	    return { spacesNeeded: null, searchfield: "Search by location" };
 	  },
-	
-	  // getStartDate: function(e) {
-	  //   e.preventDefault();
-	  //   // console.log(e.currentTarget);
-	  // },
-	  //
-	  // getEndDate: function(e) {
-	  //   e.preventDefault();
-	  // },
-	  //
-	  // getCapacity: function(e) {
-	  //   e.preventDefault();
-	  //   // console.log(e.currentTarget);
-	  // },
-	  //
 	
 	  handleSubmit: function (event) {
 	    event.preventDefault();
-	    var coords = {
+	    var queryParams = {
 	      lat: window.autocomplete.getPlace().geometry.location.lat(),
 	      lng: window.autocomplete.getPlace().geometry.location.lng()
 	    };
+	    // place: window.autocomplete.getPlace().formatted_address
 	
-	    this.setState({ coords: coords });
-	    // ClientActions.fetchWorkspaces({
-	    //   coords: coords, == NOTE: Let map take care of the coordinates.
-	    //   // startDate: this.state.startDate,
-	    //   // endDate: this.state.endDate,
-	    //   // spacesNeeded: this.state.spacesNeeded,
-	    // });
 	    HashHistory.push({
 	      pathname: "s",
-	      query: coords
+	      query: queryParams
 	    });
 	  },
 	
@@ -34869,25 +34857,49 @@
 	
 	  render: function () {
 	    var context = this;
-	    // <Dates onClick={this.getStartDate} placeholder="Start Date" dates={this.state.startDate}/>
-	    // <Dates onClick={this.getEndDate} placeholder="End Date" dates={this.state.endDate}/>
-	    // <select className="capacity-dropdown">
-	    //   <option onChange={this.getCapacity}>Spaces Needed: 1</option>
-	    //   <option onChange={this.getCapacity}>Spaces Needed: 2</option>
-	    //   <option onChange={this.getCapacity}>Spaces Needed: 3</option>
-	    //   <option onChange={this.getCapacity}>Spaces Needed: 4</option>
-	    //   <option onChange={this.getCapacity}>Spaces Needed: 5+</option>
-	    // </select>
+	
 	    return React.createElement(
 	      'form',
 	      { className: 'search-container', onSubmit: this.handleSubmit },
-	      React.createElement(SearchLocationsBar, { location: this.props.location, className: 'searchbar-home' }),
+	      React.createElement(SearchLocationsBar, { location: this.props.location, className: 'searchbar-home', text: this.state.searchfield }),
 	      React.createElement('input', { className: 'search-button', type: 'submit', value: 'Search' })
 	    );
 	  }
 	});
 	
 	module.exports = Search;
+	
+	// getStartDate: function(e) {
+	//   e.preventDefault();
+	//   // console.log(e.currentTarget);
+	// },
+	//
+	// getEndDate: function(e) {
+	//   e.preventDefault();
+	// },
+	//
+	// getCapacity: function(e) {
+	//   e.preventDefault();
+	//   // console.log(e.currentTarget);
+	// },
+	//
+
+	// <Dates onClick={this.getStartDate} placeholder="Start Date" dates={this.state.startDate}/>
+	// <Dates onClick={this.getEndDate} placeholder="End Date" dates={this.state.endDate}/>
+	// <select className="capacity-dropdown">
+	//   <option onChange={this.getCapacity}>Spaces Needed: 1</option>
+	//   <option onChange={this.getCapacity}>Spaces Needed: 2</option>
+	//   <option onChange={this.getCapacity}>Spaces Needed: 3</option>
+	//   <option onChange={this.getCapacity}>Spaces Needed: 4</option>
+	//   <option onChange={this.getCapacity}>Spaces Needed: 5+</option>
+	// </select>
+
+	// ClientActions.fetchWorkspaces({
+	//   coords: coords, == NOTE: Let map take care of the coordinates.
+	//   // startDate: this.state.startDate,
+	//   // endDate: this.state.endDate,
+	//   // spacesNeeded: this.state.spacesNeeded,
+	// });
 
 /***/ },
 /* 274 */
@@ -35031,44 +35043,6 @@
 	var Dates = React.createClass({
 	  displayName: 'Dates',
 	
-	  // getInitialState: function() {
-	  //   return {beginDate: null, endDate: null};
-	  // },
-	  //
-	  // updateBeginDate: function(date) {
-	  //   end = this.state.endDate;
-	  //   if (end && date._d > end._d) {
-	  //     alert("End date cannot occur before start date.");
-	  //   } else {
-	  //     this.setState({
-	  //       beginDate: date
-	  //     });
-	  //
-	  //     var endQuery;
-	  //     if (this.state.startDate) {
-	  //       endQuery = this.state.startDate.format("MM/DD/YYYY");
-	  //     } else {
-	  //       endQuery = "";
-	  //     }
-	  //   }
-	  // },
-	  //
-	  // updateEndDate: function(date) {
-	  //   begin = this.state.beginDate;
-	  //   if (begin && date._d < begin._d) {
-	  //     alert("End date cannot occur before start date.");
-	  //   } else {
-	  //     this.setState({
-	  //       endDate: date
-	  //     });
-	  //     var beginQuery;
-	  //     if (this.state.beginDate) {
-	  //       beginQuery = this.state.beginDate.format("MM/DD/YYYY");
-	  //     } else {
-	  //       beginQuery = "";
-	  //     }
-	  //   }
-	  // },
 	
 	  render: function () {
 	    return React.createElement(DatePicker, {
@@ -62840,6 +62814,13 @@
 	      actionType: "END_DATE",
 	      endDate: endDate
 	    });
+	  },
+	
+	  updatePrices: function (prices) {
+	    AppDispatcher.dispatch({
+	      actionType: "PRICES",
+	      prices: prices
+	    });
 	  }
 	};
 
@@ -62855,22 +62836,28 @@
 	var SearchLocationsBar = React.createClass({
 	  displayName: 'SearchLocationsBar',
 	
+	  getInitialState: function () {
+	    return { text: "Search by location" };
+	  },
 	
 	  componentDidMount: function () {
-	
 	    var input = document.getElementById('searchTextField');
 	    window.autocomplete = new google.maps.places.Autocomplete(input, { types: ['(cities)'] });
-	    // }
-	    document.getElementById('searchTextField').addEventListener('submit', this.handleChange);
+	    document.getElementById('searchTextField').addEventListener('submit', this.handleSubmit);
+	    // document.getElementById('searchTextField').addEventListener(
+	    //   'place_changed', this._onChange);
 	  },
 	
-	  showText: function () {
-	    if (window.autocomplete && window.autocomplete.getPlace()) {
-	      return window.autocomplete.getPlace().formatted_address;
-	    } else {
-	      return "Search by Location";
-	    }
-	  },
+	  // showText: function() {
+	  //   if (window.autocomplete && window.autocomplete.getPlace()) {
+	  //     return window.autocomplete.getPlace().formatted_address;
+	  //   } else {
+	  //     return "Search by Location";
+	  //   }
+	  // },
+	  // _onChange: function() {
+	  //   this.setState({text: window.autocomplete.getPlace().formatted_address});
+	  // },
 	
 	  handleSubmit: function () {
 	    var coords = {
@@ -62885,8 +62872,7 @@
 	  },
 	
 	  render: function () {
-	
-	    return React.createElement('input', { id: 'searchTextField', className: this.props.className, placeholder: this.showText() });
+	    return React.createElement('input', { id: 'searchTextField', className: this.props.className, placeholder: this.state.text });
 	  }
 	
 	});
@@ -63218,7 +63204,7 @@
 	    this.filterListener.remove();
 	    this.idleListener.remove();
 	    this.clickListener.remove();
-	    this.markerListener.remove();
+	    // this.markerListener.remove();
 	  },
 	
 	  eachSpace: function (callback) {
@@ -63389,7 +63375,9 @@
 	      capacity: 1,
 	      office_types: { "Coworking Space": true, "Private Office": true, "Home Office": true },
 	      min: 0,
-	      max: 10000
+	      beginDate: window.beginDate,
+	      endDate: window.endDate,
+	      max: 1000
 	    };
 	  },
 	
@@ -63433,27 +63421,6 @@
 	      window.beginDate = beginDate;
 	    }
 	    this.setState({ beginDate: beginDate.format("MM/DD/YYY") });
-	    // this.setState({
-	    //   beginDate: date
-	    // });
-	    //
-	    // var endQuery;
-	    // if (this.state.startDate) {
-	    //   endQuery = this.state.startDate.format("MM/DD/YYYY");
-	    // } else {
-	    //   endQuery = "";
-	    // }
-	    //
-	    // HashHistory.push({
-	    //   pathname: "s/",
-	    //   query:
-	    //     {lat: this.props.location.query.lat,
-	    //     lng: this.props.location.query.lng,
-	    //     begin: date.format("MM/DD/YYYY"),
-	    //     end: endQuery}
-	    // });
-	    //   // FilterActions.updateBeginDate(date);
-	    // }
 	  },
 	
 	  updateEndDate: function (endDate) {
@@ -63464,37 +63431,16 @@
 	      window.endDate = endDate;
 	    }
 	    this.setState({ endDate: endDate.format("MM/DD/YYY") });
-	    // this.setState({
-	    //   endDate: date
-	    // });
-	    // var beginQuery;
-	    // if (window.beginDate) {
-	    //   beginQuery = window.beginDate.format("MM/DD/YYYY");
-	    // } else {
-	    //   beginQuery = "";
-	    // }
-	
-	    // HashHistory.push({
-	    //   pathname: "s/",
-	    //   query:
-	    //     {lat: this.props.location.query.lat,
-	    //     lng: this.props.location.query.lng,
-	    //     begin: beginQuery,
-	    //     end: date.format("MM/DD/YYYY")},
-	    // });
-	    // FilterActions.updateEndDate(date);
 	  },
 	
-	  // updatePrices: function(e) {
-	  //   console.log("engaged");
-	  //   this.setState({
-	  //     min: e.propTypes.value()
-	  //   });
-	  //   console.log(e.propTypes);
-	  // },
+	  updatePrices: function (price) {
+	    // FilterActions.u
+	    this.setState({ min: price[0] * 10 });
+	    this.setState({ max: price[1] * 10 });
+	    console.log(this.state.max);
+	  },
 	
 	  render: function () {
-	
 	    return React.createElement(
 	      'div',
 	      { className: 'search-params' },
@@ -63590,23 +63536,22 @@
 	          React.createElement(
 	            'h4',
 	            null,
-	            'Price'
+	            'Price Per Week'
 	          ),
 	          React.createElement(
 	            ReactSlider,
-	            { onClick: FilterParams.updatePrices, withBars: true, defaultValue: [0, 100], className: 'slider' },
+	            { onChange: this.updatePrices, withBars: true, defaultValue: [0, 100], className: 'slider' },
 	            React.createElement(
 	              'div',
-	              { id: 'left-handle', className: 'my-handle', onClick: FilterParams.updatePrices },
+	              { id: 'left-handle', className: 'my-handle' },
 	              this.state.min
 	            ),
 	            React.createElement(
 	              'div',
 	              { id: 'right-handle', className: 'my-handle' },
-	              this.state.max
+	              this.state.max + "+"
 	            )
-	          ),
-	          ';'
+	          )
 	        )
 	      )
 	    );
@@ -63614,6 +63559,12 @@
 	});
 	
 	module.exports = FilterParams;
+	// <div class="list">
+	//   <div class="item range range-positive">
+	//     <input type="range" name="volume" min="0" max="100" value="33"/>
+	//     <input type="range" name="volume" min="0" max="100" value="33"/>
+	//   </div>
+	// </div>
 
 /***/ },
 /* 494 */
@@ -64733,7 +64684,7 @@
 	          end_date: this.state.endDate
 	        });
 	
-	        this.setState({ beginDate: null, endDate: null, buttonText: "Booked!" });
+	        this.setState({ buttonText: "Booked!" });
 	      }
 	  },
 	

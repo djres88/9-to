@@ -28,9 +28,8 @@ function preloadUser() {
   UserActions.fetchCurrentUser();
 }
 
-
-
 var App = React.createClass({
+  
   // Set nav class according to current route.
   // TODO: may need to adjust how we're detecting the route here.
   determineNavClass: function() {

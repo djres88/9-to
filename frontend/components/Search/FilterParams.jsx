@@ -13,7 +13,9 @@ var FilterParams = React.createClass({
       capacity: 1,
       office_types: { "Coworking Space": true, "Private Office": true, "Home Office": true },
       min: 0,
-      max: 10000
+      beginDate: window.beginDate,
+      endDate: window.endDate,
+      max: 1000
     };
   },
 
@@ -57,27 +59,6 @@ var FilterParams = React.createClass({
       window.beginDate = beginDate;
     }
     this.setState({beginDate: beginDate.format("MM/DD/YYY")});
-     // this.setState({
-      //   beginDate: date
-      // });
-      //
-      // var endQuery;
-      // if (this.state.startDate) {
-      //   endQuery = this.state.startDate.format("MM/DD/YYYY");
-      // } else {
-      //   endQuery = "";
-      // }
-      //
-      // HashHistory.push({
-      //   pathname: "s/",
-      //   query:
-      //     {lat: this.props.location.query.lat,
-      //     lng: this.props.location.query.lng,
-      //     begin: date.format("MM/DD/YYYY"),
-      //     end: endQuery}
-      // });
-    //   // FilterActions.updateBeginDate(date);
-    // }
   },
 
   updateEndDate: function(endDate) {
@@ -88,38 +69,17 @@ var FilterParams = React.createClass({
       window.endDate = endDate;
     }
     this.setState({endDate: endDate.format("MM/DD/YYY")});
-      // this.setState({
-      //   endDate: date
-      // });
-      // var beginQuery;
-      // if (window.beginDate) {
-      //   beginQuery = window.beginDate.format("MM/DD/YYYY");
-      // } else {
-      //   beginQuery = "";
-      // }
-
-      // HashHistory.push({
-      //   pathname: "s/",
-      //   query:
-      //     {lat: this.props.location.query.lat,
-      //     lng: this.props.location.query.lng,
-      //     begin: beginQuery,
-      //     end: date.format("MM/DD/YYYY")},
-      // });
-      // FilterActions.updateEndDate(date);
-
   },
 
-  // updatePrices: function(e) {
-  //   console.log("engaged");
-  //   this.setState({
-  //     min: e.propTypes.value()
-  //   });
-  //   console.log(e.propTypes);
-  // },
+  updatePrices: function(price) {
+    // FilterActions.u
+    this.setState({min: price[0]*10});
+    this.setState({max: price[1]*10});
+    console.log(this.state.max);
+  },
+
 
   render: function() {
-
     return (
       <div className="search-params">
         <ul>
@@ -158,11 +118,11 @@ var FilterParams = React.createClass({
           </li>
           <hr/>
           <li>
-            <h4>Price</h4>
-              <ReactSlider onClick={FilterParams.updatePrices} withBars defaultValue={[0, 100]} className="slider">
-                <div id="left-handle" className="my-handle" onClick={FilterParams.updatePrices}>{this.state.min}</div>
-                <div id="right-handle" className="my-handle">{this.state.max}</div>
-              </ReactSlider>;
+            <h4>Price Per Week</h4>
+              <ReactSlider onChange={this.updatePrices} withBars defaultValue={[0, 100]} className="slider">
+                <div id="left-handle" className="my-handle">{this.state.min}</div>
+                <div id="right-handle" className="my-handle">{this.state.max + "+"}</div>
+              </ReactSlider>
           </li>
         </ul>
       </div>
@@ -171,3 +131,9 @@ var FilterParams = React.createClass({
 });
 
 module.exports = FilterParams;
+// <div class="list">
+//   <div class="item range range-positive">
+//     <input type="range" name="volume" min="0" max="100" value="33"/>
+//     <input type="range" name="volume" min="0" max="100" value="33"/>
+//   </div>
+// </div>

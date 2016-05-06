@@ -10,7 +10,7 @@ var SearchLocationsBar = require('../Search/SearchLocationsBar');
 
 var Navbar = React.createClass({
   getInitialState: function() {
-    return {route: window.location.hash, loggedIn: false, userMenu: "hide", scrollNavAction: "off"};
+    return {route: window.location.hash, loggedIn: false, userMenu: "hide", scrollNavAction: "off", searchText: ""};
   },
 
   componentDidMount: function() {
@@ -22,12 +22,14 @@ var Navbar = React.createClass({
 
   componentWillUnmount: function() {
     this.listener.remove();
-    if (this.state.route[2] !== "s") {
-      window.removeEventListener('scroll', this.handleScroll);
-    }
+    window.removeEventListener('scroll', this.handleScroll);
   },
 
+
   handleScroll: function(event) {
+    if (window.location.hash[2] === "s") {
+      return;
+    }
     event.preventDefault();
     if (event.srcElement.body.scrollTop > 585 && this.state.scrollNavAction === "off") {
       this.setState({scrollNavAction: "on"});
@@ -60,8 +62,10 @@ var Navbar = React.createClass({
   toggleLoginIcon: function() {
     var loginIcon;
     if (this.state.loggedIn) {
+      username = UserStore.currentUser().username;
+      faIcon = <i className="fa fa-user" aria-hidden="true">&nbsp;&nbsp;</i>;
       loginIcon =
-          <NavbarItem sendClass="navbar-items dropdown" id="user-dropdown-menu" text="User Icon"></NavbarItem>;
+          <NavbarItem icon={faIcon} text={username} sendClass="navbar-items dropdown" id="user-dropdown-menu" ></NavbarItem>;
     } else {
       loginIcon = <LoginForm></LoginForm>;
     }
@@ -72,7 +76,7 @@ var Navbar = React.createClass({
     if (window.location.hash[2] === "?") {
       return;
     } else {
-      return <SearchLocationsBar className="searchbar-nav"/>;
+      return <SearchLocationsBar text={this.state.searchText} className="searchbar-nav"/>;
     }
   },
 
@@ -84,7 +88,7 @@ var Navbar = React.createClass({
 
     return (
       <div id={"scroll-nav-" + this.state.scrollNavAction} className={this.props.className}>
-        <NavbarItem id="nav-logo" className="logo" actions={this.goHome} text="Logo"></NavbarItem>
+        <NavbarItem id="nav-logo" className="logo" actions={this.goHome} text="9to"></NavbarItem>
         {this.toggleSearchBar()}
         <NavbarItem id="list-your-space" actions={this.addSpace} text="List Your Space"></NavbarItem>
         {this.toggleLoginIcon()}

@@ -48,7 +48,7 @@ var ReservationForm = React.createClass({
         end_date: this.state.endDate
       });
 
-      this.setState({beginDate: null, endDate: null, buttonText: "Booked!"});
+      this.setState({buttonText: "Booked!"});
     }
   },
 

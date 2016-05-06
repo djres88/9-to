@@ -45,7 +45,7 @@ var Map = React.createClass({
     this.filterListener.remove();
     this.idleListener.remove();
     this.clickListener.remove();
-    this.markerListener.remove();
+    // this.markerListener.remove();
   },
 
 

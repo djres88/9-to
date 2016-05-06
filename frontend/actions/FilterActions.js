@@ -31,5 +31,12 @@ module.exports = {
         actionType: "END_DATE",
         endDate: endDate
       });
-    }
+    },
+
+    updatePrices: function(prices) {
+      AppDispatcher.dispatch({
+        actionType: "PRICES",
+        prices: prices
+      });
+    } 
 };
