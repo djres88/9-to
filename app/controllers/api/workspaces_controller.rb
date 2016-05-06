@@ -1,5 +1,3 @@
-require('byebug')
-
 class Api::WorkspacesController < ApplicationController
   def index
     @workspaces = Workspace.all
