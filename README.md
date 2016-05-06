@@ -53,9 +53,9 @@ See details for the workspace on the details page.
 ![workspace_detail_res]
 
 ### Future Implementation
-[ ] View reservations in an "Account" page. Reservations are already persisted to the DB (and retrieved in some components), so this is really just a matter of (a) styling the account page and (b) attaching retrieving contents using a combo of already-existing props/db queries.
-[ ] Host features: offer a workspace, delete your workspace, etc.
-[ ] Block out reserved dates. This would be fairly involved, realistically, since each space would need to track its reservations relative to its capacity for any given date.
+- [ ] View reservations in an "Account" page. Reservations are already persisted to the DB (and retrieved in some components), so this is really just a matter of (a) styling the account page and (b) attaching retrieving contents using a combo of already-existing props/db queries.
+- [ ] Host features: offer a workspace, delete your workspace, etc.
+- [ ] Block out reserved dates. This would be fairly involved, realistically, since each space would need to track its reservations relative to its capacity for any given date.
 
 [home_search]: ./docs/images/home_search.jpg
 [login]: ./docs/images/login.jpg
