@@ -62963,10 +62963,10 @@
 	          ),
 	          React.createElement(
 	            'div',
-	            { className: 'image-gallery' },
-	            React.createElement('img', { 'class': '', src: '', alt: '' }),
-	            React.createElement('img', { 'class': '', src: '', alt: '' }),
-	            React.createElement('img', { 'class': '', src: '', alt: '' })
+	            { className: 'graphics-gallery' },
+	            React.createElement('img', { className: 'graphics', src: 'http://res.cloudinary.com/dyzqtq32z/image/upload/v1462574399/savings_lubtzw.png', alt: '' }),
+	            React.createElement('img', { className: 'graphics', src: 'http://res.cloudinary.com/dyzqtq32z/image/upload/v1462574386/happy2_pvmdnt.png', alt: '' }),
+	            React.createElement('img', { className: 'graphics', src: 'http://res.cloudinary.com/dyzqtq32z/image/upload/v1462574376/time_noachj.png', alt: '' })
 	          )
 	        ),
 	        React.createElement(
@@ -62978,39 +62978,15 @@
 	            'Productivity Near You'
 	          ),
 	          React.createElement(
-	            'p',
-	            null,
-	            'City guides?'
-	          ),
-	          React.createElement(
 	            'div',
 	            { className: 'image-gallery' },
-	            React.createElement('img', { 'class': '', src: '', alt: '' }),
-	            React.createElement('img', { 'class': '', src: '', alt: '' }),
-	            React.createElement('img', { 'class': '', src: '', alt: '' })
+	            React.createElement('img', { className: 'city-images', src: 'http://res.cloudinary.com/dyzqtq32z/image/upload/c_fill,h_700,w_1000/v1462551923/POR_vzmzui.jpg', alt: '' }),
+	            React.createElement('img', { className: 'city-images', src: 'http://res.cloudinary.com/dyzqtq32z/image/upload/c_fill,h_700,w_1000/v1462551920/LA_yt9zq6.jpg', alt: '' }),
+	            React.createElement('img', { className: 'city-images', id: 'nyc-image', src: 'http://res.cloudinary.com/dyzqtq32z/image/upload/c_fill,h_700,w_1000/v1462551936/SEA_zyrucp.jpg', alt: '' }),
+	            React.createElement('img', { className: 'city-images', id: 'nyc-image', src: 'http://res.cloudinary.com/dyzqtq32z/image/upload/c_fill,h_700,w_1000/v1462551929/SF_lktwqa.jpg', alt: '' })
 	          )
 	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'homepage-section-three' },
-	          React.createElement(
-	            'h3',
-	            null,
-	            'Some kinda gallery!'
-	          ),
-	          React.createElement(
-	            'p',
-	            null,
-	            'hmmmmdaf adsfdasfdsadas'
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'image-gallery' },
-	            React.createElement('img', { 'class': '', src: '', alt: '' }),
-	            React.createElement('img', { 'class': '', src: '', alt: '' }),
-	            React.createElement('img', { 'class': '', src: '', alt: '' })
-	          )
-	        )
+	        React.createElement('div', { id: 'homepage-footer' })
 	      )
 	    );
 	  }
@@ -63162,7 +63138,7 @@
 	      React.createElement(
 	        'li',
 	        { onClick: this.showListingDetail },
-	        React.createElement('img', { src: workspace.main_photo_url, alt: "Workspace Image" + workspace.id }),
+	        React.createElement('img', { src: workspace.thumbnail_url, alt: "Workspace Image" + workspace.id }),
 	        React.createElement(
 	          'div',
 	          { id: 'image-overlay-price' },
@@ -64440,7 +64416,8 @@
 	    var formatStartDate = this.reservation.start_date.slice(5) + "-" + this.reservation.start_date.slice(0, 4);
 	    var formatEndDate = this.reservation.end_date.slice(5) + "-" + this.reservation.end_date.slice(0, 4);
 	
-	    this.modalText = "You're all set to work in " + this.state.space.city + ". See you from " + formatStartDate + " — " + formatEndDate + ".";
+	    this.modalTextPart1 = "You're all set to work in " + this.state.space.city + "!";
+	    this.modalTextPart2 = "See you from " + formatStartDate + " — " + formatEndDate + ".";
 	    this.setState({ modalOpen: true });
 	  },
 	
@@ -64456,7 +64433,7 @@
 	        left: 0,
 	        right: 0,
 	        bottom: 0,
-	        backgroundColor: 'rgba(255, 255, 255, 0.3)',
+	        backgroundColor: 'rgba(255, 255, 255, 0.5)',
 	        zIndex: 10
 	      },
 	
@@ -64487,7 +64464,12 @@
 	          React.createElement(
 	            'h3',
 	            null,
-	            this.modalText
+	            this.modalTextPart1
+	          ),
+	          React.createElement(
+	            'h3',
+	            null,
+	            this.modalTextPart2
 	          )
 	        ),
 	        React.createElement('img', { src: detail.main_photo_url, alt: 'Main Photo' })

@@ -1,170 +1,55 @@
 # 9-to
 
 LINK TO LIVE SITE: [9-to][heroku]
-* Still trying to work out the DNS pointer thingy.
 
 [heroku]:http://nineto.heroku.com
 
-## I. Minimum Viable Product
+9-to is an Airbnb-inspired web application built using Ruby on Rails and React.js. The service helps freelancers and small startups find temporary office space. Get to work without a lease!
 
-9-to is an Airbnb-inspired web application built using Ruby on Rails and React.js. The service helps freelancers and small startups find their ideal office space at flexible terms, without the hassle of signing a lease. By the end of Week 9, the app will satisfy the following criteria:
+## I. Features & Implementation
 
-1. [x] **Account Registration & Login** (including Guest/Demo Login)
-2. [ ] **Seed Data.** Users, owners, listings, reservations, favorites. (For MVP -- see schema.)
-3. [ ] **User Features**
-  - Browse Workspaces with search/map/combination of both
-  - Reserve Workspaces
-  - View & Update Reservations
-  - (Bonus) Save "Favorites"
-  - (Bonus) Review Workspaces
-  - (Bonus) Update account
-  - (Bonus) Host ("Owner") Functionality — that is, the ability to add/manage a listing.
-  - (Bonus) Messaging between owners/tenants
-4. [ ] **Smooth Scrolling & Navigation**. No bugs!
-5. [ ] **Hosting on Heroku**
-6. [ ] **CSS/UI Style** just like Airbnb. Aim for that first, improve upon it later (if you can).
-7. [ ] **Production README**, replacing this README (Reference the [sample production README](https://github.com/appacademy/sample-project-proposal/blob/master/docs/production_readme.md)
+### What is 9-to?
+9-to is a single-page app: all content is delivered on one static page through React and programming and magic. (Happy to discuss the magic.)
 
-## II. Product Goals and Priorities
+Users may sign up (or login) on the homepage through a handy modal. Everyone can search for spaces without logging in/signing up, but similar to Airbnb, they will be prompted to sign up when attempting to make a reservation. Throughout, the app listens to the session store and allows users to do things/see content based on a call to UserStore.currentUser(), which pings the db for info about the user's session...
 
-To expand on item#3 (see above), 9-to users will be able to do the following:
-<!-- This is a Markdown checklist. Use it to keep track of your
-progress. Put an x between the brackets for a checkmark: [x] -->
+<!-- // Code: sessions controller -->
 
-1. Create Accounts
-  - [x] Register
-  - [x] Login
-  - [x] Guest/Demo Login
-2. Browse Office Listings
-  - [ ] Search Functionality (Search by Location, Dates, Price)
-  - [ ] Listings Display (Photo, Price/Day, Owner "Button")
-  - [ ] Map API Displays Listings
-  - [ ] Available Dates Popup
-  - [ ] *Show Ratings*
-3. Create Reservations  
-  - [ ] Reservation added to user accounts
-4. Manage Account
-  - [ ] View/update reservations
-  - [ ] Write reviews
-5. *Add/Manage Listings (owner features)*
-  - [ ] bonus
-6. *Send messages*
-  - [ ] bonus
-
-(Plain text => MVP, *italics* => bonus)
-
-## III. Design Docs
-* [View Wireframes][views]
-* [React Components][components]
-* [DB schema][schema]
-
-[views]: ./docs/views.md
-[components]: ./docs/components.md
-[schema]: ./docs/schema.md
-
-## IV. Implementation Timeline (Hour Estimates = MAX time)
-
-### Tues. 4/25
+or, as the case may be, signs up a user...
 
 
-#### Phase 1: Webpack and First Route -- 0.5 Hours
-**Objective:** Entry file renders into static_pages#root view.
-- [x] Core node packages
-  * npm install webpack, react, react-dom, react-router, babel-core, babel-loader, babel-preset-react, flux
-- [x] StaticPagesController, root.html, root to: "static_pages#root"
-- [x] Frontend Folders (for Flux):
-```
-frontend
-  + actions
-  + components // all React components, both views and controller-views
-  + constants
-  + dispatcher
-  + stores
-  + util
-  9_to.jsx
-```
-- [x] Webpack Setup (config file)
-- [x] Entry File Testing: `9-to.jsx`
-- [x] Test that entry file content appears in root's `content` div.
 
-### Tues. 4/25 - Weds 4/26
+### Homepage Search
+The homepage lets users search using a google autocomplete api:
 
-#### Phase 2: Project Setup and User Accounts -- 2.5 Hours
+I prefer the simple search, no dates needed, to Airbnb's multiple-field homepage form. Let users see results as quickly as possible, I say.
 
-**Objective:** Create functioning project where users can create accounts and log in/out.
-- [x] New Project (9-to) w/ Core Gems
-* gems: pry-rails, better_errors, binding_of_caller, bcrypt (for auth)
-- [x] Link up the app to Heroku
-- [ ] BONUS: point custom url to Heroku. Do this once everything else is finished.
-- [x] `User` Model
-- [x] Authentication
-- [x] User Signup/Sign-In Pages
-- [x] Blank Landing Page @ Sign-In
-- [x] Seed DB w/ Users
-- [x] Navbar
+### Browse Workspaces
+The search results page offers a Google map API as well as interactive search features. Results are updated and shown 18 at a time (again á la Airbnb — willing to trust their research on this). You can use several features to filter results:
 
-### Thurs. 4/27 - Fri. 4/28
-
-#### Phase 3: Workspace & Web API/Flux Setup -- 14 Hours
-
-**Objective:** Can view workspace data through the API.
-
-##### A. Listings
-- [ ] Create `Workspace` Model
-- [ ] Seed DB w/ Workspaces
-  * **OPEN Q**: How to add images? Reference pokemon project?
-- [ ] Create `WorkspacesController`. Only `index` and `show` needed at this stage.
-- [ ] Add routes (under api namespace)
-- [ ] jBuilder for `workspace#index` and `workspace#show`
-
-##### B. Web API/Flux Setup
-- [ ] Dispatcher
-- [ ] WorkspaceStore
-- [ ] Create `APIUtil` to fetch workspace(s)
-- [ ] Constants, ServerActions, ClientActions
-- [ ] Test (in dev tools) that you can get data thru API.
-- [ ] WorkspaceIndex component
-- [ ] WorkspaceIndexItem component
-- [ ] Add Workspace paths to React Router
-
-##### C. Search Store/CRUD
-- [ ] Create `Search` component
-- [ ] Search Store
-- [ ] Workspaces listen to Search Store
-
-##### D. Basic Styling
-- [ ] Position Workspaces on browse page (just get them to show up in a div of the right size)
+1. Drag the Map:
+Drag the map and watch the search results update to the map's new bounds. (The map's markers update, too.)
 
 
-###  Fri. 4/28
+2. Reset the Map with Search:
+Enter a new location in the autocomplete bar to re-center the map (and update the results).
 
-#### Phase 4: `Map` Component -- 16 Hours
-**Objective:** Can view/search for listings through the user interface.
+3. Capacity Dropdown:
+Filter by how many people need workspace:
 
-##### A) Search/Map Combo
-- [ ] Create `Map` component
-- [ ] Review google maps documentation; need API key
-- [ ] Render Map as child of `Search`
-
-### Sat. 4/29
-
-#### Phase 5: Reservations & User Account (12 Hours)
-**Objective:** User can reserve a workspace.
-- [ ] Ask for guidance w/ fleshing out how this would work. By now we'll have moved beyond searching for pokemon...
+4. Choose Your Type:
+Filter by type of space. **Note:** By default, all spaces are shown when you unselect all the checkboxes. Better than showing nothing.
 
 
-### Sun. 4/30 - Tues. 5/3
+5. Be Price Savvy:
+Filter results by price using the handy ReactSlider.
 
-#### Phase 6: Design & UI/UX (24 Hours)
-**Objective:**
-- [ ] Make everything look according to wireframe.
-- [ ] Crush bugs. No mercy.
-- [ ] Ask people to review for bugs. Then crush more bugs.
+### Select
+Choose a workspace by clicking on a marker or on the workspace image.
 
-#### Bonus Features.
-- [ ] User Favorites
-- [ ] Workspace Reviews
-- [ ] HOST FEATURES: dding/removing listings
-- [ ] Listing Ratings
-- [ ] Messaging
-**Objective:**
+### Review Workspace Details & Book
+See details for the workspace on the details page.
+
+### Future Implementation
+[ ] View reservations in an "Account" page. Reservations are already persisted to the DB (and retrieved in some components), so this is really just a matter of (a) styling the account page and (b) attaching retrieving contents using a combo of already-existing props/db queries.
+[ ] Host features: offer a workspace, delete your workspace, etc.

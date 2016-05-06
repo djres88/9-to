@@ -17,16 +17,14 @@
 // width: 25rem;
 // height: 16.6rem;
 .workspace-index-item {
-  width: 46%;
-  height: 29%;
+  width: 45%;
   margin: 25px 8px;
-  border: 1px solid black;
 }
 
 // Want the picture to be in the backrground, absolutely positioned w/ overlay text. TODO: How to make this responsive???
 .workspace-index-item img {
   width: 100%;
-  min-height: 100%;
+  height: 100%;
   cursor: pointer;
 }
 

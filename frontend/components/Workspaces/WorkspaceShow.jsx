@@ -35,7 +35,8 @@ var WorkspaceShow = React.createClass({
     var formatStartDate = this.reservation.start_date.slice(5) + "-" + this.reservation.start_date.slice(0,4);
     var formatEndDate = this.reservation.end_date.slice(5) + "-" + this.reservation.end_date.slice(0,4);
 
-    this.modalText = "You're all set to work in " + this.state.space.city + ". See you from " + formatStartDate + " — " + formatEndDate + ".";
+    this.modalTextPart1 = "You're all set to work in " + this.state.space.city + "!";
+    this.modalTextPart2 = "See you from " + formatStartDate + " — " + formatEndDate + ".";
     this.setState({modalOpen: true});
   },
 
@@ -51,7 +52,7 @@ var WorkspaceShow = React.createClass({
 		    left            : 0,
 		    right           : 0,
 		    bottom          : 0,
-		    backgroundColor : 'rgba(255, 255, 255, 0.3)',
+		    backgroundColor : 'rgba(255, 255, 255, 0.5)',
 				zIndex					: 10
 		  },
 
@@ -75,7 +76,8 @@ var WorkspaceShow = React.createClass({
       <div className="listing-detail">
         <div className="listing-detail-above-fold">
           <Modal isOpen={this.state.modalOpen} onRequestClose={this.closeModal} style={style}>
-            <h3>{this.modalText}</h3>
+            <h3>{this.modalTextPart1}</h3>
+            <h3>{this.modalTextPart2}</h3>
           </Modal>
           <img src={detail.main_photo_url} alt="Main Photo"/>
         </div>
