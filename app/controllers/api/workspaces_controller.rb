@@ -1,5 +1,3 @@
-require('byebug')
-
 class Api::WorkspacesController < ApplicationController
   def index
     @workspaces = Workspace.all
@@ -19,7 +17,6 @@ class Api::WorkspacesController < ApplicationController
 
     if price
       if (Integer(price[:maxPrice]) >= 1000)
-
         @workspaces = @workspaces.where("price_week > ?", Integer(price[:minPrice]))
       else
         @workspaces = @workspaces.where("price_week > ? AND price_week < ?", Integer(price[:minPrice]), Integer(price[:maxPrice]))
