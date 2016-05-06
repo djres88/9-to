@@ -16,6 +16,7 @@
 #  city           :string
 #  officetype     :string
 #  main_photo_url :string
+#  thumbnail_url  :string
 #
 
 class Workspace < ActiveRecord::Base
