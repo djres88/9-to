@@ -45,7 +45,6 @@ ReservationStore.__onDispatch = function(payload) {
     case "RESERVATION_VIEW_ALL":
       _reservations = payload.reservations;
       ReservationStore.__emitChange();
-
   }
 };
 

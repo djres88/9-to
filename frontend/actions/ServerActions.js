@@ -21,6 +21,14 @@ module.exports = {
       reservation: reservation
     });
   },
+  //
+  // receiveSingleReservation: function(reservation) {
+  //   debugger;
+  //   AppDispatcher.dispatch({
+  //     actionType: "RESERVATION_FOUND",
+  //     reservation: reservation
+  //   });
+  // },
 
   handleError: function(errors) {
     AppDispatcher.dispatch({

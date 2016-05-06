@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     resource :session, only: [:create, :destroy, :show]
 
     resources :workspaces, only: [:index, :show] do
-      resources :reservations, only: [:create, :index, :update, :destroy]
+      resources :reservations, only: [:create, :index, :update, :destroy, :show]
     end
   end
 end

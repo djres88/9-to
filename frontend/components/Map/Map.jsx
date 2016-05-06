@@ -17,7 +17,7 @@ var Map = React.createClass({
   mapOptions: function() {
     return {
       center: {lat: this.props.lat, lng: this.props.lng}, //San Francisco
-      zoom: 13
+      zoom: 11
     };
   },
 

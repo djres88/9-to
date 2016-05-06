@@ -10,25 +10,42 @@ var moment = require('moment');
 
 var ReservationForm = React.createClass({
   getInitialState: function() {
-    return { beginDate: window.beginDate, endDate: window.endDate, buttonText: "Reserve This Space" };
+    return { beginDate: moment(), endDate: moment(), buttonText: "" };
 
+  },
+  componentWillMount: function() {
+    this.user = UserStore.currentUser();
+    // if (this.user) {
+    //   ClientActions.fetchReservations({
+    //     user_id: this.user.id,
+    //     workspace_id: this.props.location.pathname.split("/")[1]
+    //   });
+    // }
   },
 
   componentDidMount: function() {
-    var user = UserStore.currentUser();
-    if (user) {
-      // ClientActions.fetchMyReservations(UserStore.currentUser().id);
+    if (ReservationStore.booked(this.props.workspace.id)) {
+      this.setState({buttonText: "Booked!"});
+    } else {
+      this.setState({buttonText: "Reserve This Space"});
     }
 
     this.listener = ReservationStore.addListener(this._onChange);
   },
+
 
   componentWillUnmount: function() {
     this.listener.remove();
   },
 
   _onChange: function() {
-    this.setState({booked: ReservationStore.booked(this.props.workspace.id)});
+    if (ReservationStore.booked(this.props.workspace.id)) {
+      document.getElementById("reservation-submit-button").disabled = true;
+      this.setState({buttonText: "Booked!"});
+    } else {
+      document.getElementById("reservation-submit-button").disabled = false;
+      this.setState({buttonText: "Reserve This Space"});
+    }
   },
 
   handleSubmit: function(e) {
@@ -36,19 +53,20 @@ var ReservationForm = React.createClass({
     var user = UserStore.currentUser();
     if (!user) {
       alert("User must be logged in");
-      // TODO: open the modal
+      return;
     } else if (!this.state.beginDate || !this.state.endDate ) {
       alert("Please select a valid begin and end date.");
+      return;
     } else {
-
       ClientActions.reserveSpace({
-        workspace_id: this.props.workspace.id,
+        workspace_id: this.props.location.pathname.split("/")[1],
         user_id: user.id,
         start_date: this.state.beginDate,
         end_date: this.state.endDate
       });
 
-      this.setState({buttonText: "Booked!"});
+      document.getElementById("reservation-submit-button").disabled = true;
+      this.setState({beginDate: moment(), endDate: moment()});
     }
   },
 
@@ -76,14 +94,6 @@ var ReservationForm = React.createClass({
     }
   },
 
-  buttonBackground: function() {
-    if (this.state.buttonText == "Booked!") {
-      return "booked";
-    } else {
-      return "Reserve this Space";
-    }
-  },
-
   render: function() {
     return (
       <div>
@@ -101,7 +111,7 @@ var ReservationForm = React.createClass({
               <Dates action={this.updateEndDate} date={this.state.endDate} placeholder="mm/dd/yyyy"/>
             </div>
           </div>
-          <button type="submit" className={"search-button " + this.buttonBackground()} >{this.state.buttonText}</button>
+          <button id="reservation-submit-button" type="submit" className={"search-button"} >{this.state.buttonText}</button>
         </form>
       </div>
     );

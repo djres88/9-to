@@ -28,6 +28,9 @@ var WorkspaceShow = React.createClass({
   },
 
   _onSuccessfulRes: function() {
+    if (!ReservationStore.latest()) {
+      return;
+    }
     this.reservation = ReservationStore.latest();
     var formatStartDate = this.reservation.start_date.slice(5) + "-" + this.reservation.start_date.slice(0,4);
     var formatEndDate = this.reservation.end_date.slice(5) + "-" + this.reservation.end_date.slice(0,4);
@@ -91,7 +94,9 @@ var WorkspaceShow = React.createClass({
                 <p>Capacity</p>
               </li>
             </ul>
-            <ReservationForm workspace={detail}/>
+
+            <ReservationForm workspace={detail} location={this.props.location}/>
+
           </div>
         </div>
         <div className="details-box">

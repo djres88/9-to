@@ -4,7 +4,6 @@ module.exports = {
 
 	// WORKSPACE VIEWS (TENANT REQUESTS)
 	fetchWorkspaces: function(searchParams) {
-		console.log(searchParams);
 		$.ajax({
 			url: 'api/workspaces',
 			method: 'get',
@@ -52,4 +51,19 @@ module.exports = {
 			}
 		});
 	}
+	//
+	// fetchReservations: function(params) {
+	// 	$.ajax({
+	// 		url: 'api/workspaces/' + params.workspace_id + "/reservations/1",
+	// 		method: 'get',
+	// 		data: { reservation: params },
+	// 		dataType: 'json',
+	// 		success: function(reservationDetails) {
+	// 			ServerActions.receiveSingleReservation(reservationDetails);
+	// 		},
+	// 		error: function(data) {
+	// 			ServerActions.handleError(data);
+	// 		}
+	// 	});
+	// }
 };

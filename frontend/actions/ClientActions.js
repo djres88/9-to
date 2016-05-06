@@ -24,8 +24,8 @@ module.exports = {
     ApiUtil.createReservation(options);
   },
 
-  fetchMyReservations: function(userId) {
-    ApiUtil.fetchMyReservations(userId);
+  fetchReservations: function(params) {
+    ApiUtil.fetchReservations(params);
   },
 
 

@@ -29,7 +29,7 @@ function preloadUser() {
 }
 
 var App = React.createClass({
-  
+
   // Set nav class according to current route.
   // TODO: may need to adjust how we're detecting the route here.
   determineNavClass: function() {
@@ -43,8 +43,8 @@ var App = React.createClass({
   componentDidMount: function() {
     // Check for current user.
     preloadUser();
-    window.beginDate = moment();
-    window.endDate = moment().add(1, 'days');
+    // window.beginDate = moment();
+    // window.endDate = moment().add(1, 'days');
   },
 
   render: function() {

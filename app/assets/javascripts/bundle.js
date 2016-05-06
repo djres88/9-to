@@ -91,8 +91,8 @@
 	  componentDidMount: function () {
 	    // Check for current user.
 	    preloadUser();
-	    window.beginDate = moment();
-	    window.endDate = moment().add(1, 'days');
+	    // window.beginDate = moment();
+	    // window.endDate = moment().add(1, 'days');
 	  },
 	
 	  render: function () {
@@ -48621,7 +48621,7 @@
 	
 	var ClientActions = __webpack_require__(377);
 	
-	var Dates = __webpack_require__(380);
+	// var Dates = require('./Dates');
 	var SearchLocationsBar = __webpack_require__(486);
 	
 	var Search = React.createClass({
@@ -48725,8 +48725,8 @@
 	    ApiUtil.createReservation(options);
 	  },
 	
-	  fetchMyReservations: function (userId) {
-	    ApiUtil.fetchMyReservations(userId);
+	  fetchReservations: function (params) {
+	    ApiUtil.fetchReservations(params);
 	  }
 	
 	};
@@ -48741,7 +48741,6 @@
 	
 		// WORKSPACE VIEWS (TENANT REQUESTS)
 		fetchWorkspaces: function (searchParams) {
-			console.log(searchParams);
 			$.ajax({
 				url: 'api/workspaces',
 				method: 'get',
@@ -48787,6 +48786,21 @@
 				}
 			});
 		}
+		//
+		// fetchReservations: function(params) {
+		// 	$.ajax({
+		// 		url: 'api/workspaces/' + params.workspace_id + "/reservations/1",
+		// 		method: 'get',
+		// 		data: { reservation: params },
+		// 		dataType: 'json',
+		// 		success: function(reservationDetails) {
+		// 			ServerActions.receiveSingleReservation(reservationDetails);
+		// 		},
+		// 		error: function(data) {
+		// 			ServerActions.handleError(data);
+		// 		}
+		// 	});
+		// }
 	};
 
 /***/ },
@@ -48816,6 +48830,14 @@
 	      reservation: reservation
 	    });
 	  },
+	  //
+	  // receiveSingleReservation: function(reservation) {
+	  //   debugger;
+	  //   AppDispatcher.dispatch({
+	  //     actionType: "RESERVATION_FOUND",
+	  //     reservation: reservation
+	  //   });
+	  // },
 	
 	  handleError: function (errors) {
 	    AppDispatcher.dispatch({
@@ -48837,8 +48859,21 @@
 	var Dates = React.createClass({
 	  displayName: 'Dates',
 	
+	  // getInitialState: function() {
+	  //   return { date: moment() };
+	  // },
+	  //
+	  // componentWillReceiveProps: function() {
+	  //   this.setState({ date: this.props.date });
+	  // },
 	
 	  render: function () {
+	    //
+	    // if (this.props.date) {
+	    //   return this.props.date;
+	    // } else {
+	    //   return moment();
+	    // }
 	    return React.createElement(DatePicker, {
 	      selected: this.props.date,
 	      onChange: this.props.action,
@@ -63177,7 +63212,7 @@
 	  mapOptions: function () {
 	    return {
 	      center: { lat: this.props.lat, lng: this.props.lng }, //San Francisco
-	      zoom: 13
+	      zoom: 11
 	    };
 	  },
 	
@@ -63365,7 +63400,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var Dates = __webpack_require__(380);
+	// var Dates = require('./Dates');
 	var FilterActions = __webpack_require__(485);
 	var ReactSlider = __webpack_require__(494);
 	var HashHistory = __webpack_require__(269).hashHistory;
@@ -63381,8 +63416,6 @@
 	      capacity: 1,
 	      office_types: { "Coworking Space": true, "Private Office": true, "Home Office": true },
 	      min: 0,
-	      beginDate: window.beginDate,
-	      endDate: window.endDate,
 	      max: 100
 	    };
 	  },
@@ -63418,26 +63451,26 @@
 	    FilterActions.updateCapacity(e.target.value);
 	    console.log(e.target.value);
 	  },
-	
-	  updateBeginDate: function (beginDate) {
-	    end = window.endDate;
-	    if (beginDate._d > end._d) {
-	      alert("End date cannot occur before start date.");
-	    } else {
-	      window.beginDate = beginDate;
-	    }
-	    this.setState({ beginDate: beginDate.format("MM/DD/YYY") });
-	  },
-	
-	  updateEndDate: function (endDate) {
-	    begin = window.beginDate;
-	    if (endDate._d < begin._d) {
-	      alert("End date cannot occur before start date.");
-	    } else {
-	      window.endDate = endDate;
-	    }
-	    this.setState({ endDate: endDate.format("MM/DD/YYY") });
-	  },
+	  //
+	  // updateBeginDate: function(beginDate) {
+	  //   end = window.endDate;
+	  //   if (beginDate._d > end._d) {
+	  //     alert("End date cannot occur before start date.");
+	  //   } else {
+	  //     window.beginDate = beginDate;
+	  //   }
+	  //   this.setState({beginDate: beginDate.format("MM/DD/YYY")});
+	  // },
+	  //
+	  // updateEndDate: function(endDate) {
+	  //   begin = window.beginDate;
+	  //   if (endDate._d < begin._d) {
+	  //     alert("End date cannot occur before start date.");
+	  //   } else {
+	  //     window.endDate = endDate;
+	  //   }
+	  //   this.setState({endDate: endDate.format("MM/DD/YYY")});
+	  // },
 	
 	  updatePrices: function (prices) {
 	    this.setState({ min: prices[0], max: prices[1] });
@@ -63445,6 +63478,12 @@
 	    FilterActions.updatePrices(adjustedPrices);
 	  },
 	
+	  //TODO: Add back in when reservations are fully functional.
+	  // <li>
+	  //   <h4>Dates</h4>
+	  //   <Dates date={window.beginDate} action={this.updateBeginDate} placeholder="Start Date"/>
+	  //   <Dates date={window.endDate} action={this.updateEndDate} placeholder="End Date"/>
+	  // </li>
 	  render: function () {
 	    return React.createElement(
 	      'div',
@@ -63452,17 +63491,6 @@
 	      React.createElement(
 	        'ul',
 	        null,
-	        React.createElement(
-	          'li',
-	          null,
-	          React.createElement(
-	            'h4',
-	            null,
-	            'Dates'
-	          ),
-	          React.createElement(Dates, { date: window.beginDate, action: this.updateBeginDate, placeholder: 'Start Date' }),
-	          React.createElement(Dates, { date: window.endDate, action: this.updateEndDate, placeholder: 'End Date' })
-	        ),
 	        React.createElement('hr', null),
 	        React.createElement(
 	          'li',
@@ -64405,6 +64433,9 @@
 	  },
 	
 	  _onSuccessfulRes: function () {
+	    if (!ReservationStore.latest()) {
+	      return;
+	    }
 	    this.reservation = ReservationStore.latest();
 	    var formatStartDate = this.reservation.start_date.slice(5) + "-" + this.reservation.start_date.slice(0, 4);
 	    var formatEndDate = this.reservation.end_date.slice(5) + "-" + this.reservation.end_date.slice(0, 4);
@@ -64510,7 +64541,7 @@
 	              )
 	            )
 	          ),
-	          React.createElement(ReservationForm, { workspace: detail })
+	          React.createElement(ReservationForm, { workspace: detail, location: this.props.location })
 	        )
 	      ),
 	      React.createElement(
@@ -64652,13 +64683,23 @@
 	  displayName: 'ReservationForm',
 	
 	  getInitialState: function () {
-	    return { beginDate: window.beginDate, endDate: window.endDate, buttonText: "Reserve This Space" };
+	    return { beginDate: moment(), endDate: moment(), buttonText: "" };
+	  },
+	  componentWillMount: function () {
+	    this.user = UserStore.currentUser();
+	    // if (this.user) {
+	    //   ClientActions.fetchReservations({
+	    //     user_id: this.user.id,
+	    //     workspace_id: this.props.location.pathname.split("/")[1]
+	    //   });
+	    // }
 	  },
 	
 	  componentDidMount: function () {
-	    var user = UserStore.currentUser();
-	    if (user) {
-	      // ClientActions.fetchMyReservations(UserStore.currentUser().id);
+	    if (ReservationStore.booked(this.props.workspace.id)) {
+	      this.setState({ buttonText: "Booked!" });
+	    } else {
+	      this.setState({ buttonText: "Reserve This Space" });
 	    }
 	
 	    this.listener = ReservationStore.addListener(this._onChange);
@@ -64669,7 +64710,13 @@
 	  },
 	
 	  _onChange: function () {
-	    this.setState({ booked: ReservationStore.booked(this.props.workspace.id) });
+	    if (ReservationStore.booked(this.props.workspace.id)) {
+	      document.getElementById("reservation-submit-button").disabled = true;
+	      this.setState({ buttonText: "Booked!" });
+	    } else {
+	      document.getElementById("reservation-submit-button").disabled = false;
+	      this.setState({ buttonText: "Reserve This Space" });
+	    }
 	  },
 	
 	  handleSubmit: function (e) {
@@ -64677,20 +64724,21 @@
 	    var user = UserStore.currentUser();
 	    if (!user) {
 	      alert("User must be logged in");
-	      // TODO: open the modal
+	      return;
 	    } else if (!this.state.beginDate || !this.state.endDate) {
-	        alert("Please select a valid begin and end date.");
-	      } else {
+	      alert("Please select a valid begin and end date.");
+	      return;
+	    } else {
+	      ClientActions.reserveSpace({
+	        workspace_id: this.props.location.pathname.split("/")[1],
+	        user_id: user.id,
+	        start_date: this.state.beginDate,
+	        end_date: this.state.endDate
+	      });
 	
-	        ClientActions.reserveSpace({
-	          workspace_id: this.props.workspace.id,
-	          user_id: user.id,
-	          start_date: this.state.beginDate,
-	          end_date: this.state.endDate
-	        });
-	
-	        this.setState({ buttonText: "Booked!" });
-	      }
+	      document.getElementById("reservation-submit-button").disabled = true;
+	      this.setState({ beginDate: moment(), endDate: moment() });
+	    }
 	  },
 	
 	  updateBeginDate: function (date) {
@@ -64714,14 +64762,6 @@
 	      this.setState({
 	        endDate: date
 	      });
-	    }
-	  },
-	
-	  buttonBackground: function () {
-	    if (this.state.buttonText == "Booked!") {
-	      return "booked";
-	    } else {
-	      return "Reserve this Space";
 	    }
 	  },
 	
@@ -64767,7 +64807,7 @@
 	        ),
 	        React.createElement(
 	          'button',
-	          { type: 'submit', className: "search-button " + this.buttonBackground() },
+	          { id: 'reservation-submit-button', type: 'submit', className: "search-button" },
 	          this.state.buttonText
 	        )
 	      )
@@ -64829,7 +64869,6 @@
 	    case "RESERVATION_VIEW_ALL":
 	      _reservations = payload.reservations;
 	      ReservationStore.__emitChange();
-	
 	  }
 	};
 	

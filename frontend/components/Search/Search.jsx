@@ -3,7 +3,7 @@ var HashHistory = require('react-router').hashHistory;
 
 var ClientActions = require('../../actions/ClientActions.js');
 
-var Dates = require('./Dates');
+// var Dates = require('./Dates');
 var SearchLocationsBar = require('./SearchLocationsBar');
 
 var Search = React.createClass({

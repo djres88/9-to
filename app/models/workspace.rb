@@ -26,6 +26,8 @@ class Workspace < ActiveRecord::Base
    class_name: "User",
    foreign_key: :owner_id
 
+  has_many :reservations
+
   def self.in_map_bounds(bounds)
     self.where("latitude < ?", bounds[:NE][:lat])
         .where("latitude > ?", bounds[:SW][:lat])

@@ -1,3 +1,5 @@
+require('byebug')
+
 class Api::WorkspacesController < ApplicationController
   def index
     @workspaces = Workspace.all
@@ -36,8 +38,12 @@ class Api::WorkspacesController < ApplicationController
   end
 
   def show
+    # Check if current user reserved. In the JSON object coming back, send reserved true. Reservation
+    # Actually, the workspace needs to know its reservations anyway (for the calendar).
     @workspace = Workspace.find(params[:id])
     @owner = @workspace.owner
+    @reservations = @workspace.reservations
+
     render "api/workspaces/show"
   end
 
@@ -69,4 +75,5 @@ class Api::WorkspacesController < ApplicationController
   def page
     params[:page]
   end
+
 end

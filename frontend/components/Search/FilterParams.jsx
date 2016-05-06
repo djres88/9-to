@@ -1,5 +1,5 @@
 var React = require('react');
-var Dates = require('./Dates');
+// var Dates = require('./Dates');
 var FilterActions = require('../../actions/FilterActions');
 var ReactSlider = require('react-slider');
 var HashHistory = require('react-router').hashHistory;
@@ -13,8 +13,6 @@ var FilterParams = React.createClass({
       capacity: 1,
       office_types: { "Coworking Space": true, "Private Office": true, "Home Office": true },
       min: 0,
-      beginDate: window.beginDate,
-      endDate: window.endDate,
       max: 100
     };
   },
@@ -50,26 +48,26 @@ var FilterParams = React.createClass({
     FilterActions.updateCapacity(e.target.value);
     console.log(e.target.value);
   },
-
-  updateBeginDate: function(beginDate) {
-    end = window.endDate;
-    if (beginDate._d > end._d) {
-      alert("End date cannot occur before start date.");
-    } else {
-      window.beginDate = beginDate;
-    }
-    this.setState({beginDate: beginDate.format("MM/DD/YYY")});
-  },
-
-  updateEndDate: function(endDate) {
-    begin = window.beginDate;
-    if (endDate._d < begin._d) {
-      alert("End date cannot occur before start date.");
-    } else {
-      window.endDate = endDate;
-    }
-    this.setState({endDate: endDate.format("MM/DD/YYY")});
-  },
+  //
+  // updateBeginDate: function(beginDate) {
+  //   end = window.endDate;
+  //   if (beginDate._d > end._d) {
+  //     alert("End date cannot occur before start date.");
+  //   } else {
+  //     window.beginDate = beginDate;
+  //   }
+  //   this.setState({beginDate: beginDate.format("MM/DD/YYY")});
+  // },
+  //
+  // updateEndDate: function(endDate) {
+  //   begin = window.beginDate;
+  //   if (endDate._d < begin._d) {
+  //     alert("End date cannot occur before start date.");
+  //   } else {
+  //     window.endDate = endDate;
+  //   }
+  //   this.setState({endDate: endDate.format("MM/DD/YYY")});
+  // },
 
   updatePrices: function(prices) {
     this.setState({min: prices[0], max: prices[1]});
@@ -77,16 +75,16 @@ var FilterParams = React.createClass({
     FilterActions.updatePrices(adjustedPrices);
   },
 
-
+  //TODO: Add back in when reservations are fully functional.
+  // <li>
+  //   <h4>Dates</h4>
+  //   <Dates date={window.beginDate} action={this.updateBeginDate} placeholder="Start Date"/>
+  //   <Dates date={window.endDate} action={this.updateEndDate} placeholder="End Date"/>
+  // </li>
   render: function() {
     return (
       <div className="search-params">
         <ul>
-          <li>
-            <h4>Dates</h4>
-            <Dates date={window.beginDate} action={this.updateBeginDate} placeholder="Start Date"/>
-            <Dates date={window.endDate} action={this.updateEndDate} placeholder="End Date"/>
-          </li>
           <hr/>
           <li>
             <h4>Capacity</h4>

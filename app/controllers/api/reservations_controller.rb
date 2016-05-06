@@ -13,6 +13,16 @@ class Api::ReservationsController < ApplicationController
     end
   end
 
+  # def show
+  #   @reservation = Reservation.find_by_workspace_id(reservation_params[:workspace_id]).where("user_id = ?", reservation_params[:user_id])
+  #
+  #   if @reservation
+  #     render json: @reservation
+  #   else
+  #     render json: {errors: [""]}
+  #   end
+  # end
+
   private
   def reservation_params
     params.require(:reservation).permit(:workspace_id, :user_id, :start_date, :end_date)
