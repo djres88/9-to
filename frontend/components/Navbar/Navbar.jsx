@@ -49,6 +49,7 @@ var Navbar = React.createClass({
     hashHistory.push("/");
     // TODO: ? this.props.location not working... something wrong with hashHistory?
     this.setState({route: window.location.hash});
+    window.addEventListener('scroll', this.handleScroll);
   },
 
   showUserMenu: function() {

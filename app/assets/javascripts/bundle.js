@@ -34435,6 +34435,7 @@
 	    hashHistory.push("/");
 	    // TODO: ? this.props.location not working... something wrong with hashHistory?
 	    this.setState({ route: window.location.hash });
+	    window.addEventListener('scroll', this.handleScroll);
 	  },
 	
 	  showUserMenu: function () {
@@ -34917,8 +34918,8 @@
 	  // }
 	
 	  //NOTE: fetch workspaces based on map bounds. Use the searchbox as a starting point for the map (i.e. translate the city input to map coordinates).
-	  fetchWorkspaces: function (bounds) {
-	    ApiUtil.fetchWorkspaces(bounds);
+	  fetchWorkspaces: function (params) {
+	    ApiUtil.fetchWorkspaces(params);
 	  },
 	
 	  fetchSingleWorkspace: function (id) {
@@ -63349,6 +63350,11 @@
 	      _params.dates.endDate = payload.endDate;
 	      FilterStore.__emitChange();
 	      break;
+	    case "PRICES":
+	      _params.price.minPrice = payload.prices[0];
+	      _params.price.maxPrice = payload.prices[1];
+	      FilterStore.__emitChange();
+	      break;
 	  }
 	};
 	
@@ -63377,7 +63383,7 @@
 	      min: 0,
 	      beginDate: window.beginDate,
 	      endDate: window.endDate,
-	      max: 1000
+	      max: 100
 	    };
 	  },
 	
@@ -63433,11 +63439,10 @@
 	    this.setState({ endDate: endDate.format("MM/DD/YYY") });
 	  },
 	
-	  updatePrices: function (price) {
-	    // FilterActions.u
-	    this.setState({ min: price[0] * 10 });
-	    this.setState({ max: price[1] * 10 });
-	    console.log(this.state.max);
+	  updatePrices: function (prices) {
+	    this.setState({ min: prices[0], max: prices[1] });
+	    var adjustedPrices = [prices[0] * 10, prices[1] * 10];
+	    FilterActions.updatePrices(adjustedPrices);
 	  },
 	
 	  render: function () {
@@ -63540,16 +63545,16 @@
 	          ),
 	          React.createElement(
 	            ReactSlider,
-	            { onChange: this.updatePrices, withBars: true, defaultValue: [0, 100], className: 'slider' },
+	            { onAfterChange: this.updatePrices, withBars: true, defaultValue: [this.state.min, this.state.max], className: 'slider' },
 	            React.createElement(
 	              'div',
 	              { id: 'left-handle', className: 'my-handle' },
-	              this.state.min
+	              this.state.min * 10
 	            ),
 	            React.createElement(
 	              'div',
 	              { id: 'right-handle', className: 'my-handle' },
-	              this.state.max + "+"
+	              this.state.max * 10 + "+"
 	            )
 	          )
 	        )

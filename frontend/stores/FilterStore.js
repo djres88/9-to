@@ -32,6 +32,11 @@ FilterStore.__onDispatch = function (payload) {
       _params.dates.endDate = payload.endDate;
       FilterStore.__emitChange();
       break;
+    case "PRICES":
+      _params.price.minPrice = payload.prices[0];
+      _params.price.maxPrice = payload.prices[1];
+      FilterStore.__emitChange();
+      break;
   }
 };
 

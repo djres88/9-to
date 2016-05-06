@@ -15,7 +15,7 @@ var FilterParams = React.createClass({
       min: 0,
       beginDate: window.beginDate,
       endDate: window.endDate,
-      max: 1000
+      max: 100
     };
   },
 
@@ -71,11 +71,10 @@ var FilterParams = React.createClass({
     this.setState({endDate: endDate.format("MM/DD/YYY")});
   },
 
-  updatePrices: function(price) {
-    // FilterActions.u
-    this.setState({min: price[0]*10});
-    this.setState({max: price[1]*10});
-    console.log(this.state.max);
+  updatePrices: function(prices) {
+    this.setState({min: prices[0], max: prices[1]});
+    var adjustedPrices = [prices[0] * 10, prices[1] * 10];
+    FilterActions.updatePrices(adjustedPrices);
   },
 
 
@@ -119,9 +118,9 @@ var FilterParams = React.createClass({
           <hr/>
           <li>
             <h4>Price Per Week</h4>
-              <ReactSlider onChange={this.updatePrices} withBars defaultValue={[0, 100]} className="slider">
-                <div id="left-handle" className="my-handle">{this.state.min}</div>
-                <div id="right-handle" className="my-handle">{this.state.max + "+"}</div>
+              <ReactSlider onAfterChange={this.updatePrices} withBars defaultValue={[this.state.min, this.state.max]} className="slider">
+                <div id="left-handle" className="my-handle">{this.state.min*10}</div>
+                <div id="right-handle" className="my-handle">{this.state.max*10 + "+"}</div>
               </ReactSlider>
           </li>
         </ul>

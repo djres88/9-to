@@ -38,5 +38,5 @@ module.exports = {
         actionType: "PRICES",
         prices: prices
       });
-    } 
+    }
 };
