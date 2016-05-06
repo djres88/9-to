@@ -11,29 +11,20 @@ var Search = React.createClass({
     return { spacesNeeded: null, coords: null};
   },
 
-  // componentDidMount: function() {
-  //   // Better to just have a table w/ all the cities (matched to their main coordinates) and load that up?
-  //   this.listener = WorkspaceStore.addListener(this._onChange);
-  //
+  // getStartDate: function(e) {
+  //   e.preventDefault();
+  //   // console.log(e.currentTarget);
   // },
-
-  getStartDate: function(e) {
-    e.preventDefault();
-    // console.log(e.currentTarget);
-  },
-
-  getEndDate: function(e) {
-    e.preventDefault();
-  },
-
-  getCapacity: function(e) {
-    e.preventDefault();
-    // console.log(e.currentTarget);
-  },
-
-  updateSearchField: function(e) {
-    // console.log(e.currentTarget.innerHTML);
-  },
+  //
+  // getEndDate: function(e) {
+  //   e.preventDefault();
+  // },
+  //
+  // getCapacity: function(e) {
+  //   e.preventDefault();
+  //   // console.log(e.currentTarget);
+  // },
+  //
 
   handleSubmit: function(event) {
     event.preventDefault();
@@ -64,16 +55,16 @@ var Search = React.createClass({
     var context = this;
     // <Dates onClick={this.getStartDate} placeholder="Start Date" dates={this.state.startDate}/>
     // <Dates onClick={this.getEndDate} placeholder="End Date" dates={this.state.endDate}/>
+    // <select className="capacity-dropdown">
+    //   <option onChange={this.getCapacity}>Spaces Needed: 1</option>
+    //   <option onChange={this.getCapacity}>Spaces Needed: 2</option>
+    //   <option onChange={this.getCapacity}>Spaces Needed: 3</option>
+    //   <option onChange={this.getCapacity}>Spaces Needed: 4</option>
+    //   <option onChange={this.getCapacity}>Spaces Needed: 5+</option>
+    // </select>
     return (
       <form className="search-container" onSubmit={this.handleSubmit}>
         <SearchLocationsBar location={this.props.location} className="searchbar-home"/>
-        <select className="capacity-dropdown">
-          <option onChange={this.getCapacity}>Spaces Needed: 1</option>
-          <option onChange={this.getCapacity}>Spaces Needed: 2</option>
-          <option onChange={this.getCapacity}>Spaces Needed: 3</option>
-          <option onChange={this.getCapacity}>Spaces Needed: 4</option>
-          <option onChange={this.getCapacity}>Spaces Needed: 5+</option>
-        </select>
         <input className="search-button" type="submit" value="Search"/>
       </form>
     );

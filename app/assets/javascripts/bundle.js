@@ -34828,29 +34828,20 @@
 	    return { spacesNeeded: null, coords: null };
 	  },
 	
-	  // componentDidMount: function() {
-	  //   // Better to just have a table w/ all the cities (matched to their main coordinates) and load that up?
-	  //   this.listener = WorkspaceStore.addListener(this._onChange);
-	  //
+	  // getStartDate: function(e) {
+	  //   e.preventDefault();
+	  //   // console.log(e.currentTarget);
 	  // },
-	
-	  getStartDate: function (e) {
-	    e.preventDefault();
-	    // console.log(e.currentTarget);
-	  },
-	
-	  getEndDate: function (e) {
-	    e.preventDefault();
-	  },
-	
-	  getCapacity: function (e) {
-	    e.preventDefault();
-	    // console.log(e.currentTarget);
-	  },
-	
-	  updateSearchField: function (e) {
-	    // console.log(e.currentTarget.innerHTML);
-	  },
+	  //
+	  // getEndDate: function(e) {
+	  //   e.preventDefault();
+	  // },
+	  //
+	  // getCapacity: function(e) {
+	  //   e.preventDefault();
+	  //   // console.log(e.currentTarget);
+	  // },
+	  //
 	
 	  handleSubmit: function (event) {
 	    event.preventDefault();
@@ -34880,39 +34871,17 @@
 	    var context = this;
 	    // <Dates onClick={this.getStartDate} placeholder="Start Date" dates={this.state.startDate}/>
 	    // <Dates onClick={this.getEndDate} placeholder="End Date" dates={this.state.endDate}/>
+	    // <select className="capacity-dropdown">
+	    //   <option onChange={this.getCapacity}>Spaces Needed: 1</option>
+	    //   <option onChange={this.getCapacity}>Spaces Needed: 2</option>
+	    //   <option onChange={this.getCapacity}>Spaces Needed: 3</option>
+	    //   <option onChange={this.getCapacity}>Spaces Needed: 4</option>
+	    //   <option onChange={this.getCapacity}>Spaces Needed: 5+</option>
+	    // </select>
 	    return React.createElement(
 	      'form',
 	      { className: 'search-container', onSubmit: this.handleSubmit },
 	      React.createElement(SearchLocationsBar, { location: this.props.location, className: 'searchbar-home' }),
-	      React.createElement(
-	        'select',
-	        { className: 'capacity-dropdown' },
-	        React.createElement(
-	          'option',
-	          { onChange: this.getCapacity },
-	          'Spaces Needed: 1'
-	        ),
-	        React.createElement(
-	          'option',
-	          { onChange: this.getCapacity },
-	          'Spaces Needed: 2'
-	        ),
-	        React.createElement(
-	          'option',
-	          { onChange: this.getCapacity },
-	          'Spaces Needed: 3'
-	        ),
-	        React.createElement(
-	          'option',
-	          { onChange: this.getCapacity },
-	          'Spaces Needed: 4'
-	        ),
-	        React.createElement(
-	          'option',
-	          { onChange: this.getCapacity },
-	          'Spaces Needed: 5+'
-	        )
-	      ),
 	      React.createElement('input', { className: 'search-button', type: 'submit', value: 'Search' })
 	    );
 	  }
@@ -64727,7 +64696,7 @@
 	  displayName: 'ReservationForm',
 	
 	  getInitialState: function () {
-	    return { beginDate: window.beginDate, endDate: window.endDate, booked: false };
+	    return { beginDate: window.beginDate, endDate: window.endDate, buttonText: "Reserve This Space" };
 	  },
 	
 	  componentDidMount: function () {
@@ -64735,6 +64704,7 @@
 	    if (user) {
 	      // ClientActions.fetchMyReservations(UserStore.currentUser().id);
 	    }
+	
 	    this.listener = ReservationStore.addListener(this._onChange);
 	  },
 	
@@ -64749,7 +64719,7 @@
 	  handleSubmit: function (e) {
 	    e.preventDefault();
 	    var user = UserStore.currentUser();
-	    if (!user.id) {
+	    if (!user) {
 	      alert("User must be logged in");
 	      // TODO: open the modal
 	    } else if (!this.state.beginDate || !this.state.endDate) {
@@ -64763,7 +64733,7 @@
 	          end_date: this.state.endDate
 	        });
 	
-	        this.setState({ beginDate: null, endDate: null, booked: true });
+	        this.setState({ beginDate: null, endDate: null, buttonText: "Booked!" });
 	      }
 	  },
 	
@@ -64791,16 +64761,8 @@
 	    }
 	  },
 	
-	  buttonText: function () {
-	    if (this.state.booked) {
-	      return "Booked!";
-	    } else {
-	      return "Reserve this Space";
-	    }
-	  },
-	
 	  buttonBackground: function () {
-	    if (this.state.booked) {
+	    if (this.state.buttonText == "Booked!") {
 	      return "booked";
 	    } else {
 	      return "Reserve this Space";
@@ -64850,7 +64812,7 @@
 	        React.createElement(
 	          'button',
 	          { type: 'submit', className: "search-button " + this.buttonBackground() },
-	          this.buttonText()
+	          this.state.buttonText
 	        )
 	      )
 	    );

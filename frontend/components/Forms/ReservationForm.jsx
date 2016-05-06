@@ -10,7 +10,7 @@ var moment = require('moment');
 
 var ReservationForm = React.createClass({
   getInitialState: function() {
-    return { beginDate: window.beginDate, endDate: window.endDate, booked: false };
+    return { beginDate: window.beginDate, endDate: window.endDate, buttonText: "Reserve This Space" };
 
   },
 
@@ -19,6 +19,7 @@ var ReservationForm = React.createClass({
     if (user) {
       // ClientActions.fetchMyReservations(UserStore.currentUser().id);
     }
+
     this.listener = ReservationStore.addListener(this._onChange);
   },
 
@@ -33,7 +34,7 @@ var ReservationForm = React.createClass({
   handleSubmit: function(e) {
     e.preventDefault();
     var user = UserStore.currentUser();
-    if (!user.id) {
+    if (!user) {
       alert("User must be logged in");
       // TODO: open the modal
     } else if (!this.state.beginDate || !this.state.endDate ) {
@@ -47,7 +48,7 @@ var ReservationForm = React.createClass({
         end_date: this.state.endDate
       });
 
-      this.setState({beginDate: null, endDate: null, booked: true});
+      this.setState({beginDate: null, endDate: null, buttonText: "Booked!"});
     }
   },
 
@@ -75,16 +76,8 @@ var ReservationForm = React.createClass({
     }
   },
 
-  buttonText: function() {
-    if (this.state.booked) {
-      return "Booked!";
-    } else {
-      return "Reserve this Space";
-    }
-  },
-
   buttonBackground: function() {
-    if (this.state.booked) {
+    if (this.state.buttonText == "Booked!") {
       return "booked";
     } else {
       return "Reserve this Space";
@@ -108,7 +101,7 @@ var ReservationForm = React.createClass({
               <Dates action={this.updateEndDate} date={this.state.endDate} placeholder="mm/dd/yyyy"/>
             </div>
           </div>
-          <button type="submit" className={"search-button " + this.buttonBackground()} >{this.buttonText()}</button>
+          <button type="submit" className={"search-button " + this.buttonBackground()} >{this.state.buttonText}</button>
         </form>
       </div>
     );
