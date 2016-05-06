@@ -8,7 +8,7 @@ var SearchLocationsBar = require('./SearchLocationsBar');
 
 var Search = React.createClass({
   getInitialState: function() {
-    return { startDate: null, endDate: null, spacesNeeded: null, coords: null};
+    return { spacesNeeded: null, coords: null};
   },
 
   // componentDidMount: function() {
@@ -62,11 +62,11 @@ var Search = React.createClass({
 
   render: function() {
     var context = this;
+    // <Dates onClick={this.getStartDate} placeholder="Start Date" dates={this.state.startDate}/>
+    // <Dates onClick={this.getEndDate} placeholder="End Date" dates={this.state.endDate}/>
     return (
       <form className="search-container" onSubmit={this.handleSubmit}>
         <SearchLocationsBar location={this.props.location} className="searchbar-home"/>
-        <Dates onClick={this.getStartDate} placeholder="Start Date"/>
-        <Dates onClick={this.getEndDate} placeholder="End Date"/>
         <select className="capacity-dropdown">
           <option onChange={this.getCapacity}>Spaces Needed: 1</option>
           <option onChange={this.getCapacity}>Spaces Needed: 2</option>

@@ -47,7 +47,7 @@
 	//React
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(32);
-	
+	var moment = __webpack_require__(383);
 	//Router
 	var ReactRouter = __webpack_require__(166);
 	var Router = ReactRouter.Router;
@@ -90,6 +90,8 @@
 	  componentDidMount: function () {
 	    // Check for current user.
 	    preloadUser();
+	    window.beginDate = moment();
+	    window.endDate = moment().add(1, 'days');
 	  },
 	
 	  render: function () {
@@ -34823,7 +34825,7 @@
 	  displayName: 'Search',
 	
 	  getInitialState: function () {
-	    return { startDate: null, endDate: null, spacesNeeded: null, coords: null };
+	    return { spacesNeeded: null, coords: null };
 	  },
 	
 	  // componentDidMount: function() {
@@ -34876,12 +34878,12 @@
 	
 	  render: function () {
 	    var context = this;
+	    // <Dates onClick={this.getStartDate} placeholder="Start Date" dates={this.state.startDate}/>
+	    // <Dates onClick={this.getEndDate} placeholder="End Date" dates={this.state.endDate}/>
 	    return React.createElement(
 	      'form',
 	      { className: 'search-container', onSubmit: this.handleSubmit },
 	      React.createElement(SearchLocationsBar, { location: this.props.location, className: 'searchbar-home' }),
-	      React.createElement(Dates, { onClick: this.getStartDate, placeholder: 'Start Date' }),
-	      React.createElement(Dates, { onClick: this.getEndDate, placeholder: 'End Date' }),
 	      React.createElement(
 	        'select',
 	        { className: 'capacity-dropdown' },
@@ -34946,33 +34948,12 @@
 	    options.start_date = options.start_date.format("YYYY-MM-DD");
 	    options.end_date = options.end_date.format("YYYY-MM-DD");
 	    ApiUtil.createReservation(options);
+	  },
+	
+	  fetchMyReservations: function (userId) {
+	    ApiUtil.fetchMyReservations(userId);
 	  }
 	
-	  // WORKSPACE COMPLETE CRUD (HOST ACTIONS)
-	  // listWorkspace: function(workspace) {
-	  //   ApiUtil.listWorkspace(workpsace);
-	  // },
-	  //
-	  // editWorkspace: function(workspace) {
-	  //   ApiUtil.editWorkspace(workspace)
-	  // },
-	  //
-	  // removeWorkspace: function(id) {
-	  //   ApiUtil.removeWorkspace(id)
-	  // },
-	
-	  // RESERVATION ACTIONS
-	  // createReservation: function(reservation) {
-	  //   ApiUtil.createReservation(reservation);
-	  // },
-	  //
-	  // changeReservation: function(reservation) {
-	  //   ApiUtil.updateReservation(reservation);
-	  // },
-	  //
-	  // cancelReservation: function(id) {
-	  //   ApiUtil.deleteReservation(id);
-	  // }
 	};
 
 /***/ },
@@ -35018,19 +34999,13 @@
 	
 		// RESERVATIONS
 		createReservation: function (options) {
-			debugger;
 			$.ajax({
 				url: 'api/workspaces/' + options.workspaceId + "/reservations",
 				method: 'post',
-				data: { reservation: {
-						workspace_id: options.workspaceId,
-						user_id: options.tenantId,
-						start_date: options.startDate,
-						end_date: options.endDate
-					} },
+				data: { reservation: options },
 				dataType: 'json',
 				success: function (reservationDetails) {
-					ServerActions.receiveReservation(workspaceDetails);
+					ServerActions.receiveReservation(reservationDetails);
 				},
 				error: function (data) {
 					ServerActions.handleError(data);
@@ -35061,7 +35036,10 @@
 	  },
 	
 	  receiveReservation: function (reservation) {
-	    console.log(reservation);
+	    AppDispatcher.dispatch({
+	      actionType: "RESERVATION_CREATED",
+	      reservation: reservation
+	    });
 	  },
 	
 	  handleError: function (errors) {
@@ -35084,44 +35062,44 @@
 	var Dates = React.createClass({
 	  displayName: 'Dates',
 	
-	  getInitialState: function () {
-	    return { beginDate: null, endDate: null };
-	  },
-	
-	  updateBeginDate: function (date) {
-	    end = this.state.endDate;
-	    if (end && date._d > end._d) {
-	      alert("End date cannot occur before start date.");
-	    } else {
-	      this.setState({
-	        beginDate: date
-	      });
-	
-	      var endQuery;
-	      if (this.state.startDate) {
-	        endQuery = this.state.startDate.format("MM/DD/YYYY");
-	      } else {
-	        endQuery = "";
-	      }
-	    }
-	  },
-	
-	  updateEndDate: function (date) {
-	    begin = this.state.beginDate;
-	    if (begin && date._d < begin._d) {
-	      alert("End date cannot occur before start date.");
-	    } else {
-	      this.setState({
-	        endDate: date
-	      });
-	      var beginQuery;
-	      if (this.state.beginDate) {
-	        beginQuery = this.state.beginDate.format("MM/DD/YYYY");
-	      } else {
-	        beginQuery = "";
-	      }
-	    }
-	  },
+	  // getInitialState: function() {
+	  //   return {beginDate: null, endDate: null};
+	  // },
+	  //
+	  // updateBeginDate: function(date) {
+	  //   end = this.state.endDate;
+	  //   if (end && date._d > end._d) {
+	  //     alert("End date cannot occur before start date.");
+	  //   } else {
+	  //     this.setState({
+	  //       beginDate: date
+	  //     });
+	  //
+	  //     var endQuery;
+	  //     if (this.state.startDate) {
+	  //       endQuery = this.state.startDate.format("MM/DD/YYYY");
+	  //     } else {
+	  //       endQuery = "";
+	  //     }
+	  //   }
+	  // },
+	  //
+	  // updateEndDate: function(date) {
+	  //   begin = this.state.beginDate;
+	  //   if (begin && date._d < begin._d) {
+	  //     alert("End date cannot occur before start date.");
+	  //   } else {
+	  //     this.setState({
+	  //       endDate: date
+	  //     });
+	  //     var beginQuery;
+	  //     if (this.state.beginDate) {
+	  //       beginQuery = this.state.beginDate.format("MM/DD/YYYY");
+	  //     } else {
+	  //       beginQuery = "";
+	  //     }
+	  //   }
+	  // },
 	
 	  render: function () {
 	    return React.createElement(DatePicker, {
@@ -63250,10 +63228,10 @@
 	  componentDidMount: function () {
 	    var map = ReactDOM.findDOMNode(this.refs.map);
 	    this.map = new google.maps.Map(map, this.mapOptions());
-	    // window.autocomplete.bindTo('bounds', this.map);
 	    this.registerListeners();
 	    this.markers = [];
 	    this.eachSpace(this.createMarker);
+	
 	    var that = this;
 	    setTimeout(function () {
 	      window.autocomplete.addListener('place_changed', function () {
@@ -63263,6 +63241,7 @@
 	        that._handleChange({ lat: place.lat(), lng: place.lng() });
 	      });
 	    }, 500);
+	
 	    this.filterListener = FilterStore.addListener(this.updateBounds);
 	  },
 	
@@ -63272,12 +63251,6 @@
 	    this.clickListener.remove();
 	    this.markerListener.remove();
 	  },
-	
-	  // _onFilterChange: function() {
-	  //   this.props.params.map_bounds = bounds;
-	  //   debugger;
-	  //   ClientActions.fetchWorkspaces(this.props.params);
-	  // },
 	
 	  eachSpace: function (callback) {
 	    var spaces = this.props.spaces;
@@ -63290,9 +63263,6 @@
 	  componentDidUpdate: function () {
 	    this._onChange();
 	  },
-	  //
-	  // componentWillReceiveProps: function() {
-	  // },
 	
 	  _onChange: function () {
 	    var newWorkspaces = [];
@@ -63438,6 +63408,7 @@
 	var FilterActions = __webpack_require__(485);
 	var ReactSlider = __webpack_require__(494);
 	var HashHistory = __webpack_require__(166).hashHistory;
+	var moment = __webpack_require__(383);
 	
 	// TODO: All this needs to do is listen to a FILTER store that updates (selects) workspaces that the WorkspaceIndex has retrieved.
 	var FilterParams = React.createClass({
@@ -63448,8 +63419,6 @@
 	      location: "",
 	      capacity: 1,
 	      office_types: { "Coworking Space": true, "Private Office": true, "Home Office": true },
-	      beginDate: null,
-	      endDate: null,
 	      min: 0,
 	      max: 10000
 	    };
@@ -63487,59 +63456,64 @@
 	    console.log(e.target.value);
 	  },
 	
-	  updateBeginDate: function (date) {
-	    end = this.state.endDate;
-	    if (end && date._d > end._d) {
+	  updateBeginDate: function (beginDate) {
+	    end = window.endDate;
+	    if (beginDate._d > end._d) {
 	      alert("End date cannot occur before start date.");
 	    } else {
-	      this.setState({
-	        beginDate: date
-	      });
-	
-	      var endQuery;
-	      if (this.state.startDate) {
-	        endQuery = this.state.startDate.format("MM/DD/YYYY");
-	      } else {
-	        endQuery = "";
-	      }
-	      //
-	      // HashHistory.push({
-	      //   pathname: "s/",
-	      //   query:
-	      //     {lat: this.props.location.query.lat,
-	      //     lng: this.props.location.query.lng,
-	      //     begin: date.format("MM/DD/YYYY"),
-	      //     end: endQuery}
-	      // });
-	      // FilterActions.updateBeginDate(date);
+	      window.beginDate = beginDate;
 	    }
+	    this.setState({ beginDate: beginDate.format("MM/DD/YYY") });
+	    // this.setState({
+	    //   beginDate: date
+	    // });
+	    //
+	    // var endQuery;
+	    // if (this.state.startDate) {
+	    //   endQuery = this.state.startDate.format("MM/DD/YYYY");
+	    // } else {
+	    //   endQuery = "";
+	    // }
+	    //
+	    // HashHistory.push({
+	    //   pathname: "s/",
+	    //   query:
+	    //     {lat: this.props.location.query.lat,
+	    //     lng: this.props.location.query.lng,
+	    //     begin: date.format("MM/DD/YYYY"),
+	    //     end: endQuery}
+	    // });
+	    //   // FilterActions.updateBeginDate(date);
+	    // }
 	  },
 	
-	  updateEndDate: function (date) {
-	    begin = this.state.beginDate;
-	    if (begin && date._d < begin._d) {
+	  updateEndDate: function (endDate) {
+	    begin = window.beginDate;
+	    if (endDate._d < begin._d) {
 	      alert("End date cannot occur before start date.");
 	    } else {
-	      this.setState({
-	        endDate: date
-	      });
-	      var beginQuery;
-	      if (this.state.beginDate) {
-	        beginQuery = this.state.beginDate.format("MM/DD/YYYY");
-	      } else {
-	        beginQuery = "";
-	      }
-	
-	      // HashHistory.push({
-	      //   pathname: "s/",
-	      //   query:
-	      //     {lat: this.props.location.query.lat,
-	      //     lng: this.props.location.query.lng,
-	      //     begin: beginQuery,
-	      //     end: date.format("MM/DD/YYYY")},
-	      // });
-	      // FilterActions.updateEndDate(date);
+	      window.endDate = endDate;
 	    }
+	    this.setState({ endDate: endDate.format("MM/DD/YYY") });
+	    // this.setState({
+	    //   endDate: date
+	    // });
+	    // var beginQuery;
+	    // if (window.beginDate) {
+	    //   beginQuery = window.beginDate.format("MM/DD/YYYY");
+	    // } else {
+	    //   beginQuery = "";
+	    // }
+	
+	    // HashHistory.push({
+	    //   pathname: "s/",
+	    //   query:
+	    //     {lat: this.props.location.query.lat,
+	    //     lng: this.props.location.query.lng,
+	    //     begin: beginQuery,
+	    //     end: date.format("MM/DD/YYYY")},
+	    // });
+	    // FilterActions.updateEndDate(date);
 	  },
 	
 	  // updatePrices: function(e) {
@@ -63566,8 +63540,8 @@
 	            null,
 	            'Dates'
 	          ),
-	          React.createElement(Dates, { date: this.state.beginDate, action: this.updateBeginDate, placeholder: 'Start Date' }),
-	          React.createElement(Dates, { date: this.state.endDate, action: this.updateEndDate, placeholder: 'End Date' })
+	          React.createElement(Dates, { date: window.beginDate, action: this.updateBeginDate, placeholder: 'Start Date' }),
+	          React.createElement(Dates, { date: window.endDate, action: this.updateEndDate, placeholder: 'End Date' })
 	        ),
 	        React.createElement('hr', null),
 	        React.createElement(
@@ -64477,31 +64451,73 @@
 	var React = __webpack_require__(1);
 	var ReservationForm = __webpack_require__(496);
 	var WorkspaceStore = __webpack_require__(489);
+	var ReservationStore = __webpack_require__(497);
 	var ClientActions = __webpack_require__(274);
+	var moment = __webpack_require__(383);
+	
+	var Modal = __webpack_require__(250);
 	
 	var WorkspaceShow = React.createClass({
 	  displayName: 'WorkspaceShow',
 	
 	  getInitialState: function () {
-	    return { space: {} };
+	    return { space: {}, modalOpen: false };
 	  },
 	
 	  componentDidMount: function () {
-	    this.listener = WorkspaceStore.addListener(this._onChange);
 	    ClientActions.fetchSingleWorkspace(this.props.params.workspaceId);
+	    this.listener = WorkspaceStore.addListener(this._onChange);
+	    this.resListener = ReservationStore.addListener(this._onSuccessfulRes);
 	  },
 	
 	  componentWillUnmount: function () {
 	    this.listener.remove();
+	    this.resListener.remove();
 	  },
 	
 	  _onChange: function () {
 	    this.setState({ space: WorkspaceStore.find(parseInt(this.props.params.workspaceId)) });
 	  },
 	
-	  render: function () {
-	    var detail = this.state.space;
+	  _onSuccessfulRes: function () {
+	    this.reservation = ReservationStore.latest();
+	    var formatStartDate = this.reservation.start_date.slice(5) + "-" + this.reservation.start_date.slice(0, 4);
+	    var formatEndDate = this.reservation.end_date.slice(5) + "-" + this.reservation.end_date.slice(0, 4);
 	
+	    this.modalText = "You're all set to work in " + this.state.space.city + ". See you from " + formatStartDate + " — " + formatEndDate + ".";
+	    this.setState({ modalOpen: true });
+	  },
+	
+	  closeModal: function () {
+	    this.setState({ modalOpen: false, formType: "login" });
+	  },
+	
+	  render: function () {
+	    var style = {
+	      overlay: {
+	        position: 'fixed',
+	        top: 0,
+	        left: 0,
+	        right: 0,
+	        bottom: 0,
+	        backgroundColor: 'rgba(255, 255, 255, 0.3)',
+	        zIndex: 10
+	      },
+	
+	      content: {
+	        position: 'relative',
+	        top: '120px',
+	        margin: 'auto auto',
+	        bottom: '120px',
+	        border: '1px solid #ff5a5f',
+	        width: '500px',
+	        // Whydis? TODO: see right margin
+	        padding: '25px 35px 25px 35px',
+	        zIndex: 11
+	      }
+	    };
+	
+	    var detail = this.state.space;
 	    // TODO: pass date props as default fields to ReservationForm
 	    return React.createElement(
 	      'div',
@@ -64509,6 +64525,15 @@
 	      React.createElement(
 	        'div',
 	        { className: 'listing-detail-above-fold' },
+	        React.createElement(
+	          Modal,
+	          { isOpen: this.state.modalOpen, onRequestClose: this.closeModal, style: style },
+	          React.createElement(
+	            'h3',
+	            null,
+	            this.modalText
+	          )
+	        ),
 	        React.createElement('img', { src: detail.main_photo_url, alt: 'Main Photo' })
 	      ),
 	      React.createElement(
@@ -64695,29 +64720,50 @@
 	var UserStore = __webpack_require__(232);
 	var FilterActions = __webpack_require__(485);
 	var ClientActions = __webpack_require__(274);
+	var ReservationStore = __webpack_require__(497);
+	var moment = __webpack_require__(383);
 	
 	var ReservationForm = React.createClass({
 	  displayName: 'ReservationForm',
 	
 	  getInitialState: function () {
-	    return { beginDate: null, endDate: null };
+	    return { beginDate: window.beginDate, endDate: window.endDate, booked: false };
+	  },
+	
+	  componentDidMount: function () {
+	    var user = UserStore.currentUser();
+	    if (user) {
+	      // ClientActions.fetchMyReservations(UserStore.currentUser().id);
+	    }
+	    this.listener = ReservationStore.addListener(this._onChange);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.listener.remove();
+	  },
+	
+	  _onChange: function () {
+	    this.setState({ booked: ReservationStore.booked(this.props.workspace.id) });
 	  },
 	
 	  handleSubmit: function (e) {
 	    e.preventDefault();
-	    var userId = UserStore.currentUser().id;
-	    if (!userId) {
+	    var user = UserStore.currentUser();
+	    if (!user.id) {
 	      alert("User must be logged in");
 	      // TODO: open the modal
 	    } else if (!this.state.beginDate || !this.state.endDate) {
 	        alert("Please select a valid begin and end date.");
 	      } else {
+	
 	        ClientActions.reserveSpace({
-	          workspaceId: this.props.workspace.id,
-	          tenantId: userId,
+	          workspace_id: this.props.workspace.id,
+	          user_id: user.id,
 	          start_date: this.state.beginDate,
 	          end_date: this.state.endDate
 	        });
+	
+	        this.setState({ beginDate: null, endDate: null, booked: true });
 	      }
 	  },
 	
@@ -64742,6 +64788,22 @@
 	      this.setState({
 	        endDate: date
 	      });
+	    }
+	  },
+	
+	  buttonText: function () {
+	    if (this.state.booked) {
+	      return "Booked!";
+	    } else {
+	      return "Reserve this Space";
+	    }
+	  },
+	
+	  buttonBackground: function () {
+	    if (this.state.booked) {
+	      return "booked";
+	    } else {
+	      return "Reserve this Space";
 	    }
 	  },
 	
@@ -64771,7 +64833,8 @@
 	              null,
 	              'Start Date'
 	            ),
-	            React.createElement(Dates, { action: this.updateBeginDate, date: this.state.beginDate })
+	            React.createElement(Dates, { action: this.updateBeginDate, date: this.state.beginDate,
+	              placeholder: 'mm/dd/yyyy' })
 	          ),
 	          React.createElement(
 	            'div',
@@ -64781,13 +64844,13 @@
 	              null,
 	              'End Date'
 	            ),
-	            React.createElement(Dates, { action: this.updateEndDate, date: this.state.endDate })
+	            React.createElement(Dates, { action: this.updateEndDate, date: this.state.endDate, placeholder: 'mm/dd/yyyy' })
 	          )
 	        ),
 	        React.createElement(
 	          'button',
-	          { type: 'submit', className: 'search-button' },
-	          'Request to Book'
+	          { type: 'submit', className: "search-button " + this.buttonBackground() },
+	          this.buttonText()
 	        )
 	      )
 	    );
@@ -64796,6 +64859,63 @@
 	});
 	
 	module.exports = ReservationForm;
+
+/***/ },
+/* 497 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(233).Store;
+	var AppDispatcher = __webpack_require__(228);
+	
+	var ReservationStore = new Store(AppDispatcher);
+	
+	var _reservations = {};
+	var _latestReservation;
+	
+	var _addReservation = function (res) {
+	  _reservations[res.id] = res;
+	};
+	
+	var _deleteReservation = function (id) {
+	  delete _reservations[id];
+	};
+	
+	ReservationStore.all = function () {
+	  Object.assign({}, _reservations);
+	};
+	
+	ReservationStore.latest = function () {
+	  return _latestReservation;
+	};
+	
+	ReservationStore.booked = function (id) {
+	  var reservation;
+	  Object.keys(_reservations).forEach(function (res) {
+	    if (id === _reservations[res].workspaceId) {
+	      return true;
+	    }
+	  });
+	};
+	
+	ReservationStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case "RESERVATION_CREATED":
+	      _addReservation(payload.reservation);
+	      _latestReservation = payload.reservation;
+	      ReservationStore.__emitChange();
+	      break;
+	    case "RESERVATION_DELETED":
+	      _deleteReservation(payload.id);
+	      ReservationStore.__emitChange();
+	      break;
+	    case "RESERVATION_VIEW_ALL":
+	      _reservations = payload.reservations;
+	      ReservationStore.__emitChange();
+	
+	  }
+	};
+	
+	module.exports = ReservationStore;
 
 /***/ }
 /******/ ]);

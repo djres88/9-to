@@ -39,19 +39,13 @@ module.exports = {
 
 	// RESERVATIONS
 	createReservation: function(options) {
-		debugger;
 		$.ajax({
-			url: 'api/workspaces/' + options.workspaceId +"/reservations",
+			url: 'api/workspaces/' + options.workspaceId + "/reservations",
 			method: 'post',
-			data: { reservation: {
-				workspace_id: options.workspaceId,
-				user_id: options.tenantId,
-				start_date: options.startDate,
-				end_date: options.endDate
-			}},
+			data: { reservation: options },
 			dataType: 'json',
 			success: function(reservationDetails) {
-				ServerActions.receiveReservation(workspaceDetails);
+				ServerActions.receiveReservation(reservationDetails);
 			},
 			error: function(data) {
 				ServerActions.handleError(data);

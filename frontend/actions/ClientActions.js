@@ -22,9 +22,11 @@ module.exports = {
     options.start_date = options.start_date.format("YYYY-MM-DD");
     options.end_date = options.end_date.format("YYYY-MM-DD");
     ApiUtil.createReservation(options);
-  }
+  },
 
-
+  fetchMyReservations: function(userId) {
+    ApiUtil.fetchMyReservations(userId);
+  },
 
 
   // WORKSPACE COMPLETE CRUD (HOST ACTIONS)

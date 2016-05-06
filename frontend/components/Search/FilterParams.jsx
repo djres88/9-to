@@ -3,6 +3,7 @@ var Dates = require('./Dates');
 var FilterActions = require('../../actions/FilterActions');
 var ReactSlider = require('react-slider');
 var HashHistory = require('react-router').hashHistory;
+var moment = require('moment');
 
 // TODO: All this needs to do is listen to a FILTER store that updates (selects) workspaces that the WorkspaceIndex has retrieved.
 var FilterParams = React.createClass({
@@ -11,8 +12,6 @@ var FilterParams = React.createClass({
       location: "",
       capacity: 1,
       office_types: { "Coworking Space": true, "Private Office": true, "Home Office": true },
-      beginDate: null,
-      endDate: null,
       min: 0,
       max: 10000
     };
@@ -50,22 +49,25 @@ var FilterParams = React.createClass({
     console.log(e.target.value);
   },
 
-  updateBeginDate: function(date) {
-    end = this.state.endDate;
-    if (end && date._d > end._d) {
+  updateBeginDate: function(beginDate) {
+    end = window.endDate;
+    if (beginDate._d > end._d) {
       alert("End date cannot occur before start date.");
     } else {
-      this.setState({
-        beginDate: date
-      });
-
-      var endQuery;
-      if (this.state.startDate) {
-        endQuery = this.state.startDate.format("MM/DD/YYYY");
-      } else {
-        endQuery = "";
-      }
-      // 
+      window.beginDate = beginDate;
+    }
+    this.setState({beginDate: beginDate.format("MM/DD/YYY")});
+     // this.setState({
+      //   beginDate: date
+      // });
+      //
+      // var endQuery;
+      // if (this.state.startDate) {
+      //   endQuery = this.state.startDate.format("MM/DD/YYYY");
+      // } else {
+      //   endQuery = "";
+      // }
+      //
       // HashHistory.push({
       //   pathname: "s/",
       //   query:
@@ -74,24 +76,27 @@ var FilterParams = React.createClass({
       //     begin: date.format("MM/DD/YYYY"),
       //     end: endQuery}
       // });
-      // FilterActions.updateBeginDate(date);
-    }
+    //   // FilterActions.updateBeginDate(date);
+    // }
   },
 
-  updateEndDate: function(date) {
-    begin = this.state.beginDate;
-    if (begin && date._d < begin._d) {
+  updateEndDate: function(endDate) {
+    begin = window.beginDate;
+    if (endDate._d < begin._d) {
       alert("End date cannot occur before start date.");
     } else {
-      this.setState({
-        endDate: date
-      });
-      var beginQuery;
-      if (this.state.beginDate) {
-        beginQuery = this.state.beginDate.format("MM/DD/YYYY");
-      } else {
-        beginQuery = "";
-      }
+      window.endDate = endDate;
+    }
+    this.setState({endDate: endDate.format("MM/DD/YYY")});
+      // this.setState({
+      //   endDate: date
+      // });
+      // var beginQuery;
+      // if (window.beginDate) {
+      //   beginQuery = window.beginDate.format("MM/DD/YYYY");
+      // } else {
+      //   beginQuery = "";
+      // }
 
       // HashHistory.push({
       //   pathname: "s/",
@@ -102,7 +107,7 @@ var FilterParams = React.createClass({
       //     end: date.format("MM/DD/YYYY")},
       // });
       // FilterActions.updateEndDate(date);
-    }
+
   },
 
   // updatePrices: function(e) {
@@ -120,8 +125,8 @@ var FilterParams = React.createClass({
         <ul>
           <li>
             <h4>Dates</h4>
-            <Dates date={this.state.beginDate} action={this.updateBeginDate} placeholder="Start Date"/>
-            <Dates date={this.state.endDate} action={this.updateEndDate} placeholder="End Date"/>
+            <Dates date={window.beginDate} action={this.updateBeginDate} placeholder="Start Date"/>
+            <Dates date={window.endDate} action={this.updateEndDate} placeholder="End Date"/>
           </li>
           <hr/>
           <li>

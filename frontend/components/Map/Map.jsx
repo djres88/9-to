@@ -24,10 +24,10 @@ var Map = React.createClass({
   componentDidMount: function(){
     var map = ReactDOM.findDOMNode(this.refs.map);
     this.map = new google.maps.Map(map, this.mapOptions());
-    // window.autocomplete.bindTo('bounds', this.map);
     this.registerListeners();
     this.markers = [];
     this.eachSpace(this.createMarker);
+
     var that = this;
     setTimeout(function() {
       window.autocomplete.addListener('place_changed', function() {
@@ -37,6 +37,7 @@ var Map = React.createClass({
         that._handleChange({lat: place.lat(), lng: place.lng()});
       });
     }, 500);
+
     this.filterListener = FilterStore.addListener(this.updateBounds);
   },
 
@@ -47,11 +48,6 @@ var Map = React.createClass({
     this.markerListener.remove();
   },
 
-  // _onFilterChange: function() {
-  //   this.props.params.map_bounds = bounds;
-  //   debugger;
-  //   ClientActions.fetchWorkspaces(this.props.params);
-  // },
 
   eachSpace: function(callback){
     var spaces = this.props.spaces;
@@ -64,9 +60,6 @@ var Map = React.createClass({
   componentDidUpdate: function () {
     this._onChange();
   },
-  //
-  // componentWillReceiveProps: function() {
-  // },
 
   _onChange: function(){
     var newWorkspaces = [];

@@ -1,7 +1,7 @@
 //React
 var React = require('react');
 var ReactDOM = require('react-dom');
-
+var moment = require('moment');
 //Router
 var ReactRouter = require('react-router');
 var Router = ReactRouter.Router;
@@ -44,7 +44,8 @@ var App = React.createClass({
   componentDidMount: function() {
     // Check for current user.
     preloadUser();
-
+    window.beginDate = moment();
+    window.endDate = moment().add(1, 'days');
   },
 
   render: function() {

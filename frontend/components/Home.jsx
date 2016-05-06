@@ -11,7 +11,7 @@ var Home = React.createClass({
           <h2>Flexible-term office space for freelancers and teams.</h2>
         </div>
 
-        <Search location={this.props.location.pathname}/>
+      <Search location={this.props.location.pathname}/>
 
       <div className="below-fold">
           <div className="homepage-section-one">

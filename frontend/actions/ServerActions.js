@@ -16,7 +16,10 @@ module.exports = {
   },
 
   receiveReservation: function(reservation) {
-    console.log(reservation);
+    AppDispatcher.dispatch({
+      actionType: "RESERVATION_CREATED",
+      reservation: reservation
+    });
   },
 
   handleError: function(errors) {

@@ -1,11 +1,15 @@
+
 class Api::ReservationsController < ApplicationController
   def create
-    reservation_params.start_date = Date.new(reservation_params.start_date)
-    reservation_params.end_date = Date.new(reservation_params.end_date)
+    reservation_params[:start_date] = Date.parse(reservation_params[:start_date])
+    reservation_params[:end_date] = Date.parse(reservation_params[:end_date])
 
     @reservation = Reservation.new(reservation_params)
+
     if @reservation.save
       render json: @reservation
+    else
+      render json: {errors: ["Invalid reservation."]}
     end
   end
 

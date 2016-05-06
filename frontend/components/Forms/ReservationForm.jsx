@@ -5,27 +5,49 @@ var WorkspaceStore = require('../../stores/WorkspaceStore');
 var UserStore = require('../../stores/UserStore');
 var FilterActions = require('../../actions/FilterActions');
 var ClientActions = require('../../actions/ClientActions');
+var ReservationStore = require('../../stores/ReservationStore');
+var moment = require('moment');
 
 var ReservationForm = React.createClass({
   getInitialState: function() {
-    return { beginDate: null, endDate: null };
+    return { beginDate: window.beginDate, endDate: window.endDate, booked: false };
+
+  },
+
+  componentDidMount: function() {
+    var user = UserStore.currentUser();
+    if (user) {
+      // ClientActions.fetchMyReservations(UserStore.currentUser().id);
+    }
+    this.listener = ReservationStore.addListener(this._onChange);
+  },
+
+  componentWillUnmount: function() {
+    this.listener.remove();
+  },
+
+  _onChange: function() {
+    this.setState({booked: ReservationStore.booked(this.props.workspace.id)});
   },
 
   handleSubmit: function(e) {
     e.preventDefault();
-    var userId = UserStore.currentUser().id;
-    if (!userId) {
+    var user = UserStore.currentUser();
+    if (!user.id) {
       alert("User must be logged in");
       // TODO: open the modal
     } else if (!this.state.beginDate || !this.state.endDate ) {
       alert("Please select a valid begin and end date.");
     } else {
+
       ClientActions.reserveSpace({
-        workspaceId: this.props.workspace.id,
-        tenantId: userId,
+        workspace_id: this.props.workspace.id,
+        user_id: user.id,
         start_date: this.state.beginDate,
         end_date: this.state.endDate
       });
+
+      this.setState({beginDate: null, endDate: null, booked: true});
     }
   },
 
@@ -53,6 +75,22 @@ var ReservationForm = React.createClass({
     }
   },
 
+  buttonText: function() {
+    if (this.state.booked) {
+      return "Booked!";
+    } else {
+      return "Reserve this Space";
+    }
+  },
+
+  buttonBackground: function() {
+    if (this.state.booked) {
+      return "booked";
+    } else {
+      return "Reserve this Space";
+    }
+  },
+
   render: function() {
     return (
       <div>
@@ -62,14 +100,15 @@ var ReservationForm = React.createClass({
           <div>
             <div className="reservation-form-dates">
               <p>Start Date</p>
-              <Dates action={this.updateBeginDate} date={this.state.beginDate}/>
+              <Dates action={this.updateBeginDate} date={this.state.beginDate}
+                placeholder="mm/dd/yyyy"/>
             </div>
             <div className="reservation-form-dates">
               <p>End Date</p>
-              <Dates action={this.updateEndDate} date={this.state.endDate}/>
+              <Dates action={this.updateEndDate} date={this.state.endDate} placeholder="mm/dd/yyyy"/>
             </div>
           </div>
-          <button type="submit" className="search-button">Request to Book</button>
+          <button type="submit" className={"search-button " + this.buttonBackground()} >{this.buttonText()}</button>
         </form>
       </div>
     );
