@@ -1,7 +1,7 @@
 //React
 var React = require('react');
 var ReactDOM = require('react-dom');
-var moment = require('moment');
+// var moment = require('moment');
 //Router
 var ReactRouter = require('react-router');
 var Router = ReactRouter.Router;

@@ -47,7 +47,7 @@
 	//React
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(32);
-	var moment = __webpack_require__(166);
+	// var moment = require('moment');
 	//Router
 	var ReactRouter = __webpack_require__(269);
 	var Router = ReactRouter.Router;
@@ -64382,7 +64382,7 @@
 	var WorkspaceStore = __webpack_require__(489);
 	var ReservationStore = __webpack_require__(497);
 	var ClientActions = __webpack_require__(377);
-	var moment = __webpack_require__(166);
+	// var moment = require('moment');
 	
 	var Modal = __webpack_require__(353);
 	
@@ -64728,7 +64728,7 @@
 	    if (end && date._d > end._d) {
 	      alert("End date cannot occur before start date.");
 	    } else {
-	      FilterActions.updateBeginDate(date);
+	      // FilterActions.updateBeginDate(date);
 	      this.setState({
 	        beginDate: date
 	      });
@@ -64740,7 +64740,7 @@
 	    if (begin && date._d < begin._d) {
 	      alert("End date cannot occur before start date.");
 	    } else {
-	      FilterActions.updateEndDate(date);
+	      // FilterActions.updateEndDate(date);
 	      this.setState({
 	        endDate: date
 	      });

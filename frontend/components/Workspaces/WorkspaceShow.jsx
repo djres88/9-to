@@ -3,7 +3,7 @@ var ReservationForm = require('../Forms/ReservationForm');
 var WorkspaceStore = require('../../stores/WorkspaceStore');
 var ReservationStore = require('../../stores/ReservationStore');
 var ClientActions = require('../../actions/ClientActions');
-var moment = require('moment');
+// var moment = require('moment');
 
 var Modal = require("react-modal");
 

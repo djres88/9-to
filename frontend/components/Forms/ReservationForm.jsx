@@ -75,7 +75,7 @@ var ReservationForm = React.createClass({
     if (end && date._d > end._d) {
       alert("End date cannot occur before start date.");
     } else {
-      FilterActions.updateBeginDate(date);
+      // FilterActions.updateBeginDate(date);
       this.setState({
         beginDate: date
       });
@@ -87,7 +87,7 @@ var ReservationForm = React.createClass({
     if (begin && date._d < begin._d) {
       alert("End date cannot occur before start date.");
     } else {
-      FilterActions.updateEndDate(date);
+      // FilterActions.updateEndDate(date);
       this.setState({
         endDate: date
       });
