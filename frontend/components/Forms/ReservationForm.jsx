@@ -92,7 +92,6 @@ var ReservationForm = React.createClass({
   },
 
   render: function() {
-    debugger;
     return (
       <div>
         <h1>{this.state.reservations}</h1>

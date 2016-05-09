@@ -34952,22 +34952,22 @@
 					ServerActions.handleError(data);
 				}
 			});
+		},
+	
+		fetchReservations: function (params) {
+			$.ajax({
+				url: 'api/workspaces/' + params.workspace_id + "/reservations/",
+				method: 'get',
+				data: { reservation: params },
+				dataType: 'json',
+				success: function (reservationDetails) {
+					ServerActions.receiveSingleReservation(reservationDetails);
+				},
+				error: function (data) {
+					ServerActions.handleError(data);
+				}
+			});
 		}
-		//
-		// fetchReservations: function(params) {
-		// 	$.ajax({
-		// 		url: 'api/workspaces/' + params.workspace_id + "/reservations/1",
-		// 		method: 'get',
-		// 		data: { reservation: params },
-		// 		dataType: 'json',
-		// 		success: function(reservationDetails) {
-		// 			ServerActions.receiveSingleReservation(reservationDetails);
-		// 		},
-		// 		error: function(data) {
-		// 			ServerActions.handleError(data);
-		// 		}
-		// 	});
-		// }
 	};
 
 /***/ },
@@ -50404,7 +50404,7 @@
 	  displayName: 'WorkspaceShow',
 	
 	  getInitialState: function () {
-	    return { space: {}, modalOpen: false };
+	    return { space: {}, modalOpen: false, user: UserStore.currentUser() };
 	  },
 	
 	  componentDidMount: function () {
@@ -50419,6 +50419,7 @@
 	
 	    this.listener = WorkspaceStore.addListener(this._onChange);
 	    this.resListener = ReservationStore.addListener(this._onSuccessfulRes);
+	    this.userListener = UserStore.addListener(this._onLogin);
 	  },
 	
 	  componentWillUnmount: function () {
@@ -50441,6 +50442,10 @@
 	    this.modalTextPart1 = "You're all set to work in " + this.state.space.city + "!";
 	    this.modalTextPart2 = "See you from " + formatStartDate + " — " + formatEndDate + ".";
 	    this.setState({ modalOpen: true });
+	  },
+	
+	  _onLogin: function () {
+	    this.setState({ user: UserStore.currentUser() });
 	  },
 	
 	  closeModal: function () {
@@ -50768,7 +50773,6 @@
 	  },
 	
 	  render: function () {
-	    debugger;
 	    return React.createElement(
 	      'div',
 	      null,
@@ -64801,7 +64805,6 @@
 	
 	ReservationStore.all = function () {
 	  Object.assign({}, _reservations);
-	  debugger;
 	};
 	
 	ReservationStore.latest = function () {

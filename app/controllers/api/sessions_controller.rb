@@ -4,7 +4,7 @@ class Api::SessionsController < ApplicationController
 
     if @user
       session[:session_token] = @user.reset_token!
-      render json: {username: @user.username}
+      render json: {username: @user.username, id: @user.id }
       # render "api/users/show"
     else
       @errors = ['Invalid username or password']

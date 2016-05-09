@@ -50,20 +50,20 @@ module.exports = {
 				ServerActions.handleError(data);
 			}
 		});
+	},
+
+	fetchReservations: function(params) {
+		$.ajax({
+			url: 'api/workspaces/' + params.workspace_id + "/reservations/",
+			method: 'get',
+			data: { reservation: params },
+			dataType: 'json',
+			success: function(reservationDetails) {
+				ServerActions.receiveSingleReservation(reservationDetails);
+			},
+			error: function(data) {
+				ServerActions.handleError(data);
+			}
+		});
 	}
-	//
-	// fetchReservations: function(params) {
-	// 	$.ajax({
-	// 		url: 'api/workspaces/' + params.workspace_id + "/reservations/1",
-	// 		method: 'get',
-	// 		data: { reservation: params },
-	// 		dataType: 'json',
-	// 		success: function(reservationDetails) {
-	// 			ServerActions.receiveSingleReservation(reservationDetails);
-	// 		},
-	// 		error: function(data) {
-	// 			ServerActions.handleError(data);
-	// 		}
-	// 	});
-	// }
 };

@@ -16,7 +16,6 @@ var _deleteReservation = function(id) {
 
 ReservationStore.all = function() {
   Object.assign({}, _reservations);
-  debugger;
 };
 
 ReservationStore.latest = function() {

@@ -9,7 +9,7 @@ var Modal = require("react-modal");
 
 var WorkspaceShow = React.createClass({
   getInitialState: function() {
-    return {space: {}, modalOpen: false};
+    return {space: {}, modalOpen: false, user: UserStore.currentUser()};
   },
 
   componentDidMount: function() {
@@ -24,6 +24,7 @@ var WorkspaceShow = React.createClass({
 
     this.listener = WorkspaceStore.addListener(this._onChange);
     this.resListener = ReservationStore.addListener(this._onSuccessfulRes);
+    this.userListener = UserStore.addListener(this._onLogin);
   },
 
   componentWillUnmount: function() {
@@ -46,6 +47,10 @@ var WorkspaceShow = React.createClass({
     this.modalTextPart1 = "You're all set to work in " + this.state.space.city + "!";
     this.modalTextPart2 = "See you from " + formatStartDate + " — " + formatEndDate + ".";
     this.setState({modalOpen: true});
+  },
+
+  _onLogin: function() {
+    this.setState({user: UserStore.currentUser()});
   },
 
   closeModal: function(){
