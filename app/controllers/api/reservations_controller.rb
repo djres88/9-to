@@ -1,4 +1,3 @@
-require('byebug')
 class Api::ReservationsController < ApplicationController
   def create
     reservation_params[:start_date] = Date.parse(reservation_params[:start_date])
