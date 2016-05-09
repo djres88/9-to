@@ -1,22 +1,21 @@
 var React = require('react');
 
 var WorkspaceStore = require('../../stores/WorkspaceStore');
+var UserStore = require('../../stores/UserStore');
 
 var ClientActions = require('../../actions/ClientActions');
 var WorkspaceIndexItem = require('./WorkspaceIndexItem');
-var Navbar = require('../Navbar/Navbar');
 var Map = require('../Map/Map');
 var FilterParams = require('../Search/FilterParams');
-var FilterStore = require('../../stores/FilterStore');
-// var SearchLocationsBar = require('../Search/SearchLocationsBar');
 
 var WorkspaceIndex = React.createClass({
   getInitialState: function() {
-    return {workspaces: "", page: 1};
+    return {workspaces: "", page: 1 };
   },
 
   componentDidMount: function () {
     this.listener = WorkspaceStore.addListener(this._onChange);
+    this.user = UserStore.currentUser();
   },
 
   componentWillUnmount: function() {
@@ -27,6 +26,7 @@ var WorkspaceIndex = React.createClass({
     this.setState({workspaces: WorkspaceStore.all()});
   },
 
+  //TODO: Fetch batches of workspaces by the 18s. Code is already set up on back end, just need styling here.
   // nextRecords: function(e) {
   //   this.setState({page: e.currentTarget.value + 1});
   //   // ClientActions.fetchWorkspaces(e.currentTarget.value);
@@ -47,11 +47,33 @@ var WorkspaceIndex = React.createClass({
         <FilterParams
           location={this.props.location}
         />
-        <div className="workspace-index">{workspaceComponents}</div>
+      <div className="workspace-index" user={this.user}>{workspaceComponents}</div>
       </div>
     );
   }
 });
-// <div type="button" onClick={this.nextRecords} value={this.state.page}>{this.state.page}</div>
 
 module.exports = WorkspaceIndex;
+
+//Filters on for searching purposes
+// updateBeginDate: function(date) {
+//   end = this.state.endDate;
+//   if (end && date._d > end._d) {
+//     alert("End date cannot occur before start date.");
+//   } else {
+//     this.setState({
+//       beginDate: date
+//     });
+//   }
+// },
+//
+// updateEndDate: function(date) {
+//   begin = this.state.beginDate;
+//   if (begin && date._d < begin._d) {
+//     alert("End date cannot occur before start date.");
+//   } else {
+//     this.setState({
+//       endDate: date
+//     });
+//   }
+// },

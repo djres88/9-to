@@ -16,7 +16,6 @@ var Home = React.createClass({
       <div className="below-fold">
           <div className="homepage-section-one">
             <h3>Time is money. Save it.</h3>
-            <p>Something about saving costs involved w/ finding/setting up a new office...</p>
             <div className="graphics-gallery">
               <img className="graphics" src="http://res.cloudinary.com/dyzqtq32z/image/upload/v1462574399/savings_lubtzw.png" alt=""/>
               <img className="graphics" src="http://res.cloudinary.com/dyzqtq32z/image/upload/v1462574386/happy2_pvmdnt.png" alt=""/>

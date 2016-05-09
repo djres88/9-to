@@ -3,7 +3,7 @@ var ReservationForm = require('../Forms/ReservationForm');
 var WorkspaceStore = require('../../stores/WorkspaceStore');
 var ReservationStore = require('../../stores/ReservationStore');
 var ClientActions = require('../../actions/ClientActions');
-// var moment = require('moment');
+var UserStore = require('../../stores/UserStore');
 
 var Modal = require("react-modal");
 
@@ -14,6 +14,14 @@ var WorkspaceShow = React.createClass({
 
   componentDidMount: function() {
     ClientActions.fetchSingleWorkspace(this.props.params.workspaceId);
+    // this.user = UserStore.currentUser().id;
+    // this.workspace = this.props.params.workspaceId;
+    //
+    // ClientActions.fetchReservations({
+    //   user_id: this.user,
+    //   workspace_id: this.workspace
+    // });
+
     this.listener = WorkspaceStore.addListener(this._onChange);
     this.resListener = ReservationStore.addListener(this._onSuccessfulRes);
   },
@@ -32,8 +40,8 @@ var WorkspaceShow = React.createClass({
       return;
     }
     this.reservation = ReservationStore.latest();
-    var formatStartDate = this.reservation.start_date.slice(5) + "-" + this.reservation.start_date.slice(0,4);
-    var formatEndDate = this.reservation.end_date.slice(5) + "-" + this.reservation.end_date.slice(0,4);
+    var formatStartDate = this.reservation.start_date.slice(5);
+    var formatEndDate = this.reservation.end_date.slice(5);
 
     this.modalTextPart1 = "You're all set to work in " + this.state.space.city + "!";
     this.modalTextPart2 = "See you from " + formatStartDate + " — " + formatEndDate + ".";

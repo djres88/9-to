@@ -10,17 +10,11 @@ var moment = require('moment');
 
 var ReservationForm = React.createClass({
   getInitialState: function() {
-    return { beginDate: moment(), endDate: moment(), buttonText: "" };
+    return { beginDate: moment(), endDate: moment(), buttonText: "", reservations: ReservationStore.all() };
 
   },
   componentWillMount: function() {
-    this.user = UserStore.currentUser();
-    // if (this.user) {
-    //   ClientActions.fetchReservations({
-    //     user_id: this.user.id,
-    //     workspace_id: this.props.location.pathname.split("/")[1]
-    //   });
-    // }
+    this.state.reservations = ReservationStore.all();
   },
 
   componentDidMount: function() {
@@ -29,13 +23,15 @@ var ReservationForm = React.createClass({
     } else {
       this.setState({buttonText: "Reserve This Space"});
     }
-
     this.listener = ReservationStore.addListener(this._onChange);
   },
 
-
   componentWillUnmount: function() {
     this.listener.remove();
+  },
+
+  componentDidUpdate: function() {
+    this.state.reservations = ReservationStore.all();
   },
 
   _onChange: function() {
@@ -59,7 +55,7 @@ var ReservationForm = React.createClass({
       return;
     } else {
       ClientActions.reserveSpace({
-        workspace_id: this.props.location.pathname.split("/")[1],
+        workspace_id: this.props.workspace.id,
         user_id: user.id,
         start_date: this.state.beginDate,
         end_date: this.state.endDate
@@ -75,7 +71,7 @@ var ReservationForm = React.createClass({
     if (end && date._d > end._d) {
       alert("End date cannot occur before start date.");
     } else {
-      // FilterActions.updateBeginDate(date);
+      // NB: No longer filtering on reservations page, so... comment out: FilterActions.updateBeginDate(date);
       this.setState({
         beginDate: date
       });
@@ -87,6 +83,7 @@ var ReservationForm = React.createClass({
     if (begin && date._d < begin._d) {
       alert("End date cannot occur before start date.");
     } else {
+      // NB: No longer filtering on reservations page, so... comment out:
       // FilterActions.updateEndDate(date);
       this.setState({
         endDate: date
@@ -95,8 +92,10 @@ var ReservationForm = React.createClass({
   },
 
   render: function() {
+    debugger;
     return (
       <div>
+        <h1>{this.state.reservations}</h1>
         <form className="mini-reservation-form"
           onSubmit={this.handleSubmit}>
           <h1>$ {this.props.workspace.price_week} per week</h1>

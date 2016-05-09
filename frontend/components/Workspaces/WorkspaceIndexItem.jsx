@@ -1,9 +1,15 @@
 var React = require('react');
 var HashHistory = require('react-router').hashHistory;
+var ClientActions = require('../../actions/ClientActions');
 
 var WorkspaceIndexItem = React.createClass({
   showListingDetail: function() {
     HashHistory.push("workspaces/" + this.props.workspace.id);
+
+    ClientActions.fetchReservations({
+      user_id: this.props.user,
+      workspace_id: this.props.workspace.id
+    });
   },
 
   render: function() {
@@ -21,6 +27,3 @@ var WorkspaceIndexItem = React.createClass({
 });
 
 module.exports = WorkspaceIndexItem;
-//
-// <li>{workspace.address}</li>
-// <li>{workspace.city}</li>

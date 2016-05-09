@@ -1,7 +1,7 @@
 //React
 var React = require('react');
 var ReactDOM = require('react-dom');
-// var moment = require('moment');
+
 //Router
 var ReactRouter = require('react-router');
 var Router = ReactRouter.Router;
@@ -13,6 +13,7 @@ var Link = ReactRouter.Link;
 //Action (to populate session store)
 var UserActions = require('./actions/UserClientActions');
 var UserStore = require('./stores/UserStore');
+
 //React Add-Ons
 var Modal = require("react-modal");
 
@@ -43,8 +44,6 @@ var App = React.createClass({
   componentDidMount: function() {
     // Check for current user.
     preloadUser();
-    // window.beginDate = moment();
-    // window.endDate = moment().add(1, 'days');
   },
 
   render: function() {
@@ -56,11 +55,6 @@ var App = React.createClass({
     );
   }
 });
-
-// For testing
-// window.hash = hashHistory;
-// window.User = UserStore;
-// window.UserApiUtil = require('./util/UserApiUtil');
 
 var Router = (
   <Router history={hashHistory}>
