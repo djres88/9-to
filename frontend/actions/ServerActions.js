@@ -22,13 +22,12 @@ module.exports = {
     });
   },
   //
-  // receiveSingleReservation: function(reservation) {
-  //   debugger;
-  //   AppDispatcher.dispatch({
-  //     actionType: "RESERVATION_FOUND",
-  //     reservation: reservation
-  //   });
-  // },
+  receiveWorkspaceReservations: function(reservations) {
+    AppDispatcher.dispatch({
+      actionType: "RESERVATIONS_FOUND",
+      reservations: reservations
+    });
+  },
 
   handleError: function(errors) {
     AppDispatcher.dispatch({

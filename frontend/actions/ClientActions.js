@@ -24,9 +24,9 @@ module.exports = {
     ApiUtil.createReservation(options);
   },
 
-  fetchReservations: function(params) {
-    ApiUtil.fetchReservations(params);
-  },
+  fetchReservations: function(id) {
+    ApiUtil.fetchReservations(id);
+  }
 
 
   // WORKSPACE COMPLETE CRUD (HOST ACTIONS)

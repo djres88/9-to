@@ -4,12 +4,12 @@ var ClientActions = require('../../actions/ClientActions');
 
 var WorkspaceIndexItem = React.createClass({
   showListingDetail: function() {
-    HashHistory.push("workspaces/" + this.props.workspace.id);
+    ClientActions.fetchReservations(
+      // NB: Really we'll need all the reservations eventually, to block out the calendar for reserved dates. user_id: this.props.user,
+      this.props.workspace.id
+    );
 
-    ClientActions.fetchReservations({
-      user_id: this.props.user,
-      workspace_id: this.props.workspace.id
-    });
+    HashHistory.push("workspaces/" + this.props.workspace.id);
   },
 
   render: function() {

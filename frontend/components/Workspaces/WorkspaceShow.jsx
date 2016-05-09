@@ -9,21 +9,12 @@ var Modal = require("react-modal");
 
 var WorkspaceShow = React.createClass({
   getInitialState: function() {
-    return {space: {}, modalOpen: false, user: UserStore.currentUser()};
+    return {space: {}, modalOpen: false, user: UserStore.currentUser(), reservations: ReservationStore.all()};
   },
 
   componentDidMount: function() {
     ClientActions.fetchSingleWorkspace(this.props.params.workspaceId);
-    // this.user = UserStore.currentUser().id;
-    // this.workspace = this.props.params.workspaceId;
-    //
-    // ClientActions.fetchReservations({
-    //   user_id: this.user,
-    //   workspace_id: this.workspace
-    // });
-
     this.listener = WorkspaceStore.addListener(this._onChange);
-    this.resListener = ReservationStore.addListener(this._onSuccessfulRes);
     this.userListener = UserStore.addListener(this._onLogin);
   },
 
@@ -32,20 +23,26 @@ var WorkspaceShow = React.createClass({
     this.resListener.remove();
   },
 
+  componentDidUpdate: function() {
+    this.resListener = ReservationStore.addListener(this._onSuccessfulRes);
+  },
+
   _onChange: function() {
     this.setState({space: WorkspaceStore.find(parseInt(this.props.params.workspaceId))});
   },
 
   _onSuccessfulRes: function() {
-    if (!ReservationStore.latest()) {
+    this.reservation = ReservationStore.latest();
+    if (!this.reservation) {
       return;
     }
-    this.reservation = ReservationStore.latest();
+
     var formatStartDate = this.reservation.start_date.slice(5);
     var formatEndDate = this.reservation.end_date.slice(5);
 
     this.modalTextPart1 = "You're all set to work in " + this.state.space.city + "!";
     this.modalTextPart2 = "See you from " + formatStartDate + " — " + formatEndDate + ".";
+    this.setState({reservations: ReservationStore.all()});
     this.setState({modalOpen: true});
   },
 

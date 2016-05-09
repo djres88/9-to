@@ -52,14 +52,14 @@ module.exports = {
 		});
 	},
 
-	fetchReservations: function(params) {
+	fetchReservations: function(workspaceId) {
 		$.ajax({
-			url: 'api/workspaces/' + params.workspace_id + "/reservations/",
+			url: 'api/workspaces/' + workspaceId + "/reservations/",
 			method: 'get',
-			data: { reservation: params },
+			data: { reservation: {workspace_id: workspaceId }},
 			dataType: 'json',
 			success: function(reservationDetails) {
-				ServerActions.receiveSingleReservation(reservationDetails);
+				ServerActions.receiveWorkspaceReservations(reservationDetails);
 			},
 			error: function(data) {
 				ServerActions.handleError(data);

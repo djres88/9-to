@@ -13,9 +13,6 @@ var ReservationForm = React.createClass({
     return { beginDate: moment(), endDate: moment(), buttonText: "", reservations: ReservationStore.all() };
 
   },
-  componentWillMount: function() {
-    this.state.reservations = ReservationStore.all();
-  },
 
   componentDidMount: function() {
     if (ReservationStore.booked(this.props.workspace.id)) {
@@ -28,10 +25,6 @@ var ReservationForm = React.createClass({
 
   componentWillUnmount: function() {
     this.listener.remove();
-  },
-
-  componentDidUpdate: function() {
-    this.state.reservations = ReservationStore.all();
   },
 
   _onChange: function() {
@@ -94,7 +87,6 @@ var ReservationForm = React.createClass({
   render: function() {
     return (
       <div>
-        <h1>{this.state.reservations}</h1>
         <form className="mini-reservation-form"
           onSubmit={this.handleSubmit}>
           <h1>$ {this.props.workspace.price_week} per week</h1>

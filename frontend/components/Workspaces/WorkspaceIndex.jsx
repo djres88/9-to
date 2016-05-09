@@ -24,6 +24,7 @@ var WorkspaceIndex = React.createClass({
 
   _onChange: function() {
     this.setState({workspaces: WorkspaceStore.all()});
+
   },
 
   //TODO: Fetch batches of workspaces by the 18s. Code is already set up on back end, just need styling here.

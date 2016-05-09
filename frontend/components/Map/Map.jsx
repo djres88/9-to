@@ -129,6 +129,10 @@ var Map = React.createClass({
     });
 
     this.markerListener = marker.addListener('click', function () {
+      // NB: Start fetching the workspace's reservations as quickly as possible before the show page loads.
+      ClientActions.fetchReservations(
+        this.workspaceId
+      );
       HashHistory.push("workspaces/" + workspace.id );
     });
     this.markers.push(marker);

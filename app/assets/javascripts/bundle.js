@@ -34892,10 +34892,35 @@
 	    ApiUtil.createReservation(options);
 	  },
 	
-	  fetchReservations: function (params) {
-	    ApiUtil.fetchReservations(params);
+	  fetchReservations: function (id) {
+	    ApiUtil.fetchReservations(id);
 	  }
 	
+	  // WORKSPACE COMPLETE CRUD (HOST ACTIONS)
+	  // listWorkspace: function(workspace) {
+	  //   ApiUtil.listWorkspace(workpsace);
+	  // },
+	  //
+	  // editWorkspace: function(workspace) {
+	  //   ApiUtil.editWorkspace(workspace)
+	  // },
+	  //
+	  // removeWorkspace: function(id) {
+	  //   ApiUtil.removeWorkspace(id)
+	  // },
+	
+	  // RESERVATION ACTIONS
+	  // createReservation: function(reservation) {
+	  //   ApiUtil.createReservation(reservation);
+	  // },
+	  //
+	  // changeReservation: function(reservation) {
+	  //   ApiUtil.updateReservation(reservation);
+	  // },
+	  //
+	  // cancelReservation: function(id) {
+	  //   ApiUtil.deleteReservation(id);
+	  // }
 	};
 
 /***/ },
@@ -34954,14 +34979,14 @@
 			});
 		},
 	
-		fetchReservations: function (params) {
+		fetchReservations: function (workspaceId) {
 			$.ajax({
-				url: 'api/workspaces/' + params.workspace_id + "/reservations/",
+				url: 'api/workspaces/' + workspaceId + "/reservations/",
 				method: 'get',
-				data: { reservation: params },
+				data: { reservation: { workspace_id: workspaceId } },
 				dataType: 'json',
 				success: function (reservationDetails) {
-					ServerActions.receiveSingleReservation(reservationDetails);
+					ServerActions.receiveWorkspaceReservations(reservationDetails);
 				},
 				error: function (data) {
 					ServerActions.handleError(data);
@@ -34998,13 +35023,12 @@
 	    });
 	  },
 	  //
-	  // receiveSingleReservation: function(reservation) {
-	  //   debugger;
-	  //   AppDispatcher.dispatch({
-	  //     actionType: "RESERVATION_FOUND",
-	  //     reservation: reservation
-	  //   });
-	  // },
+	  receiveWorkspaceReservations: function (reservations) {
+	    AppDispatcher.dispatch({
+	      actionType: "RESERVATIONS_FOUND",
+	      reservations: reservations
+	    });
+	  },
 	
 	  handleError: function (errors) {
 	    AppDispatcher.dispatch({
@@ -35299,12 +35323,11 @@
 	  displayName: 'WorkspaceIndexItem',
 	
 	  showListingDetail: function () {
-	    HashHistory.push("workspaces/" + this.props.workspace.id);
+	    ClientActions.fetchReservations(
+	    // NB: Really we'll need all the reservations eventually, to block out the calendar for reserved dates. user_id: this.props.user,
+	    this.props.workspace.id);
 	
-	    ClientActions.fetchReservations({
-	      user_id: this.props.user,
-	      workspace_id: this.props.workspace.id
-	    });
+	    HashHistory.push("workspaces/" + this.props.workspace.id);
 	  },
 	
 	  render: function () {
@@ -35472,6 +35495,8 @@
 	    });
 	
 	    this.markerListener = marker.addListener('click', function () {
+	      // NB: Start fetching the workspace's reservations as quickly as possible before the show page loads.
+	      ClientActions.fetchReservations(this.workspaceId);
 	      HashHistory.push("workspaces/" + workspace.id);
 	    });
 	    this.markers.push(marker);
@@ -50404,21 +50429,12 @@
 	  displayName: 'WorkspaceShow',
 	
 	  getInitialState: function () {
-	    return { space: {}, modalOpen: false, user: UserStore.currentUser() };
+	    return { space: {}, modalOpen: false, user: UserStore.currentUser(), reservations: ReservationStore.all() };
 	  },
 	
 	  componentDidMount: function () {
 	    ClientActions.fetchSingleWorkspace(this.props.params.workspaceId);
-	    // this.user = UserStore.currentUser().id;
-	    // this.workspace = this.props.params.workspaceId;
-	    //
-	    // ClientActions.fetchReservations({
-	    //   user_id: this.user,
-	    //   workspace_id: this.workspace
-	    // });
-	
 	    this.listener = WorkspaceStore.addListener(this._onChange);
-	    this.resListener = ReservationStore.addListener(this._onSuccessfulRes);
 	    this.userListener = UserStore.addListener(this._onLogin);
 	  },
 	
@@ -50427,20 +50443,26 @@
 	    this.resListener.remove();
 	  },
 	
+	  componentDidUpdate: function () {
+	    this.resListener = ReservationStore.addListener(this._onSuccessfulRes);
+	  },
+	
 	  _onChange: function () {
 	    this.setState({ space: WorkspaceStore.find(parseInt(this.props.params.workspaceId)) });
 	  },
 	
 	  _onSuccessfulRes: function () {
-	    if (!ReservationStore.latest()) {
+	    this.reservation = ReservationStore.latest();
+	    if (!this.reservation) {
 	      return;
 	    }
-	    this.reservation = ReservationStore.latest();
+	
 	    var formatStartDate = this.reservation.start_date.slice(5);
 	    var formatEndDate = this.reservation.end_date.slice(5);
 	
 	    this.modalTextPart1 = "You're all set to work in " + this.state.space.city + "!";
 	    this.modalTextPart2 = "See you from " + formatStartDate + " — " + formatEndDate + ".";
+	    this.setState({ reservations: ReservationStore.all() });
 	    this.setState({ modalOpen: true });
 	  },
 	
@@ -50694,9 +50716,6 @@
 	  getInitialState: function () {
 	    return { beginDate: moment(), endDate: moment(), buttonText: "", reservations: ReservationStore.all() };
 	  },
-	  componentWillMount: function () {
-	    this.state.reservations = ReservationStore.all();
-	  },
 	
 	  componentDidMount: function () {
 	    if (ReservationStore.booked(this.props.workspace.id)) {
@@ -50709,10 +50728,6 @@
 	
 	  componentWillUnmount: function () {
 	    this.listener.remove();
-	  },
-	
-	  componentDidUpdate: function () {
-	    this.state.reservations = ReservationStore.all();
 	  },
 	
 	  _onChange: function () {
@@ -50776,11 +50791,6 @@
 	    return React.createElement(
 	      'div',
 	      null,
-	      React.createElement(
-	        'h1',
-	        null,
-	        this.state.reservations
-	      ),
 	      React.createElement(
 	        'form',
 	        { className: 'mini-reservation-form',
@@ -64804,7 +64814,11 @@
 	};
 	
 	ReservationStore.all = function () {
-	  Object.assign({}, _reservations);
+	  var reservations = {};
+	  Object.keys(_reservations).forEach(function (key) {
+	    reservations[key] = _reservations[key];
+	  });
+	  return reservations;
 	};
 	
 	ReservationStore.latest = function () {
@@ -64831,8 +64845,10 @@
 	      _deleteReservation(payload.id);
 	      ReservationStore.__emitChange();
 	      break;
-	    case "RESERVATION_VIEW_ALL":
-	      _reservations = payload.reservations;
+	    case "RESERVATIONS_FOUND":
+	      payload.reservations.forEach(function (res) {
+	        _addReservation(res);
+	      });
 	      ReservationStore.__emitChange();
 	  }
 	};

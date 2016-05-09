@@ -30,7 +30,8 @@ class Api::SessionsController < ApplicationController
     @user = current_user
 
     if @user
-      render json: @user
+      # render json: @user
+      render json: { username: @user.username, id: @user.id }
     else
       @errors = ['no user']
       render "api/partials/_errors"

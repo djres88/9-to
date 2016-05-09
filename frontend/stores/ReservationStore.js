@@ -15,7 +15,11 @@ var _deleteReservation = function(id) {
 };
 
 ReservationStore.all = function() {
-  Object.assign({}, _reservations);
+  var reservations = {};
+  Object.keys(_reservations).forEach(function(key) {
+    reservations[key] = _reservations[key];
+  });
+  return reservations;
 };
 
 ReservationStore.latest = function() {
@@ -42,8 +46,10 @@ ReservationStore.__onDispatch = function(payload) {
       _deleteReservation(payload.id);
       ReservationStore.__emitChange();
       break;
-    case "RESERVATION_VIEW_ALL":
-      _reservations = payload.reservations;
+    case "RESERVATIONS_FOUND":
+      payload.reservations.forEach(function(res) {
+        _addReservation(res);
+      });
       ReservationStore.__emitChange();
   }
 };
