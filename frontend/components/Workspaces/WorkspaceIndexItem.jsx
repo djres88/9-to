@@ -5,7 +5,7 @@ var ClientActions = require('../../actions/ClientActions');
 var WorkspaceIndexItem = React.createClass({
   showListingDetail: function() {
     ClientActions.fetchReservations(
-      // NB: Really we'll need all the reservations eventually, to block out the calendar for reserved dates. user_id: this.props.user,
+      // NB: Really we'll need all the reservations eventually, on the WorkspaceIndex component, to filter for reserved dates.
       this.props.workspace.id
     );
 

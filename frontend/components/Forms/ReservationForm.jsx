@@ -10,15 +10,17 @@ var moment = require('moment');
 
 var ReservationForm = React.createClass({
   getInitialState: function() {
-    return { beginDate: moment(), endDate: moment(), buttonText: "", reservations: ReservationStore.all() };
-
+    return { beginDate: moment(), endDate: moment() };
   },
 
-  componentDidMount: function() {
-    if (ReservationStore.booked(this.props.workspace.id)) {
-      this.setState({buttonText: "Booked!"});
+  componentWillMount: function() {
+    ClientActions.fetchReservations(
+      Number(this.props.location.pathname.split("/")[2])
+    );
+    if (ReservationStore.booked(Number(this.props.location.pathname.split("/")[2]))) {
+      this.buttonText = "Booked!";
     } else {
-      this.setState({buttonText: "Reserve This Space"});
+      this.buttonText = "Reserve This Space";
     }
     this.listener = ReservationStore.addListener(this._onChange);
   },
@@ -101,7 +103,7 @@ var ReservationForm = React.createClass({
               <Dates action={this.updateEndDate} date={this.state.endDate} placeholder="mm/dd/yyyy"/>
             </div>
           </div>
-          <button id="reservation-submit-button" type="submit" className={"search-button"} >{this.state.buttonText}</button>
+          <button id="reservation-submit-button" type="submit" className={"search-button"} >{this.buttonText}</button>
         </form>
       </div>
     );

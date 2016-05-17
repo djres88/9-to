@@ -9,8 +9,9 @@ var Modal = require("react-modal");
 
 var WorkspaceShow = React.createClass({
   getInitialState: function() {
-    return {space: {}, modalOpen: false, user: UserStore.currentUser(), reservations: ReservationStore.all()};
+    return {space: {}, modalOpen: false, user: UserStore.currentUser() };
   },
+
 
   componentDidMount: function() {
     ClientActions.fetchSingleWorkspace(this.props.params.workspaceId);
@@ -32,13 +33,13 @@ var WorkspaceShow = React.createClass({
   },
 
   _onSuccessfulRes: function() {
-    this.reservation = ReservationStore.latest();
-    if (!this.reservation) {
+    this.reservations = ReservationStore.all();
+    if (!this.reservations) {
       return;
     }
-
-    var formatStartDate = this.reservation.start_date.slice(5);
-    var formatEndDate = this.reservation.end_date.slice(5);
+    var latest = Object.keys(this.reservations)[Object.keys(this.reservations).length-1];
+    var formatStartDate = this.reservations[latest].start_date.slice(5);
+    var formatEndDate = this.reservations[latest].end_date.slice(5);
 
     this.modalTextPart1 = "You're all set to work in " + this.state.space.city + "!";
     this.modalTextPart2 = "See you from " + formatStartDate + " — " + formatEndDate + ".";
@@ -107,7 +108,7 @@ var WorkspaceShow = React.createClass({
               </li>
             </ul>
 
-            <ReservationForm workspace={detail} location={this.props.location}/>
+            <ReservationForm workspace={detail} location={this.props.location} reservations={this.reservations}/>
 
           </div>
         </div>

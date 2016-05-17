@@ -27,6 +27,7 @@ ReservationStore.latest = function() {
 };
 
 ReservationStore.booked = function(id) {
+  // debugger;
   var reservation;
   Object.keys(_reservations).forEach(function(res) {
     if (id === _reservations[res].workspaceId) {

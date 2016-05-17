@@ -34395,9 +34395,11 @@
 	  },
 	
 	  componentDidMount: function () {
+	    debugger;
 	    this.listener = UserStore.addListener(this._onChange);
 	    if (this.state.route[2] !== "s") {
 	      window.addEventListener('scroll', this.handleScroll);
+	      window.addEventListener('popstate', this.setState({ scrollNavAction: "off" }));
 	    }
 	  },
 	
@@ -35099,11 +35101,49 @@
 
 	var React = __webpack_require__(1);
 	var Search = __webpack_require__(273);
+	var HashHistory = __webpack_require__(166).hashHistory;
 	
 	var Home = React.createClass({
 	  displayName: 'Home',
 	
+	  clickCity: function (coords) {
+	    HashHistory.push({
+	      pathname: "s/",
+	      query: coords
+	    });
+	  },
+	
 	  render: function () {
+	    var por = {
+	      style: { backgroundImage: 'url(http://res.cloudinary.com/dyzqtq32z/image/upload/c_fill,h_350,w_400/v1462551923/POR_vzmzui.jpg)' },
+	      label: "Portland",
+	      action: function () {
+	        this.clickCity({ lat: 45.5231, lng: -122.6765 });
+	      }.bind(this)
+	    };
+	    var la = {
+	      style: { backgroundImage: 'url(http://res.cloudinary.com/dyzqtq32z/image/upload/c_fill,h_350,w_400/v1462551920/LA_yt9zq6.jpg)' },
+	      label: "Los Angeles",
+	      action: function () {
+	        this.clickCity({ lat: 34.0522, lng: -118.2437 });
+	      }.bind(this)
+	    };
+	    var sea = {
+	      style: { backgroundImage: 'url(http://res.cloudinary.com/dyzqtq32z/image/upload/c_fill,h_350,w_400/v1462551936/SEA_zyrucp.jpg)' },
+	      label: "Seattle",
+	      action: function () {
+	        this.clickCity({ lat: 47.6062, lng: -122.3321 });
+	      }.bind(this)
+	    };
+	    var sf = {
+	      style: { backgroundImage: 'url(http://res.cloudinary.com/dyzqtq32z/image/upload/c_fill,h_350,w_400/v1462551929/SF_lktwqa.jpg)' },
+	      label: "San Francisco",
+	      action: function () {
+	        this.clickCity({ lat: 37.7749, lng: -122.4194 });
+	      }.bind(this)
+	    };
+	    // var nyc =
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'homepage' },
@@ -35153,10 +35193,54 @@
 	          React.createElement(
 	            'div',
 	            { className: 'image-gallery' },
-	            React.createElement('img', { className: 'city-images', src: 'http://res.cloudinary.com/dyzqtq32z/image/upload/c_fill,h_700,w_1000/v1462551923/POR_vzmzui.jpg', alt: '' }),
-	            React.createElement('img', { className: 'city-images', src: 'http://res.cloudinary.com/dyzqtq32z/image/upload/c_fill,h_700,w_1000/v1462551920/LA_yt9zq6.jpg', alt: '' }),
-	            React.createElement('img', { className: 'city-images', id: 'nyc-image', src: 'http://res.cloudinary.com/dyzqtq32z/image/upload/c_fill,h_700,w_1000/v1462551936/SEA_zyrucp.jpg', alt: '' }),
-	            React.createElement('img', { className: 'city-images', id: 'nyc-image', src: 'http://res.cloudinary.com/dyzqtq32z/image/upload/c_fill,h_700,w_1000/v1462551929/SF_lktwqa.jpg', alt: '' })
+	            React.createElement(
+	              'div',
+	              { className: 'city-images',
+	                style: por.style,
+	                alt: por.label,
+	                onClick: por.action },
+	              React.createElement(
+	                'h1',
+	                { className: 'city-label' },
+	                por.label
+	              )
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'city-images',
+	                style: sf.style,
+	                alt: sf.label,
+	                onClick: sf.action },
+	              React.createElement(
+	                'h1',
+	                { className: 'city-label' },
+	                sf.label
+	              )
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'city-images',
+	                style: la.style,
+	                alt: la.label,
+	                onClick: la.action },
+	              React.createElement(
+	                'h1',
+	                { className: 'city-label' },
+	                la.label
+	              )
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'city-images',
+	                style: sea.style,
+	                alt: sea.label,
+	                onClick: sea.action },
+	              React.createElement(
+	                'h1',
+	                { className: 'city-label' },
+	                sea.label
+	              )
+	            )
 	          )
 	        ),
 	        React.createElement('div', { id: 'homepage-footer' })
@@ -35324,7 +35408,7 @@
 	
 	  showListingDetail: function () {
 	    ClientActions.fetchReservations(
-	    // NB: Really we'll need all the reservations eventually, to block out the calendar for reserved dates. user_id: this.props.user,
+	    // NB: Really we'll need all the reservations eventually, on the WorkspaceIndex component, to filter for reserved dates.
 	    this.props.workspace.id);
 	
 	    HashHistory.push("workspaces/" + this.props.workspace.id);
@@ -50429,7 +50513,7 @@
 	  displayName: 'WorkspaceShow',
 	
 	  getInitialState: function () {
-	    return { space: {}, modalOpen: false, user: UserStore.currentUser(), reservations: ReservationStore.all() };
+	    return { space: {}, modalOpen: false, user: UserStore.currentUser() };
 	  },
 	
 	  componentDidMount: function () {
@@ -50452,13 +50536,13 @@
 	  },
 	
 	  _onSuccessfulRes: function () {
-	    this.reservation = ReservationStore.latest();
-	    if (!this.reservation) {
+	    this.reservations = ReservationStore.all();
+	    if (!this.reservations) {
 	      return;
 	    }
-	
-	    var formatStartDate = this.reservation.start_date.slice(5);
-	    var formatEndDate = this.reservation.end_date.slice(5);
+	    var latest = Object.keys(this.reservations)[Object.keys(this.reservations).length - 1];
+	    var formatStartDate = this.reservations[latest].start_date.slice(5);
+	    var formatEndDate = this.reservations[latest].end_date.slice(5);
 	
 	    this.modalTextPart1 = "You're all set to work in " + this.state.space.city + "!";
 	    this.modalTextPart2 = "See you from " + formatStartDate + " — " + formatEndDate + ".";
@@ -50572,7 +50656,7 @@
 	              )
 	            )
 	          ),
-	          React.createElement(ReservationForm, { workspace: detail, location: this.props.location })
+	          React.createElement(ReservationForm, { workspace: detail, location: this.props.location, reservations: this.reservations })
 	        )
 	      ),
 	      React.createElement(
@@ -50714,14 +50798,15 @@
 	  displayName: 'ReservationForm',
 	
 	  getInitialState: function () {
-	    return { beginDate: moment(), endDate: moment(), buttonText: "", reservations: ReservationStore.all() };
+	    return { beginDate: moment(), endDate: moment() };
 	  },
 	
-	  componentDidMount: function () {
-	    if (ReservationStore.booked(this.props.workspace.id)) {
-	      this.setState({ buttonText: "Booked!" });
+	  componentWillMount: function () {
+	    ClientActions.fetchReservations(Number(this.props.location.pathname.split("/")[2]));
+	    if (ReservationStore.booked(Number(this.props.location.pathname.split("/")[2]))) {
+	      this.buttonText = "Booked!";
 	    } else {
-	      this.setState({ buttonText: "Reserve This Space" });
+	      this.buttonText = "Reserve This Space";
 	    }
 	    this.listener = ReservationStore.addListener(this._onChange);
 	  },
@@ -50830,7 +50915,7 @@
 	        React.createElement(
 	          'button',
 	          { id: 'reservation-submit-button', type: 'submit', className: "search-button" },
-	          this.state.buttonText
+	          this.buttonText
 	        )
 	      )
 	    );
@@ -64826,6 +64911,7 @@
 	};
 	
 	ReservationStore.booked = function (id) {
+	  // debugger;
 	  var reservation;
 	  Object.keys(_reservations).forEach(function (res) {
 	    if (id === _reservations[res].workspaceId) {
