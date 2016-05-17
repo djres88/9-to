@@ -15,9 +15,12 @@ var Navbar = React.createClass({
 
   componentDidMount: function() {
     this.listener = UserStore.addListener(this._onChange);
-    if (this.state.route[2] !== "s") {
-      window.addEventListener('scroll', this.handleScroll);
-      window.addEventListener('popstate', this.setState({scrollNavAction: "off"}));
+    var that = this;
+    if (that.state.route[2] !== "s") {
+      window.addEventListener('scroll', that.handleScroll);
+      window.addEventListener('popstate', function() {
+        that.setState({scrollNavAction: "off"});
+      });
     }
   },
 
