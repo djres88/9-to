@@ -39,7 +39,9 @@
   border-left: 2px solid #eee;
 }
 
+// Temporarily hiding "List your space" until functionality is there.
 .nav-detail #list-your-space {
+  display: none;
   align-content: center;
   border: 2px solid #eee;
   margin-right: 10px;

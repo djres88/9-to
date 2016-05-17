@@ -82,6 +82,11 @@ var FilterParams = React.createClass({
   //   <Dates date={window.endDate} action={this.updateEndDate} placeholder="End Date"/>
   // </li>
   render: function() {
+    var toggleMax = "";
+    if (this.state.max === 100) {
+      toggleMax = "+";
+    }
+
     return (
       <div className="search-params">
         <ul>
@@ -118,7 +123,7 @@ var FilterParams = React.createClass({
             <h4>Price Per Week</h4>
               <ReactSlider onAfterChange={this.updatePrices} withBars defaultValue={[this.state.min, this.state.max]} className="slider">
                 <div id="left-handle" className="my-handle">{this.state.min*10}</div>
-                <div id="right-handle" className="my-handle">{this.state.max*10 + "+"}</div>
+                <div id="right-handle" className="my-handle">{this.state.max*10 + toggleMax}</div>
               </ReactSlider>
           </li>
         </ul>

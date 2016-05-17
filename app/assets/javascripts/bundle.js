@@ -35766,6 +35766,11 @@
 	  //   <Dates date={window.endDate} action={this.updateEndDate} placeholder="End Date"/>
 	  // </li>
 	  render: function () {
+	    var toggleMax = "";
+	    if (this.state.max === 100) {
+	      toggleMax = "+";
+	    }
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'search-params' },
@@ -35863,7 +35868,7 @@
 	            React.createElement(
 	              'div',
 	              { id: 'right-handle', className: 'my-handle' },
-	              this.state.max * 10 + "+"
+	              this.state.max * 10 + toggleMax
 	            )
 	          )
 	        )

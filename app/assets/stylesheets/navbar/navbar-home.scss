@@ -35,7 +35,9 @@
   color: #eee;
 }
 
+// Temporarily hiding "List your space" until functionality is there.
 #list-your-space {
+  display: none;
   min-width: 110px;
   margin-top: 16px;
   height: 10px;
