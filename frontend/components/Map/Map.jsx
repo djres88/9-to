@@ -13,6 +13,17 @@ function _getCoordsObj(latLng) {
 }
 
 var Map = React.createClass({
+  //
+  // goBack: function(e) {
+  //   e.preventDefault();
+  //   HashHistory.go(3);
+  // },
+  //
+  // pushHomeRoute: function() {
+  //   HashHistory.push({
+  //     pathname: "/",
+  //   });
+  // },
 
   mapOptions: function() {
     return {
@@ -36,16 +47,18 @@ var Map = React.createClass({
         that.map.setZoom(11);
         that._handleChange({lat: place.lat(), lng: place.lng()});
       });
+      that.updateBounds();
     }, 500);
-
+    this.idleListenerWasSet = false;
     this.filterListener = FilterStore.addListener(this.updateBounds);
   },
 
   componentWillUnmount: function() {
-    this.filterListener.remove();
-    this.idleListener.remove();
-    this.clickListener.remove();
-    // this.markerListener.remove();
+    // this.filterListener.remove();
+    // this.idleListener.remove();
+    // // this.clickListener.remove();
+    // this.setIdleListener.remove();
+    // // this.markerListener.remove();
   },
 
 
@@ -64,14 +77,13 @@ var Map = React.createClass({
   _onChange: function(){
     var newWorkspaces = [];
     var removeMarkers = [];
-    //Collect markers to remove
+
     this.markers.forEach(function(marker){
       if (!this.props.spaces.hasOwnProperty(marker.workspaceId)){
         removeMarkers.push(marker);
       }
     }.bind(this));
 
-    //Collect spaces to add
     var currentWorkspaces = this.markers.map(function(marker){
       return marker.workspaceId;
     });
@@ -81,10 +93,8 @@ var Map = React.createClass({
         newWorkspaces.push(space);
       }
     });
-    //Do the adding / removing
     newWorkspaces.forEach(this.createMarker);
     removeMarkers.forEach(this.removeMarker);
-
   },
 
   _handleChange: function(coords){
@@ -103,17 +113,28 @@ var Map = React.createClass({
       NE: northEast,
       SW: southWest
     };
-    params = FilterStore.params();
+    var params = FilterStore.params();
     params.map_bounds = bounds;
 
     ClientActions.fetchWorkspaces(params);
     var coords = { lat: this.map.center.lat(), lng: this.map.center.lng() };
-    this._handleChange(coords);
+    if (this.idleListenerWasSet) {
+      this._handleChange(coords);
+    }
   },
 
   registerListeners: function(){
     var that = this;
-    this.idleListener = google.maps.event.addListener(this.map, 'idle', this.updateBounds);
+    // NB: Prevent registering map idle listener until user moves map. This prevents pushing to hashHistory 2x on page load.
+    this.setIdleListener = google.maps.event.addListener(this.map, 'drag',
+      function() {
+        if (!that.idleListenerWasSet) {
+          that.idleListenerWasSet = true;
+          that.idleListener = google.maps.event.addListener(that.map, 'idle', that.updateBounds);
+        }
+      }
+    );
+
     this.clickListener = google.maps.event.addListener(this.map, 'click', function(event) {
       var coords = { lat: event.latLng.lat(), lng: event.latLng.lng() };
       that._handleChange(coords);

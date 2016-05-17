@@ -12,23 +12,17 @@
   padding-left: 10px;
 }
 
-
-// TODO: I thought REM made for responsive??
-// width: 25rem;
-// height: 16.6rem;
 .workspace-index-item {
-  width: 45%;
-  margin: 25px 8px;
+  flex-basis: 45%;
+  margin: 25px 16px;
 }
 
-// Want the picture to be in the backrground, absolutely positioned w/ overlay text. TODO: How to make this responsive???
 .workspace-index-item img {
-  width: 100%;
-  height: 100%;
+  width: 103%;
   cursor: pointer;
+  margin-bottom: 10px;
 }
 
-//Overlay text:
 .workspace-index-item #image-overlay-price {
   position: absolute;
   margin-top: -80px;
@@ -40,9 +34,9 @@
 }
 
 #image-overlay-price span {
-  padding-top: 3px;
+  font-size: 24px;
   display: inline-block;
-  line-height: normal;
+  line-height: 1.5;
   vertical-align: middle;
 }
 

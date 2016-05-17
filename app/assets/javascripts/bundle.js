@@ -34395,7 +34395,6 @@
 	  },
 	
 	  componentDidMount: function () {
-	    debugger;
 	    this.listener = UserStore.addListener(this._onChange);
 	    if (this.state.route[2] !== "s") {
 	      window.addEventListener('scroll', this.handleScroll);
@@ -35465,6 +35464,17 @@
 	var Map = React.createClass({
 	  displayName: 'Map',
 	
+	  //
+	  // goBack: function(e) {
+	  //   e.preventDefault();
+	  //   HashHistory.go(3);
+	  // },
+	  //
+	  // pushHomeRoute: function() {
+	  //   HashHistory.push({
+	  //     pathname: "/",
+	  //   });
+	  // },
 	
 	  mapOptions: function () {
 	    return {
@@ -35488,16 +35498,18 @@
 	        that.map.setZoom(11);
 	        that._handleChange({ lat: place.lat(), lng: place.lng() });
 	      });
+	      that.updateBounds();
 	    }, 500);
-	
+	    this.idleListenerWasSet = false;
 	    this.filterListener = FilterStore.addListener(this.updateBounds);
 	  },
 	
 	  componentWillUnmount: function () {
-	    this.filterListener.remove();
-	    this.idleListener.remove();
-	    this.clickListener.remove();
-	    // this.markerListener.remove();
+	    // this.filterListener.remove();
+	    // this.idleListener.remove();
+	    // // this.clickListener.remove();
+	    // this.setIdleListener.remove();
+	    // // this.markerListener.remove();
 	  },
 	
 	  eachSpace: function (callback) {
@@ -35515,14 +35527,13 @@
 	  _onChange: function () {
 	    var newWorkspaces = [];
 	    var removeMarkers = [];
-	    //Collect markers to remove
+	
 	    this.markers.forEach(function (marker) {
 	      if (!this.props.spaces.hasOwnProperty(marker.workspaceId)) {
 	        removeMarkers.push(marker);
 	      }
 	    }.bind(this));
 	
-	    //Collect spaces to add
 	    var currentWorkspaces = this.markers.map(function (marker) {
 	      return marker.workspaceId;
 	    });
@@ -35532,7 +35543,6 @@
 	        newWorkspaces.push(space);
 	      }
 	    });
-	    //Do the adding / removing
 	    newWorkspaces.forEach(this.createMarker);
 	    removeMarkers.forEach(this.removeMarker);
 	  },
@@ -35553,17 +35563,26 @@
 	      NE: northEast,
 	      SW: southWest
 	    };
-	    params = FilterStore.params();
+	    var params = FilterStore.params();
 	    params.map_bounds = bounds;
 	
 	    ClientActions.fetchWorkspaces(params);
 	    var coords = { lat: this.map.center.lat(), lng: this.map.center.lng() };
-	    this._handleChange(coords);
+	    if (this.idleListenerWasSet) {
+	      this._handleChange(coords);
+	    }
 	  },
 	
 	  registerListeners: function () {
 	    var that = this;
-	    this.idleListener = google.maps.event.addListener(this.map, 'idle', this.updateBounds);
+	    // NB: Prevent registering map idle listener until user moves map. This prevents pushing to hashHistory 2x on page load.
+	    this.setIdleListener = google.maps.event.addListener(this.map, 'drag', function () {
+	      if (!that.idleListenerWasSet) {
+	        that.idleListenerWasSet = true;
+	        that.idleListener = google.maps.event.addListener(that.map, 'idle', that.updateBounds);
+	      }
+	    });
+	
 	    this.clickListener = google.maps.event.addListener(this.map, 'click', function (event) {
 	      var coords = { lat: event.latLng.lat(), lng: event.latLng.lng() };
 	      that._handleChange(coords);
