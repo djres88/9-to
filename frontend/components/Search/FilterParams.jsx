@@ -133,9 +133,3 @@ var FilterParams = React.createClass({
 });
 
 module.exports = FilterParams;
-// <div class="list">
-//   <div class="item range range-positive">
-//     <input type="range" name="volume" min="0" max="100" value="33"/>
-//     <input type="range" name="volume" min="0" max="100" value="33"/>
-//   </div>
-// </div>

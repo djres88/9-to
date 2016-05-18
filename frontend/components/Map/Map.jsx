@@ -13,22 +13,11 @@ function _getCoordsObj(latLng) {
 }
 
 var Map = React.createClass({
-  //
-  // goBack: function(e) {
-  //   e.preventDefault();
-  //   HashHistory.go(3);
-  // },
-  //
-  // pushHomeRoute: function() {
-  //   HashHistory.push({
-  //     pathname: "/",
-  //   });
-  // },
 
   mapOptions: function() {
     return {
       center: {lat: this.props.lat, lng: this.props.lng}, //San Francisco
-      zoom: 11
+      zoom: 12
     };
   },
 
@@ -40,15 +29,26 @@ var Map = React.createClass({
     this.eachSpace(this.createMarker);
 
     var that = this;
+    // NOTE: The map element has mounted on the DOM, but the Google Map API has not yet created a Map object for the Autocomplete (search bar) to listen to. In order to avoid an error (that.map is undefined), I'll wait a tick to add the listener. Not sure if setTimeout is the best way to solve this problem (or any problem, for that matter), but it's one solution.
+
     setTimeout(function() {
       window.autocomplete.addListener('place_changed', function() {
         var place = window.autocomplete.getPlace().geometry.location;
         that.map.setCenter(place);
-        that.map.setZoom(11);
+        that.map.setZoom(12);
         that._handleChange({lat: place.lat(), lng: place.lng()});
       });
-      that.updateBounds();
     }, 500);
+
+    // NOTE: (discussion point for iviews? tough bug). We normally use the map object's bounds to fetch the right workspaces, but — per the note above — the map has not yet been created. And yet in this case we don't want to wait to fetch the workspaces. Solution: I'm going to using the location query params for the initial ClientActions call, and use the Map bounds (once the map is loaded) for each subsequent call. The initial zoom of the map will always be the same, so I can grab the lat/lng of the NE/SW corners by factoring in the map's height/width in degrees.
+    var params = FilterStore.params();
+    var bounds = {
+      SW: {lat: this.props.lat - 0.097245, lng: this.props.lng - 0.054932},
+      NE: {lat: this.props.lat + 0.097245, lng: this.props.lng + 0.054932}
+    };
+    params.map_bounds = bounds;
+    ClientActions.fetchWorkspaces(params);
+
     this.idleListenerWasSet = false;
     this.filterListener = FilterStore.addListener(this.updateBounds);
   },
@@ -108,7 +108,6 @@ var Map = React.createClass({
     var bounds = this.map.getBounds();
     var northEast = _getCoordsObj(bounds.getNorthEast());
     var southWest = _getCoordsObj(bounds.getSouthWest());
-    //actually issue the request
     bounds = {
       NE: northEast,
       SW: southWest
