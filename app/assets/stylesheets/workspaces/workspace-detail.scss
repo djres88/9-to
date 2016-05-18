@@ -129,7 +129,7 @@
   flex-direction: column;
 }
 
-.mini-reservation-form button {
+.mini-reservation-form .search-button-open {
   background-color: #ff5a5f;
   border-color: #ff5a5f;
   border: none;
@@ -137,6 +137,20 @@
   margin: 20px 10px;
   width: 90%;
   color: white;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: "Hind";
+  cursor: pointer;
+}
+
+.mini-reservation-form .search-button-booked {
+  background-color: white;
+  border-color: none;
+  border: none;
+  height: 41px;
+  margin: 20px 10px;
+  width: 90%;
+  color: #565a5c;
   font-size: 16px;
   font-weight: 400;
   font-family: "Hind";
