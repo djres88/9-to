@@ -54,11 +54,9 @@ var Map = React.createClass({
   },
 
   componentWillUnmount: function() {
-    // this.filterListener.remove();
-    // this.idleListener.remove();
-    // // this.clickListener.remove();
-    // this.setIdleListener.remove();
-    // // this.markerListener.remove();
+    this.filterListener.remove();
+    this.idleListener.remove();
+    this.markerListener.remove();
   },
 
 
@@ -116,6 +114,8 @@ var Map = React.createClass({
     params.map_bounds = bounds;
 
     ClientActions.fetchWorkspaces(params);
+    this._onChange();
+
     var coords = { lat: this.map.center.lat(), lng: this.map.center.lng() };
     if (this.idleListenerWasSet) {
       this._handleChange(coords);
@@ -123,16 +123,7 @@ var Map = React.createClass({
   },
 
   registerListeners: function(){
-    var that = this;
-    // NB: Prevent registering map idle listener until user moves map. This prevents pushing to hashHistory 2x on page load.
-    this.setIdleListener = google.maps.event.addListener(this.map, 'drag',
-      function() {
-        if (!that.idleListenerWasSet) {
-          that.idleListenerWasSet = true;
-          that.idleListener = google.maps.event.addListener(that.map, 'idle', that.updateBounds);
-        }
-      }
-    );
+    this.idleListener = google.maps.event.addListener(that.map, 'idle', that.updateBounds);
 
     this.clickListener = google.maps.event.addListener(this.map, 'click', function(event) {
       var coords = { lat: event.latLng.lat(), lng: event.latLng.lng() };
@@ -157,6 +148,7 @@ var Map = React.createClass({
     });
     this.markers.push(marker);
   },
+
   removeMarker: function(marker){
     for(var i = 0; i < this.markers.length; i++){
       if (this.markers[i].workspaceId === marker.workspaceId){
