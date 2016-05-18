@@ -123,8 +123,9 @@ var Map = React.createClass({
   },
 
   registerListeners: function(){
-    this.idleListener = google.maps.event.addListener(that.map, 'idle', that.updateBounds);
+    this.idleListener = google.maps.event.addListener(this.map, 'idle', this.updateBounds);
 
+    var that = this;
     this.clickListener = google.maps.event.addListener(this.map, 'click', function(event) {
       var coords = { lat: event.latLng.lat(), lng: event.latLng.lng() };
       that._handleChange(coords);

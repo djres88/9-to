@@ -35576,8 +35576,9 @@
 	  },
 	
 	  registerListeners: function () {
-	    this.idleListener = google.maps.event.addListener(that.map, 'idle', that.updateBounds);
+	    this.idleListener = google.maps.event.addListener(this.map, 'idle', this.updateBounds);
 	
+	    var that = this;
 	    this.clickListener = google.maps.event.addListener(this.map, 'click', function (event) {
 	      var coords = { lat: event.latLng.lat(), lng: event.latLng.lng() };
 	      that._handleChange(coords);
@@ -50534,6 +50535,7 @@
 	    ClientActions.fetchSingleWorkspace(this.props.params.workspaceId);
 	    this.listener = WorkspaceStore.addListener(this._onChange);
 	    this.userListener = UserStore.addListener(this._onLogin);
+	    this.resListener = ReservationStore.addListener(this._onSuccessfulRes);
 	  },
 	
 	  componentWillUnmount: function () {
@@ -50542,7 +50544,7 @@
 	  },
 	
 	  componentDidUpdate: function () {
-	    this.resListener = ReservationStore.addListener(this._onSuccessfulRes);
+	    this.getDOMNode().scrollTop = 0;
 	  },
 	
 	  _onChange: function () {
