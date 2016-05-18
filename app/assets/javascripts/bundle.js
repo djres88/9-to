@@ -34894,11 +34894,11 @@
 	    options.start_date = options.start_date.format("YYYY-MM-DD");
 	    options.end_date = options.end_date.format("YYYY-MM-DD");
 	    ApiUtil.createReservation(options);
-	  },
-	
-	  fetchReservations: function (id) {
-	    ApiUtil.fetchReservations(id);
 	  }
+	  //
+	  // fetchReservations: function(id) {
+	  //   ApiUtil.fetchReservations(id);
+	  // }
 	
 	  // WORKSPACE COMPLETE CRUD (HOST ACTIONS)
 	  // listWorkspace: function(workspace) {
@@ -35144,7 +35144,21 @@
 	        this.clickCity({ lat: 37.7749, lng: -122.4194 });
 	      }.bind(this)
 	    };
-	    // var nyc =
+	    var nyc = {
+	      style: { backgroundImage: 'url(http://res.cloudinary.com/dyzqtq32z/image/upload/c_fill,h_350,w_400/v1462551922/NYC_vsnlar.jpg)' },
+	      label: "New York",
+	      action: function () {
+	        this.clickCity({ lat: 37.7749, lng: -122.4194 });
+	      }.bind(this)
+	    };
+	
+	    var chi = {
+	      style: { backgroundImage: 'url(http://res.cloudinary.com/dyzqtq32z/image/upload/c_fill,h_350,w_400/v1463594350/chicago-image-1_qm0dep.jpg)' },
+	      label: "Chicago",
+	      action: function () {
+	        this.clickCity({ lat: 37.7749, lng: -122.4194 });
+	      }.bind(this)
+	    };
 	
 	    return React.createElement(
 	      'div',
@@ -35198,18 +35212,6 @@
 	            React.createElement(
 	              'div',
 	              { className: 'city-images',
-	                style: por.style,
-	                alt: por.label,
-	                onClick: por.action },
-	              React.createElement(
-	                'h1',
-	                { className: 'city-label' },
-	                por.label
-	              )
-	            ),
-	            React.createElement(
-	              'div',
-	              { className: 'city-images',
 	                style: sf.style,
 	                alt: sf.label,
 	                onClick: sf.action },
@@ -35217,6 +35219,42 @@
 	                'h1',
 	                { className: 'city-label' },
 	                sf.label
+	              )
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'city-images',
+	                style: nyc.style,
+	                alt: nyc.label,
+	                onClick: nyc.action },
+	              React.createElement(
+	                'h1',
+	                { className: 'city-label' },
+	                nyc.label
+	              )
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'city-images',
+	                style: chi.style,
+	                alt: chi.label,
+	                onClick: chi.action },
+	              React.createElement(
+	                'h1',
+	                { className: 'city-label' },
+	                chi.label
+	              )
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'city-images',
+	                style: por.style,
+	                alt: por.label,
+	                onClick: por.action },
+	              React.createElement(
+	                'h1',
+	                { className: 'city-label' },
+	                por.label
 	              )
 	            ),
 	            React.createElement(
@@ -35409,10 +35447,6 @@
 	  displayName: 'WorkspaceIndexItem',
 	
 	  showListingDetail: function () {
-	    ClientActions.fetchReservations(
-	    // NB: Really we'll need all the reservations eventually, on the WorkspaceIndex component, to filter for reserved dates.
-	    this.props.workspace.id);
-	
 	    HashHistory.push("workspaces/" + this.props.workspace.id);
 	  },
 	
@@ -35594,8 +35628,6 @@
 	    });
 	
 	    this.markerListener = marker.addListener('click', function () {
-	      // NB: Start fetching the workspace's reservations as quickly as possible before the show page loads.
-	      ClientActions.fetchReservations(this.workspaceId);
 	      HashHistory.push("workspaces/" + workspace.id);
 	    });
 	    this.markers.push(marker);
@@ -50531,8 +50563,11 @@
 	    return { space: {}, modalOpen: false, user: UserStore.currentUser() };
 	  },
 	
-	  componentDidMount: function () {
+	  componentWillMount: function () {
 	    ClientActions.fetchSingleWorkspace(this.props.params.workspaceId);
+	  },
+	
+	  componentDidMount: function () {
 	    this.listener = WorkspaceStore.addListener(this._onChange);
 	    this.userListener = UserStore.addListener(this._onLogin);
 	    this.resListener = ReservationStore.addListener(this._onSuccessfulRes);
@@ -50543,26 +50578,24 @@
 	    this.resListener.remove();
 	  },
 	
-	  componentDidUpdate: function () {
-	    this.getDOMNode().scrollTop = 0;
-	  },
-	
 	  _onChange: function () {
 	    this.setState({ space: WorkspaceStore.find(parseInt(this.props.params.workspaceId)) });
+	    this.reservations = this.state.space.reservations;
 	  },
 	
 	  _onSuccessfulRes: function () {
 	    this.reservations = ReservationStore.all();
-	    if (!this.reservations) {
+	    if (Object.keys(this.reservations).length === 0) {
 	      return;
 	    }
-	    var latest = Object.keys(this.reservations)[Object.keys(this.reservations).length - 1];
-	    var formatStartDate = this.reservations[latest].start_date.slice(5);
-	    var formatEndDate = this.reservations[latest].end_date.slice(5);
+	    var latestReservationId = Object.keys(this.reservations)[Object.keys(this.reservations).length - 1];
+	    var latestReservation = this.reservations[latestReservationId];
+	    var formatStartDate = latestReservation.start_date.slice(5);
+	    var formatEndDate = latestReservation.end_date.slice(5);
 	
+	    // TODO: Want the modal closed on page load.
 	    this.modalTextPart1 = "You're all set to work in " + this.state.space.city + "!";
 	    this.modalTextPart2 = "See you from " + formatStartDate + " — " + formatEndDate + ".";
-	    this.setState({ reservations: ReservationStore.all() });
 	    this.setState({ modalOpen: true });
 	  },
 	
@@ -50814,30 +50847,36 @@
 	  displayName: 'ReservationForm',
 	
 	  getInitialState: function () {
-	    return { beginDate: moment(), endDate: moment() };
+	    return { beginDate: moment(), endDate: moment(), formatSubmit: ["open", "Reserve This Space"] };
 	  },
 	
 	  componentWillMount: function () {
-	    ClientActions.fetchReservations(Number(this.props.location.pathname.split("/")[2]));
-	    if (ReservationStore.booked(Number(this.props.location.pathname.split("/")[2]))) {
-	      this.buttonText = "Booked!";
-	    } else {
-	      this.buttonText = "Reserve This Space";
-	    }
 	    this.listener = ReservationStore.addListener(this._onChange);
 	  },
 	
 	  componentWillUnmount: function () {
+	    this.setState({ reservations: [] });
 	    this.listener.remove();
+	  },
+	
+	  componentWillReceiveProps: function (props) {
+	    this.setState({ reservations: props.reservations });
+	    if (this.state.reservations && Object.keys(this.state.reservations).length > 0) {
+	      this.setState({ formatSubmit: ["booked", "Booked!"] });
+	      document.getElementById("reservation-submit-button").disabled = true;
+	    } else {
+	      this.setState({ formatSubmit: ["open", "Reserve This Space"] });
+	      document.getElementById("reservation-submit-button").disabled = false;
+	    }
 	  },
 	
 	  _onChange: function () {
 	    if (ReservationStore.booked(this.props.workspace.id)) {
+	      this.setState({ formatSubmit: ["booked", "Booked!"] });
 	      document.getElementById("reservation-submit-button").disabled = true;
-	      this.setState({ buttonText: "Booked!" });
 	    } else {
+	      this.setState({ formatSubmit: ["open", "Reserve This Space"] });
 	      document.getElementById("reservation-submit-button").disabled = false;
-	      this.setState({ buttonText: "Reserve This Space" });
 	    }
 	  },
 	
@@ -50858,7 +50897,6 @@
 	        end_date: this.state.endDate
 	      });
 	
-	      document.getElementById("reservation-submit-button").disabled = true;
 	      this.setState({ beginDate: moment(), endDate: moment() });
 	    }
 	  },
@@ -50930,8 +50968,8 @@
 	        ),
 	        React.createElement(
 	          'button',
-	          { id: 'reservation-submit-button', type: 'submit', className: "search-button" },
-	          this.buttonText
+	          { id: 'reservation-submit-button', type: 'submit', className: "search-button-" + this.state.formatSubmit[0] },
+	          this.state.formatSubmit[1]
 	        )
 	      )
 	    );
@@ -64904,7 +64942,6 @@
 	var ReservationStore = new Store(AppDispatcher);
 	
 	var _reservations = {};
-	var _latestReservation;
 	
 	var _addReservation = function (res) {
 	  _reservations[res.id] = res;
@@ -64922,36 +64959,40 @@
 	  return reservations;
 	};
 	
-	ReservationStore.latest = function () {
-	  return _latestReservation;
-	};
-	
 	ReservationStore.booked = function (id) {
-	  // debugger;
 	  var reservation;
+	  var hasBooked = false;
 	  Object.keys(_reservations).forEach(function (res) {
-	    if (id === _reservations[res].workspaceId) {
-	      return true;
+	    if (id === _reservations[res].workspace_id) {
+	      hasBooked = true;
 	    }
 	  });
+	  return hasBooked;
 	};
 	
 	ReservationStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case "RESERVATION_CREATED":
 	      _addReservation(payload.reservation);
-	      _latestReservation = payload.reservation;
 	      ReservationStore.__emitChange();
 	      break;
 	    case "RESERVATION_DELETED":
 	      _deleteReservation(payload.id);
 	      ReservationStore.__emitChange();
 	      break;
-	    case "RESERVATIONS_FOUND":
-	      payload.reservations.forEach(function (res) {
+	    case "WORKSPACE_RECEIVED":
+	      _reservations = {};
+	      payload.workspace.reservations.forEach(function (res) {
 	        _addReservation(res);
 	      });
 	      ReservationStore.__emitChange();
+	      break;
+	    // case "RESERVATIONS_FOUND":
+	    //   _reservations = {};
+	    //   payload.reservations.forEach(function(res) {
+	    //     _addReservation(res);
+	    //   });
+	    //   ReservationStore.__emitChange();
 	  }
 	};
 	

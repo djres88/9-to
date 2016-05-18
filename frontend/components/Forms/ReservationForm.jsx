@@ -10,32 +10,36 @@ var moment = require('moment');
 
 var ReservationForm = React.createClass({
   getInitialState: function() {
-    return { beginDate: moment(), endDate: moment() };
+    return { beginDate: moment(), endDate: moment(), formatSubmit: ["open", "Reserve This Space"] };
   },
 
   componentWillMount: function() {
-    ClientActions.fetchReservations(
-      Number(this.props.location.pathname.split("/")[2])
-    );
-    if (ReservationStore.booked(Number(this.props.location.pathname.split("/")[2]))) {
-      this.buttonText = "Booked!";
-    } else {
-      this.buttonText = "Reserve This Space";
-    }
     this.listener = ReservationStore.addListener(this._onChange);
   },
 
   componentWillUnmount: function() {
+    this.setState({reservations: []});
     this.listener.remove();
+  },
+
+  componentWillReceiveProps: function(props) {
+    this.setState({reservations: props.reservations});
+    if (this.state.reservations && Object.keys(this.state.reservations).length > 0) {
+      this.setState({formatSubmit: ["booked", "Booked!"]});
+      document.getElementById("reservation-submit-button").disabled = true;
+    } else {
+      this.setState({formatSubmit: ["open", "Reserve This Space"]});
+      document.getElementById("reservation-submit-button").disabled = false;
+    }
   },
 
   _onChange: function() {
     if (ReservationStore.booked(this.props.workspace.id)) {
+      this.setState({formatSubmit: ["booked", "Booked!"]});
       document.getElementById("reservation-submit-button").disabled = true;
-      this.setState({buttonText: "Booked!"});
     } else {
+      this.setState({formatSubmit: ["open", "Reserve This Space"]});
       document.getElementById("reservation-submit-button").disabled = false;
-      this.setState({buttonText: "Reserve This Space"});
     }
   },
 
@@ -56,7 +60,6 @@ var ReservationForm = React.createClass({
         end_date: this.state.endDate
       });
 
-      document.getElementById("reservation-submit-button").disabled = true;
       this.setState({beginDate: moment(), endDate: moment()});
     }
   },
@@ -103,7 +106,7 @@ var ReservationForm = React.createClass({
               <Dates action={this.updateEndDate} date={this.state.endDate} placeholder="mm/dd/yyyy"/>
             </div>
           </div>
-          <button id="reservation-submit-button" type="submit" className={"search-button"} >{this.buttonText}</button>
+          <button id="reservation-submit-button" type="submit" className={ "search-button-" + this.state.formatSubmit[0] } >{this.state.formatSubmit[1]}</button>
         </form>
       </div>
     );

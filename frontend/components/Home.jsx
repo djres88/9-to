@@ -31,7 +31,17 @@ var Home = React.createClass({
       label: "San Francisco",
       action: function() { this.clickCity({lat: 37.7749, lng: -122.4194}); }.bind(this)
     };
-    // var nyc =
+    var nyc = {
+      style: {backgroundImage: 'url(http://res.cloudinary.com/dyzqtq32z/image/upload/c_fill,h_350,w_400/v1462551922/NYC_vsnlar.jpg)'},
+      label: "New York",
+      action: function() { this.clickCity({lat: 37.7749, lng: -122.4194}); }.bind(this)
+    };
+
+    var chi = {
+      style: {backgroundImage: 'url(http://res.cloudinary.com/dyzqtq32z/image/upload/c_fill,h_350,w_400/v1463594350/chicago-image-1_qm0dep.jpg)'},
+      label: "Chicago",
+      action: function() { this.clickCity({lat: 37.7749, lng: -122.4194}); }.bind(this)
+    };
 
 
     return (
@@ -57,16 +67,28 @@ var Home = React.createClass({
             <h3>Productivity Near You</h3>
             <div className="image-gallery">
               <div className="city-images"
-                style={por.style}
-                alt={por.label}
-                onClick={por.action}>
-                <h1 className="city-label">{por.label}</h1>
-              </div>
-              <div className="city-images"
                 style={sf.style}
                 alt={sf.label}
                 onClick={sf.action}>
                 <h1 className="city-label">{sf.label}</h1>
+              </div>
+              <div className="city-images"
+                style={nyc.style}
+                alt={nyc.label}
+                onClick={nyc.action}>
+                <h1 className="city-label">{nyc.label}</h1>
+              </div>
+              <div className="city-images"
+                style={chi.style}
+                alt={chi.label}
+                onClick={chi.action}>
+                <h1 className="city-label">{chi.label}</h1>
+              </div>
+              <div className="city-images"
+                style={por.style}
+                alt={por.label}
+                onClick={por.action}>
+                <h1 className="city-label">{por.label}</h1>
               </div>
               <div className="city-images"
                 style={la.style}

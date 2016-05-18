@@ -12,11 +12,14 @@ var WorkspaceShow = React.createClass({
     return {space: {}, modalOpen: false, user: UserStore.currentUser() };
   },
 
+  componentWillMount: function() {
+    ClientActions.fetchSingleWorkspace(this.props.params.workspaceId);
+  },
 
   componentDidMount: function() {
-    ClientActions.fetchSingleWorkspace(this.props.params.workspaceId);
     this.listener = WorkspaceStore.addListener(this._onChange);
     this.userListener = UserStore.addListener(this._onLogin);
+    this.resListener = ReservationStore.addListener(this._onSuccessfulRes);
   },
 
   componentWillUnmount: function() {
@@ -24,26 +27,24 @@ var WorkspaceShow = React.createClass({
     this.resListener.remove();
   },
 
-  componentDidUpdate: function() {
-    this.resListener = ReservationStore.addListener(this._onSuccessfulRes);
-  },
-
   _onChange: function() {
     this.setState({space: WorkspaceStore.find(parseInt(this.props.params.workspaceId))});
+    this.reservations = this.state.space.reservations;
   },
 
   _onSuccessfulRes: function() {
     this.reservations = ReservationStore.all();
-    if (!this.reservations) {
+    if (Object.keys(this.reservations).length === 0) {
       return;
     }
-    var latest = Object.keys(this.reservations)[Object.keys(this.reservations).length-1];
-    var formatStartDate = this.reservations[latest].start_date.slice(5);
-    var formatEndDate = this.reservations[latest].end_date.slice(5);
+    var latestReservationId = Object.keys(this.reservations)[Object.keys(this.reservations).length-1];
+    var latestReservation = this.reservations[latestReservationId];
+    var formatStartDate = latestReservation.start_date.slice(5);
+    var formatEndDate = latestReservation.end_date.slice(5);
 
+    // TODO: Want the modal closed on page load.
     this.modalTextPart1 = "You're all set to work in " + this.state.space.city + "!";
     this.modalTextPart2 = "See you from " + formatStartDate + " — " + formatEndDate + ".";
-    this.setState({reservations: ReservationStore.all()});
     this.setState({modalOpen: true});
   },
 
