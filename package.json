@@ -1,14 +1,14 @@
 {
   "name": "finalProject",
   "version": "1.0.0",
-  "description": "[Heroku link][heroku] **NB:** This should be a link to your production site",
+  "description": "[www.9-to.com][9-to]",
   "main": "index.js",
   "directories": {
     "doc": "docs",
     "test": "test"
   },
   "scripts": {
-    "postinstall": "./node_modules/.bin/webpack"
+    "heroku-postbuild": "webpack --config webpack.config.prod.js"
   },
   "keywords": [],
   "author": "",
