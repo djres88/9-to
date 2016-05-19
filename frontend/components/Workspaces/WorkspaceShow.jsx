@@ -24,6 +24,7 @@ var WorkspaceShow = React.createClass({
 
   componentWillUnmount: function() {
     this.listener.remove();
+    this.userListener.remove();
     this.resListener.remove();
   },
 
@@ -33,7 +34,9 @@ var WorkspaceShow = React.createClass({
   },
 
   _onSuccessfulRes: function() {
-    this.reservations = ReservationStore.all();
+    if (this.state.user) {
+      this.reservations = ReservationStore.userReservationsSingleWorkspace(this.state.user.id, this.state.space.id);
+    }
     if (Object.keys(this.reservations).length === 0) {
       return;
     }
@@ -42,7 +45,6 @@ var WorkspaceShow = React.createClass({
     var formatStartDate = latestReservation.start_date.slice(5);
     var formatEndDate = latestReservation.end_date.slice(5);
 
-    // TODO: Want the modal closed on page load.
     this.modalTextPart1 = "You're all set to work in " + this.state.space.city + "!";
     this.modalTextPart2 = "See you from " + formatStartDate + " — " + formatEndDate + ".";
     this.setState({modalOpen: true});
@@ -50,6 +52,9 @@ var WorkspaceShow = React.createClass({
 
   _onLogin: function() {
     this.setState({user: UserStore.currentUser()});
+    if (!this.state.user) {
+      this.closeModal();
+    }
   },
 
   closeModal: function(){

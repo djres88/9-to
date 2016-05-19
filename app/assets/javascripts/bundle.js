@@ -35049,8 +35049,6 @@
 	var React = __webpack_require__(1);
 	var HashHistory = __webpack_require__(166).hashHistory;
 	
-	// TODO: Make this a place autocomplete w/ Google API. All the search bar needs to do is set the coordinates of the Map! https://developers.google.com/places/javascript/
-	
 	var SearchLocationsBar = React.createClass({
 	  displayName: 'SearchLocationsBar',
 	
@@ -35062,20 +35060,7 @@
 	    var input = document.getElementById('searchTextField');
 	    window.autocomplete = new google.maps.places.Autocomplete(input, { types: ['(cities)'] });
 	    document.getElementById('searchTextField').addEventListener('submit', this.handleSubmit);
-	    // document.getElementById('searchTextField').addEventListener(
-	    //   'place_changed', this._onChange);
 	  },
-	
-	  // showText: function() {
-	  //   if (window.autocomplete && window.autocomplete.getPlace()) {
-	  //     return window.autocomplete.getPlace().formatted_address;
-	  //   } else {
-	  //     return "Search by Location";
-	  //   }
-	  // },
-	  // _onChange: function() {
-	  //   this.setState({text: window.autocomplete.getPlace().formatted_address});
-	  // },
 	
 	  handleSubmit: function () {
 	    var coords = {
@@ -50575,6 +50560,7 @@
 	
 	  componentWillUnmount: function () {
 	    this.listener.remove();
+	    this.userListener.remove();
 	    this.resListener.remove();
 	  },
 	
@@ -50584,7 +50570,9 @@
 	  },
 	
 	  _onSuccessfulRes: function () {
-	    this.reservations = ReservationStore.all();
+	    if (this.state.user) {
+	      this.reservations = ReservationStore.userReservationsSingleWorkspace(this.state.user.id, this.state.space.id);
+	    }
 	    if (Object.keys(this.reservations).length === 0) {
 	      return;
 	    }
@@ -50593,7 +50581,6 @@
 	    var formatStartDate = latestReservation.start_date.slice(5);
 	    var formatEndDate = latestReservation.end_date.slice(5);
 	
-	    // TODO: Want the modal closed on page load.
 	    this.modalTextPart1 = "You're all set to work in " + this.state.space.city + "!";
 	    this.modalTextPart2 = "See you from " + formatStartDate + " — " + formatEndDate + ".";
 	    this.setState({ modalOpen: true });
@@ -50601,6 +50588,9 @@
 	
 	  _onLogin: function () {
 	    this.setState({ user: UserStore.currentUser() });
+	    if (!this.state.user) {
+	      this.closeModal();
+	    }
 	  },
 	
 	  closeModal: function () {
@@ -50850,34 +50840,44 @@
 	    return { beginDate: moment(), endDate: moment(), formatSubmit: ["open", "Reserve This Space"] };
 	  },
 	
-	  componentWillMount: function () {
-	    this.listener = ReservationStore.addListener(this._onChange);
-	  },
-	
-	  componentWillUnmount: function () {
-	    this.setState({ reservations: [] });
-	    this.listener.remove();
+	  componentDidMount: function () {
+	    if (this.userHasBooked()) {
+	      this.disableForm();
+	    } else {
+	      this.enableForm();
+	    }
 	  },
 	
 	  componentWillReceiveProps: function (props) {
-	    this.setState({ reservations: props.reservations });
-	    if (this.state.reservations && Object.keys(this.state.reservations).length > 0) {
-	      this.setState({ formatSubmit: ["booked", "Booked!"] });
-	      document.getElementById("reservation-submit-button").disabled = true;
+	    this.setState({ reservations: this.props.reservations });
+	
+	    if (this.userHasBooked()) {
+	      this.disableForm();
 	    } else {
-	      this.setState({ formatSubmit: ["open", "Reserve This Space"] });
-	      document.getElementById("reservation-submit-button").disabled = false;
+	      this.enableForm();
 	    }
 	  },
 	
 	  _onChange: function () {
-	    if (ReservationStore.booked(this.props.workspace.id)) {
-	      this.setState({ formatSubmit: ["booked", "Booked!"] });
-	      document.getElementById("reservation-submit-button").disabled = true;
+	    if (this.userHasBooked()) {
+	      this.disableForm();
 	    } else {
-	      this.setState({ formatSubmit: ["open", "Reserve This Space"] });
-	      document.getElementById("reservation-submit-button").disabled = false;
+	      this.enableForm();
 	    }
+	  },
+	
+	  userHasBooked: function () {
+	    return ReservationStore.booked(this.props.workspace.id) && UserStore.currentUser();
+	  },
+	
+	  enableForm: function () {
+	    this.setState({ formatSubmit: ["open", "Reserve This Space"] });
+	    document.getElementById("reservation-submit-button").disabled = false;
+	  },
+	
+	  disableForm: function () {
+	    this.setState({ formatSubmit: ["booked", "Booked!"] });
+	    document.getElementById("reservation-submit-button").disabled = true;
 	  },
 	
 	  handleSubmit: function (e) {
@@ -50896,8 +50896,6 @@
 	        start_date: this.state.beginDate,
 	        end_date: this.state.endDate
 	      });
-	
-	      this.setState({ beginDate: moment(), endDate: moment() });
 	    }
 	  },
 	
@@ -64951,6 +64949,7 @@
 	  delete _reservations[id];
 	};
 	
+	// NB: Want all reservations for the workspace. Needed to check for availability (eventual feature).
 	ReservationStore.all = function () {
 	  var reservations = {};
 	  Object.keys(_reservations).forEach(function (key) {
@@ -64959,6 +64958,7 @@
 	  return reservations;
 	};
 	
+	// NB: Check whether the user has booked this workspace. Returns boolean.
 	ReservationStore.booked = function (id) {
 	  var reservation;
 	  var hasBooked = false;
@@ -64968,6 +64968,26 @@
 	    }
 	  });
 	  return hasBooked;
+	};
+	
+	// NB: Get all reservations for this user. For "My Account" component.
+	ReservationStore.userReservationsAll = function (userId) {
+	  Object.keys(_reservations).forEach(function (res) {
+	    if (id === _reservations[res].workspace_id) {
+	      hasBooked = true;
+	    }
+	  });
+	};
+	
+	// NB: Retrieve user's reservations for this workspace. Use for displaying modal on WorkspaceShow page.
+	ReservationStore.userReservationsSingleWorkspace = function (userId, workspaceId) {
+	  var userReservations = {};
+	  Object.keys(_reservations).forEach(function (res) {
+	    if (workspaceId === _reservations[res].workspace_id && userId === _reservations[res].user_id) {
+	      userReservations[_reservations[res].id] = _reservations[res];
+	    }
+	  });
+	  return userReservations;
 	};
 	
 	ReservationStore.__onDispatch = function (payload) {
@@ -64980,13 +65000,13 @@
 	      _deleteReservation(payload.id);
 	      ReservationStore.__emitChange();
 	      break;
-	    case "WORKSPACE_RECEIVED":
-	      _reservations = {};
-	      payload.workspace.reservations.forEach(function (res) {
-	        _addReservation(res);
-	      });
-	      ReservationStore.__emitChange();
-	      break;
+	    // case "WORKSPACE_RECEIVED":
+	    //   _reservations = {};
+	    //   payload.workspace.reservations.forEach(function(res) {
+	    //     _addReservation(res);
+	    //   });
+	    //   ReservationStore.__emitChange();
+	    //   break;
 	    // case "RESERVATIONS_FOUND":
 	    //   _reservations = {};
 	    //   payload.reservations.forEach(function(res) {

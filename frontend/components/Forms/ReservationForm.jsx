@@ -13,34 +13,44 @@ var ReservationForm = React.createClass({
     return { beginDate: moment(), endDate: moment(), formatSubmit: ["open", "Reserve This Space"] };
   },
 
-  componentWillMount: function() {
-    this.listener = ReservationStore.addListener(this._onChange);
-  },
-
-  componentWillUnmount: function() {
-    this.setState({reservations: []});
-    this.listener.remove();
+  componentDidMount: function() {
+    if (this.userHasBooked()) {
+      this.disableForm();
+    } else {
+      this.enableForm();
+    }
   },
 
   componentWillReceiveProps: function(props) {
-    this.setState({reservations: props.reservations});
-    if (this.state.reservations && Object.keys(this.state.reservations).length > 0) {
-      this.setState({formatSubmit: ["booked", "Booked!"]});
-      document.getElementById("reservation-submit-button").disabled = true;
+    this.setState({reservations: this.props.reservations});
+
+    if (this.userHasBooked()) {
+      this.disableForm();
     } else {
-      this.setState({formatSubmit: ["open", "Reserve This Space"]});
-      document.getElementById("reservation-submit-button").disabled = false;
+      this.enableForm();
     }
   },
 
   _onChange: function() {
-    if (ReservationStore.booked(this.props.workspace.id)) {
-      this.setState({formatSubmit: ["booked", "Booked!"]});
-      document.getElementById("reservation-submit-button").disabled = true;
+    if (this.userHasBooked()) {
+      this.disableForm();
     } else {
-      this.setState({formatSubmit: ["open", "Reserve This Space"]});
-      document.getElementById("reservation-submit-button").disabled = false;
+      this.enableForm();
     }
+  },
+
+  userHasBooked: function() {
+    return (ReservationStore.booked(this.props.workspace.id) && UserStore.currentUser());
+  },
+
+  enableForm: function() {
+    this.setState({formatSubmit: ["open", "Reserve This Space"]});
+    document.getElementById("reservation-submit-button").disabled = false;
+  },
+
+  disableForm: function() {
+    this.setState({formatSubmit: ["booked", "Booked!"]});
+    document.getElementById("reservation-submit-button").disabled = true;
   },
 
   handleSubmit: function(e) {
@@ -60,7 +70,6 @@ var ReservationForm = React.createClass({
         end_date: this.state.endDate
       });
 
-      this.setState({beginDate: moment(), endDate: moment()});
     }
   },
 
