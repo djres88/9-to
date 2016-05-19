@@ -25532,7 +25532,6 @@
 				dataType: 'json',
 				success: function (data) {
 					if (!data.errors) {
-						// debugger;
 						ServerActions.receiveCurrentUser(data);
 					}
 				}
