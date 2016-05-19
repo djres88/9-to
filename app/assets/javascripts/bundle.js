@@ -35488,7 +35488,7 @@
 	
 	  mapOptions: function () {
 	    return {
-	      center: { lat: this.props.lat, lng: this.props.lng }, //San Francisco
+	      center: { lat: this.props.lat, lng: this.props.lng },
 	      zoom: 12
 	    };
 	  },
@@ -35496,9 +35496,9 @@
 	  componentDidMount: function () {
 	    var map = ReactDOM.findDOMNode(this.refs.map);
 	    this.map = new google.maps.Map(map, this.mapOptions());
-	    this.registerListeners();
 	    this.markers = [];
 	    this.eachSpace(this.createMarker);
+	    this.registerListeners();
 	
 	    var that = this;
 	    // NOTE: The map element has mounted on the DOM, but the Google Map API has not yet created a Map object for the Autocomplete (search bar) to listen to. In order to avoid an error (that.map is undefined), I'll wait a tick to add the listener. Not sure if setTimeout is the best way to solve this problem (or any problem, for that matter), but it's one solution.
@@ -35508,7 +35508,6 @@
 	        var place = window.autocomplete.getPlace().geometry.location;
 	        that.map.setCenter(place);
 	        that.map.setZoom(12);
-	        that._handleChange({ lat: place.lat(), lng: place.lng() });
 	      });
 	    }, 500);
 	
@@ -35574,6 +35573,11 @@
 	  },
 	
 	  updateBounds: function () {
+	    // Prevent listener from running the first time.
+	    if (!this.idleListenerWasSet) {
+	      this.idleListenerWasSet = true;
+	      return;
+	    }
 	    var bounds = this.map.getBounds();
 	    var northEast = _getCoordsObj(bounds.getNorthEast());
 	    var southWest = _getCoordsObj(bounds.getSouthWest());
@@ -35588,9 +35592,7 @@
 	    this._onChange();
 	
 	    var coords = { lat: this.map.center.lat(), lng: this.map.center.lng() };
-	    if (this.idleListenerWasSet) {
-	      this._handleChange(coords);
-	    }
+	    this._handleChange(coords);
 	  },
 	
 	  registerListeners: function () {
