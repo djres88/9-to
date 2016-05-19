@@ -35058,7 +35058,7 @@
 	  componentDidMount: function () {
 	    var input = document.getElementById('searchTextField');
 	    window.autocomplete = new google.maps.places.Autocomplete(input, { types: ['(cities)'] });
-	    document.getElementById('searchTextField').addEventListener('submit', this.handleSubmit);
+	    document.getElementById('searchTextField').addEventListener('enter', this.handleSubmit);
 	  },
 	
 	  handleSubmit: function () {

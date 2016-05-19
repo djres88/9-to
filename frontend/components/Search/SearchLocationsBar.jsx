@@ -10,7 +10,7 @@ var SearchLocationsBar = React.createClass({
     var input = document.getElementById('searchTextField');
       window.autocomplete = new google.maps.places.Autocomplete(input, {types: ['(cities)']});
     document.getElementById('searchTextField').addEventListener(
-      'submit', this.handleSubmit);
+      'enter', this.handleSubmit);
   },
 
   handleSubmit: function() {
