@@ -2,9 +2,9 @@
   margin-top: 0px;
   object-fit: contain;
   position: absolute;
-  top: 30%;
+  top: 10%;
   left: 50%;
-  min-width: 100%;
+  min-width: 50%;
   width: auto;
   z-index: -100;
   transform: translateX(-50%) translateY(-50%);
@@ -58,7 +58,7 @@
 }
 
 .below-fold h3 {
-  margin-bottom: 5%;
+  margin: 5%;
   text-align: center;
 }
 

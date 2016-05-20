@@ -47,7 +47,7 @@ var Home = React.createClass({
     return (
       <div className="homepage">
         <video id="above-fold-background-video" autoPlay loop>
-          <source src="http://res.cloudinary.com/dyzqtq32z/video/upload/v1463727267/background-vid_lyypkm.mp4" type="video/mp4"/>
+          <source src="http://res.cloudinary.com/dyzqtq32z/video/upload/v1463730794/montage-work_wighhl.mp4" type="video/mp4"/>
         </video>
         <div className="above-fold-text">
           <h1>WHEREVER WORK TAKES YOU</h1>
@@ -58,7 +58,7 @@ var Home = React.createClass({
 
       <div className="below-fold">
           <div className="homepage-section-one">
-            <h3>Time is money. Save it.</h3>
+            <h3>Time is money. Save yours.</h3>
             <div className="graphics-gallery">
               <img className="graphics" src="http://res.cloudinary.com/dyzqtq32z/image/upload/v1462574399/savings_lubtzw.png" alt=""/>
               <img className="graphics" src="http://res.cloudinary.com/dyzqtq32z/image/upload/v1462574386/happy2_pvmdnt.png" alt=""/>
