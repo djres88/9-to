@@ -35196,15 +35196,13 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'homepage' },
-	      React.createElement(
-	        'video',
-	        { crossorigin: 'anonymous',
-	          id: 'above-fold-background-video',
-	          autoPlay: true, loop: true,
-	          poster: 'http://res.cloudinary.com/dyzqtq32z/image/upload/c_scale,w_1920/v1463764488/screenshot-homepage_tma0vf.jpg'
-	        },
-	        React.createElement('source', { src: this.state.video })
-	      ),
+	      React.createElement('video', { crossorigin: 'anonymous',
+	        id: 'above-fold-background-video',
+	        autoPlay: true, loop: true,
+	        preload: true,
+	        poster: 'http://res.cloudinary.com/dyzqtq32z/image/upload/c_scale,w_1920/v1463764488/screenshot-homepage_tma0vf.jpg',
+	        src: this.state.video
+	      }),
 	      React.createElement(
 	        'div',
 	        { className: 'above-fold-text' },

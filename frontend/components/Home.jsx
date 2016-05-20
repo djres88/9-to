@@ -79,9 +79,10 @@ var Home = React.createClass({
         <video crossorigin="anonymous"
           id="above-fold-background-video"
           autoPlay loop
+          preload
           poster="http://res.cloudinary.com/dyzqtq32z/image/upload/c_scale,w_1920/v1463764488/screenshot-homepage_tma0vf.jpg"
+          src={this.state.video}
           >
-          <source src={this.state.video}/>
         </video>
         <div className="above-fold-text">
           <h1>WHEREVER WORK TAKES YOU</h1>
