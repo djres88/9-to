@@ -20,7 +20,10 @@ var Home = React.createClass({
   componentDidMount: function() {
     var vid = document.getElementById("above-fold-background-video");
     vid.addEventListener("canplaythrough", function() {
-      vid.play();
+      setTimeout(function() {
+        console.log(vid);
+        vid.play();
+      }, 3000);
     });
   },
 
@@ -32,7 +35,7 @@ var Home = React.createClass({
   },
 
   fetchVideo: function() {
-    this.setState({video: "http://res.cloudinary.com/dyzqtq32z/video/upload/ac_none,br_5000/v1463730794/montage-work_wighhl.mp4"});
+    this.setState({video: "http://res.cloudinary.com/dyzqtq32z/video/upload/ac_none/v1463730794/montage-work_wighhl.mp4"});
   },
 
   render: function() {
@@ -73,6 +76,7 @@ var Home = React.createClass({
       <div className="homepage">
         <video
           id="above-fold-background-video"
+          preload="auto"
           poster="http://res.cloudinary.com/dyzqtq32z/image/upload/c_scale,w_1920/v1463764488/screenshot-homepage_tma0vf.jpg"
           loop
           src={this.state.video}
