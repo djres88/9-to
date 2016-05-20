@@ -46,8 +46,7 @@ var Home = React.createClass({
 
     return (
       <div className="homepage">
-        <video id="above-fold-background-video" autoPlay loop>
-          <source src="http://res.cloudinary.com/dyzqtq32z/video/upload/v1463730794/montage-work_wighhl.mp4" type="video/mp4"/>
+        <video id="above-fold-background-video" autoPlay loop  src="http://res.cloudinary.com/dyzqtq32z/video/upload/v1463730794/montage-work_wighhl.mp4" type="video/mp4">
         </video>
         <div className="above-fold-text">
           <h1>WHEREVER WORK TAKES YOU</h1>

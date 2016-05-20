@@ -35165,11 +35165,7 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'homepage' },
-	      React.createElement(
-	        'video',
-	        { id: 'above-fold-background-video', autoPlay: true, loop: true },
-	        React.createElement('source', { src: 'http://res.cloudinary.com/dyzqtq32z/video/upload/v1463730794/montage-work_wighhl.mp4', type: 'video/mp4' })
-	      ),
+	      React.createElement('video', { id: 'above-fold-background-video', autoPlay: true, loop: true, src: 'http://res.cloudinary.com/dyzqtq32z/video/upload/v1463730794/montage-work_wighhl.mp4', type: 'video/mp4' }),
 	      React.createElement(
 	        'div',
 	        { className: 'above-fold-text' },
