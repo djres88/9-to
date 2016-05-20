@@ -17,6 +17,13 @@ var Home = React.createClass({
     this.fetchVideo();
   },
 
+  componentDidMount: function() {
+    var vid = document.getElementById("above-fold-background-video");
+    vid.addEventListener("canplaythrough", function() {
+      vid.play();
+    });
+  },
+
   clickCity: function(coords) {
     HashHistory.push({
       pathname: "s/",
@@ -74,13 +81,13 @@ var Home = React.createClass({
       action: function() { this.clickCity({lat: 37.7749, lng: -122.4194}); }.bind(this)
     };
 
+    // crossorigin="anonymous"
     return (
       <div className="homepage">
-        <video crossorigin="anonymous"
+        <video
           id="above-fold-background-video"
-          autoPlay loop
-          preload
           poster="http://res.cloudinary.com/dyzqtq32z/image/upload/c_scale,w_1920/v1463764488/screenshot-homepage_tma0vf.jpg"
+          loop
           src={this.state.video}
           >
         </video>

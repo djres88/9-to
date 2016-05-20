@@ -35124,6 +35124,13 @@
 	    this.fetchVideo();
 	  },
 	
+	  componentDidMount: function () {
+	    var vid = document.getElementById("above-fold-background-video");
+	    vid.addEventListener("canplaythrough", function () {
+	      vid.play();
+	    });
+	  },
+	
 	  clickCity: function (coords) {
 	    HashHistory.push({
 	      pathname: "s/",
@@ -35193,14 +35200,14 @@
 	      }.bind(this)
 	    };
 	
+	    // crossorigin="anonymous"
 	    return React.createElement(
 	      'div',
 	      { className: 'homepage' },
-	      React.createElement('video', { crossorigin: 'anonymous',
+	      React.createElement('video', {
 	        id: 'above-fold-background-video',
-	        autoPlay: true, loop: true,
-	        preload: true,
 	        poster: 'http://res.cloudinary.com/dyzqtq32z/image/upload/c_scale,w_1920/v1463764488/screenshot-homepage_tma0vf.jpg',
+	        loop: true,
 	        src: this.state.video
 	      }),
 	      React.createElement(
