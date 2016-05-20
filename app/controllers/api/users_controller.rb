@@ -18,7 +18,7 @@ class Api::UsersController < ApplicationController
   end
 
   def show
-    @reservations = Reservation.where("user_id = ?", Integer(user_id))
+    @reservations = Reservation.joins(:workspace).select("reservations.*, workspaces.*").where("reservations.user_id = ?", Integer(user_id))
     render json: @reservations
   end
 

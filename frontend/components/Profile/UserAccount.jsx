@@ -25,7 +25,8 @@ var UserAccount = React.createClass({
   },
 
   _onChange: function() {
-    this.setState({reservations: ReservationStore.userReservations(this.state.user.id)});
+    this.setState({reservations: ReservationStore.userReservations()});
+    debugger;
   },
 
   render: function() {
@@ -36,7 +37,7 @@ var UserAccount = React.createClass({
       reservations = this.state.reservations.map(function(res, idx) {
         return (
           <div className="" key={idx+1}>
-            <h3>{res}</h3>
+            <h3>{res.id}</h3>
           </div>
         );
       });

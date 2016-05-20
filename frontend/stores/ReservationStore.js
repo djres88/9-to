@@ -31,32 +31,34 @@ ReservationStore.all = function() {
 ReservationStore.booked = function(id) {
   var reservation;
   var hasBooked = false;
-  Object.keys(_spaceReservations).forEach(function(res) {
-    if (id === _spaceReservations[res].workspace_id) {
+  Object.keys(_spaceReservations).forEach(function(key) {
+    if (id === _spaceReservations[key].workspace_id) {
       hasBooked = true;
     }
   });
   return hasBooked;
 };
 
-// NB: Get all reservations for this user. For "My Account" component.
-ReservationStore.userReservations = function(userId) {
-  var reservations = [];
-
-  return reservations;
-};
-
 // NB: Retrieve user's reservations for this workspace. Use for displaying modal on WorkspaceShow page.
 ReservationStore.userReservationsSingleWorkspace = function(userId, workspaceId) {
   var userReservations = {};
-  Object.keys(_spaceReservations).forEach(function(res) {
-    if (workspaceId === _spaceReservations[res].workspace_id &&
-        userId === _spaceReservations[res].user_id
+  Object.keys(_spaceReservations).forEach(function(key) {
+    if (workspaceId === _spaceReservations[key].workspace_id &&
+        userId === _spaceReservations[key].user_id
     ) {
-      userReservations[_spaceReservations[res].id] = _spaceReservations[res];
+      userReservations[_spaceReservations[key].id] = _spaceReservations[key];
     }
   });
   return userReservations;
+};
+
+// NB: Get all reservations for this user. For "My Account" component.
+ReservationStore.userReservations = function() {
+  var reservations = [];
+  Object.keys(_userReservations).forEach(function(key) {
+    reservations.push(_userReservations[key]);
+  });
+  return reservations;
 };
 
 ReservationStore.__onDispatch = function(payload) {
