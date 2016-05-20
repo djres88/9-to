@@ -17,7 +17,7 @@ module.exports = {
 			}
 		});
 	},
-
+	// Backend retrieves the workspace's reservations along with the workspace itself..
 	fetchSingleWorkspace: function(id) {
 		$.ajax({
 			url: 'api/workspaces/' + id,
@@ -31,7 +31,6 @@ module.exports = {
 			}
 		});
 	},
-
 
 	// WORKSPACE CRUD (HOST REQUESTS)
 
@@ -52,14 +51,15 @@ module.exports = {
 		});
 	},
 
-	fetchReservations: function(workspaceId) {
+	// Need separate reservations query for this user's reservations. The use case here — the user's profile page — is distinct from looking at all reservations for a particular set of workspaces (to check availability).
+	fetchUserReservations: function(userId) {
 		$.ajax({
-			url: 'api/workspaces/' + workspaceId + "/reservations/",
+			url: 'api/user/',
 			method: 'get',
-			data: { reservation: {workspace_id: workspaceId }},
+			data: {user_id: userId},
 			dataType: 'json',
 			success: function(reservationDetails) {
-				ServerActions.receiveWorkspaceReservations(reservationDetails);
+				ServerActions.receiveReservations(reservationDetails);
 			},
 			error: function(data) {
 				ServerActions.handleError(data);

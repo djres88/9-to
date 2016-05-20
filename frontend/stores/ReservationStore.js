@@ -3,21 +3,26 @@ var AppDispatcher = require('../dispatcher/Dispatcher.js');
 
 var ReservationStore = new Store(AppDispatcher);
 
-var _reservations = {};
+var _spaceReservations = {};
+var _userReservations = {};
 
-var _addReservation = function(res) {
-  _reservations[res.id] = res;
+var _addSpaceReservation = function(res) {
+  _spaceReservations[res.id] = res;
 };
 
-var _deleteReservation = function(id) {
-  delete _reservations[id];
+var _deleteSpaceReservation = function(id) {
+  delete _spaceReservations[id];
 };
 
-// NB: Want all reservations for the workspace. Needed to check for availability (eventual feature).
+var _addUserReservation = function(res) {
+  _userReservations[res.id] = res;
+};
+
+// NB: Want all reservations for the workspace. Needed to check for availability (eventual feature). Better to keep the user's reservations stored separately, too, in case they revisit their account; but that's an optimization for later.
 ReservationStore.all = function() {
   var reservations = {};
-  Object.keys(_reservations).forEach(function(key) {
-    reservations[key] = _reservations[key];
+  Object.keys(_spaceReservations).forEach(function(key) {
+    reservations[key] = _spaceReservations[key];
   });
   return reservations;
 };
@@ -26,8 +31,8 @@ ReservationStore.all = function() {
 ReservationStore.booked = function(id) {
   var reservation;
   var hasBooked = false;
-  Object.keys(_reservations).forEach(function(res) {
-    if (id === _reservations[res].workspace_id) {
+  Object.keys(_spaceReservations).forEach(function(res) {
+    if (id === _spaceReservations[res].workspace_id) {
       hasBooked = true;
     }
   });
@@ -35,22 +40,20 @@ ReservationStore.booked = function(id) {
 };
 
 // NB: Get all reservations for this user. For "My Account" component.
-ReservationStore.userReservationsAll = function(userId) {
-  Object.keys(_reservations).forEach(function(res) {
-    if (id === _reservations[res].workspace_id) {
-      hasBooked = true;
-    }
-  });
+ReservationStore.userReservations = function(userId) {
+  var reservations = [];
+
+  return reservations;
 };
 
 // NB: Retrieve user's reservations for this workspace. Use for displaying modal on WorkspaceShow page.
 ReservationStore.userReservationsSingleWorkspace = function(userId, workspaceId) {
   var userReservations = {};
-  Object.keys(_reservations).forEach(function(res) {
-    if (workspaceId === _reservations[res].workspace_id &&
-        userId === _reservations[res].user_id
+  Object.keys(_spaceReservations).forEach(function(res) {
+    if (workspaceId === _spaceReservations[res].workspace_id &&
+        userId === _spaceReservations[res].user_id
     ) {
-      userReservations[_reservations[res].id] = _reservations[res];
+      userReservations[_spaceReservations[res].id] = _spaceReservations[res];
     }
   });
   return userReservations;
@@ -59,26 +62,26 @@ ReservationStore.userReservationsSingleWorkspace = function(userId, workspaceId)
 ReservationStore.__onDispatch = function(payload) {
   switch(payload.actionType) {
     case "RESERVATION_CREATED":
-      _addReservation(payload.reservation);
+      _addSpaceReservation(payload.reservation);
       ReservationStore.__emitChange();
       break;
     case "RESERVATION_DELETED":
-      _deleteReservation(payload.id);
+      _deleteSpaceReservation(payload.id);
       ReservationStore.__emitChange();
       break;
-    // case "WORKSPACE_RECEIVED":
-    //   _reservations = {};
-    //   payload.workspace.reservations.forEach(function(res) {
-    //     _addReservation(res);
-    //   });
-    //   ReservationStore.__emitChange();
-    //   break;
-    // case "RESERVATIONS_FOUND":
-    //   _reservations = {};
-    //   payload.reservations.forEach(function(res) {
-    //     _addReservation(res);
-    //   });
-    //   ReservationStore.__emitChange();
+    case "WORKSPACE_RECEIVED":
+      _spaceReservations = {};
+      payload.workspace.reservations.forEach(function(res) {
+        _addSpaceReservation(res);
+      });
+      ReservationStore.__emitChange();
+      break;
+    case "RESERVATIONS_FOUND":
+      _userReservations = {};
+      payload.reservations.forEach(function(res) {
+        _addUserReservation(res);
+      });
+      ReservationStore.__emitChange();
   }
 };
 

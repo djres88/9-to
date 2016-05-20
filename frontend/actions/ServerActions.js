@@ -21,8 +21,8 @@ module.exports = {
       reservation: reservation
     });
   },
-  //
-  receiveWorkspaceReservations: function(reservations) {
+
+  receiveReservations: function(reservations) {
     AppDispatcher.dispatch({
       actionType: "RESERVATIONS_FOUND",
       reservations: reservations

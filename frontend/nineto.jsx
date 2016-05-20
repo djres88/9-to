@@ -63,7 +63,7 @@ var Router = (
       <IndexRoute component={Home}/>
       <Route path="s(/:coords)" component={WorkspaceIndex}/>
       <Route path="workspaces/:workspaceId" component={WorkspaceShow}/>
-      <Route path="profile/:username" component={UserAccount}/>
+      <Route path="profile/reservations" component={UserAccount}/>
     </Route>
   </Router>
 );

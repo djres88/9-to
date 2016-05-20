@@ -13,25 +13,8 @@ var ReservationForm = React.createClass({
     return { beginDate: moment(), endDate: moment(), formatSubmit: ["open", "Reserve This Space"] };
   },
 
-  componentDidMount: function() {
-    if (this.userHasBooked()) {
-      this.disableForm();
-    } else {
-      this.enableForm();
-    }
-  },
-
   componentWillReceiveProps: function(props) {
     this.setState({reservations: this.props.reservations});
-
-    if (this.userHasBooked()) {
-      this.disableForm();
-    } else {
-      this.enableForm();
-    }
-  },
-
-  _onChange: function() {
     if (this.userHasBooked()) {
       this.disableForm();
     } else {

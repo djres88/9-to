@@ -1,3 +1,5 @@
+require 'byebug'
+
 class Api::UsersController < ApplicationController
   def new
     @user = User.new
@@ -15,8 +17,17 @@ class Api::UsersController < ApplicationController
     end
   end
 
+  def show
+    @reservations = Reservation.where("user_id = ?", Integer(user_id))
+    render json: @reservations
+  end
+
   private
   def user_params
     params.require(:user).permit(:password, :username)
+  end
+
+  def user_id
+    params[:user_id]
   end
 end

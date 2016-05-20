@@ -10,7 +10,7 @@ var NavbarItem = React.createClass({
 
   goToAccount: function() {
     HashHistory.push({
-      pathname: "profile/" + UserStore.currentUser().username
+      pathname: "profile/reservations"
     });
   },
 

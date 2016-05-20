@@ -114,7 +114,7 @@
 	    React.createElement(IndexRoute, { component: Home }),
 	    React.createElement(Route, { path: 's(/:coords)', component: WorkspaceIndex }),
 	    React.createElement(Route, { path: 'workspaces/:workspaceId', component: WorkspaceShow }),
-	    React.createElement(Route, { path: 'profile/:username', component: UserAccount })
+	    React.createElement(Route, { path: 'profile/reservations', component: UserAccount })
 	  )
 	);
 	
@@ -34431,7 +34431,6 @@
 	
 	  goHome: function () {
 	    hashHistory.push("/");
-	    // TODO: ? this.props.location not working... something wrong with hashHistory?
 	    this.setState({ route: window.location.hash });
 	    window.addEventListener('scroll', this.handleScroll);
 	  },
@@ -34503,7 +34502,7 @@
 	
 	  goToAccount: function () {
 	    HashHistory.push({
-	      pathname: "profile/" + UserStore.currentUser().username
+	      pathname: "profile/reservations"
 	    });
 	  },
 	
@@ -34901,11 +34900,11 @@
 	    options.start_date = options.start_date.format("YYYY-MM-DD");
 	    options.end_date = options.end_date.format("YYYY-MM-DD");
 	    ApiUtil.createReservation(options);
+	  },
+	
+	  fetchUserReservations: function (userId) {
+	    ApiUtil.fetchUserReservations(userId);
 	  }
-	  //
-	  // fetchReservations: function(id) {
-	  //   ApiUtil.fetchReservations(id);
-	  // }
 	
 	  // WORKSPACE COMPLETE CRUD (HOST ACTIONS)
 	  // listWorkspace: function(workspace) {
@@ -34957,7 +34956,7 @@
 				}
 			});
 		},
-	
+		// Backend retrieves the workspace's reservations along with the workspace itself..
 		fetchSingleWorkspace: function (id) {
 			$.ajax({
 				url: 'api/workspaces/' + id,
@@ -34990,14 +34989,15 @@
 			});
 		},
 	
-		fetchReservations: function (workspaceId) {
+		// Need separate reservations query for this user's reservations. The use case here — the user's profile page — is distinct from looking at all reservations for a particular set of workspaces (to check availability).
+		fetchUserReservations: function (userId) {
 			$.ajax({
-				url: 'api/workspaces/' + workspaceId + "/reservations/",
+				url: 'api/user/',
 				method: 'get',
-				data: { reservation: { workspace_id: workspaceId } },
+				data: { user_id: userId },
 				dataType: 'json',
 				success: function (reservationDetails) {
-					ServerActions.receiveWorkspaceReservations(reservationDetails);
+					ServerActions.receiveReservations(reservationDetails);
 				},
 				error: function (data) {
 					ServerActions.handleError(data);
@@ -35033,8 +35033,8 @@
 	      reservation: reservation
 	    });
 	  },
-	  //
-	  receiveWorkspaceReservations: function (reservations) {
+	
+	  receiveReservations: function (reservations) {
 	    AppDispatcher.dispatch({
 	      actionType: "RESERVATIONS_FOUND",
 	      reservations: reservations
@@ -50859,25 +50859,8 @@
 	    return { beginDate: moment(), endDate: moment(), formatSubmit: ["open", "Reserve This Space"] };
 	  },
 	
-	  componentDidMount: function () {
-	    if (this.userHasBooked()) {
-	      this.disableForm();
-	    } else {
-	      this.enableForm();
-	    }
-	  },
-	
 	  componentWillReceiveProps: function (props) {
 	    this.setState({ reservations: this.props.reservations });
-	
-	    if (this.userHasBooked()) {
-	      this.disableForm();
-	    } else {
-	      this.enableForm();
-	    }
-	  },
-	
-	  _onChange: function () {
 	    if (this.userHasBooked()) {
 	      this.disableForm();
 	    } else {
@@ -64958,21 +64941,26 @@
 	
 	var ReservationStore = new Store(AppDispatcher);
 	
-	var _reservations = {};
+	var _spaceReservations = {};
+	var _userReservations = {};
 	
-	var _addReservation = function (res) {
-	  _reservations[res.id] = res;
+	var _addSpaceReservation = function (res) {
+	  _spaceReservations[res.id] = res;
 	};
 	
-	var _deleteReservation = function (id) {
-	  delete _reservations[id];
+	var _deleteSpaceReservation = function (id) {
+	  delete _spaceReservations[id];
 	};
 	
-	// NB: Want all reservations for the workspace. Needed to check for availability (eventual feature).
+	var _addUserReservation = function (res) {
+	  _userReservations[res.id] = res;
+	};
+	
+	// NB: Want all reservations for the workspace. Needed to check for availability (eventual feature). Better to keep the user's reservations stored separately, too, in case they revisit their account; but that's an optimization for later.
 	ReservationStore.all = function () {
 	  var reservations = {};
-	  Object.keys(_reservations).forEach(function (key) {
-	    reservations[key] = _reservations[key];
+	  Object.keys(_spaceReservations).forEach(function (key) {
+	    reservations[key] = _spaceReservations[key];
 	  });
 	  return reservations;
 	};
@@ -64981,8 +64969,8 @@
 	ReservationStore.booked = function (id) {
 	  var reservation;
 	  var hasBooked = false;
-	  Object.keys(_reservations).forEach(function (res) {
-	    if (id === _reservations[res].workspace_id) {
+	  Object.keys(_spaceReservations).forEach(function (res) {
+	    if (id === _spaceReservations[res].workspace_id) {
 	      hasBooked = true;
 	    }
 	  });
@@ -64990,20 +64978,18 @@
 	};
 	
 	// NB: Get all reservations for this user. For "My Account" component.
-	ReservationStore.userReservationsAll = function (userId) {
-	  Object.keys(_reservations).forEach(function (res) {
-	    if (id === _reservations[res].workspace_id) {
-	      hasBooked = true;
-	    }
-	  });
+	ReservationStore.userReservations = function (userId) {
+	  var reservations = [];
+	
+	  return reservations;
 	};
 	
 	// NB: Retrieve user's reservations for this workspace. Use for displaying modal on WorkspaceShow page.
 	ReservationStore.userReservationsSingleWorkspace = function (userId, workspaceId) {
 	  var userReservations = {};
-	  Object.keys(_reservations).forEach(function (res) {
-	    if (workspaceId === _reservations[res].workspace_id && userId === _reservations[res].user_id) {
-	      userReservations[_reservations[res].id] = _reservations[res];
+	  Object.keys(_spaceReservations).forEach(function (res) {
+	    if (workspaceId === _spaceReservations[res].workspace_id && userId === _spaceReservations[res].user_id) {
+	      userReservations[_spaceReservations[res].id] = _spaceReservations[res];
 	    }
 	  });
 	  return userReservations;
@@ -65012,26 +64998,26 @@
 	ReservationStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case "RESERVATION_CREATED":
-	      _addReservation(payload.reservation);
+	      _addSpaceReservation(payload.reservation);
 	      ReservationStore.__emitChange();
 	      break;
 	    case "RESERVATION_DELETED":
-	      _deleteReservation(payload.id);
+	      _deleteSpaceReservation(payload.id);
 	      ReservationStore.__emitChange();
 	      break;
-	    // case "WORKSPACE_RECEIVED":
-	    //   _reservations = {};
-	    //   payload.workspace.reservations.forEach(function(res) {
-	    //     _addReservation(res);
-	    //   });
-	    //   ReservationStore.__emitChange();
-	    //   break;
-	    // case "RESERVATIONS_FOUND":
-	    //   _reservations = {};
-	    //   payload.reservations.forEach(function(res) {
-	    //     _addReservation(res);
-	    //   });
-	    //   ReservationStore.__emitChange();
+	    case "WORKSPACE_RECEIVED":
+	      _spaceReservations = {};
+	      payload.workspace.reservations.forEach(function (res) {
+	        _addSpaceReservation(res);
+	      });
+	      ReservationStore.__emitChange();
+	      break;
+	    case "RESERVATIONS_FOUND":
+	      _userReservations = {};
+	      payload.reservations.forEach(function (res) {
+	        _addUserReservation(res);
+	      });
+	      ReservationStore.__emitChange();
 	  }
 	};
 	
@@ -65042,16 +65028,88 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var ReservationStore = __webpack_require__(497);
+	var ClientActions = __webpack_require__(274);
+	var UserStore = __webpack_require__(232);
 	
 	var UserAccount = React.createClass({
-	  displayName: "UserAccount",
+	  displayName: 'UserAccount',
 	
+	  getInitialState: function () {
+	    return { user: UserStore.currentUser(), reservations: ["New York", "San Francisco", "Minneapolis "] };
+	  },
+	
+	  componentWillMount: function () {
+	    this.listener = ReservationStore.addListener(this._onChange);
+	    this.userListener = UserStore.addListener(this._retrievedUser);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.userListener.remove();
+	    this.listener.remove();
+	  },
+	
+	  _retrievedUser: function () {
+	    // on user load, set state and fetch reservations. component will rerender when reservations are returned.
+	    this.setState({ user: UserStore.currentUser() });
+	    ClientActions.fetchUserReservations(UserStore.currentUser().id);
+	  },
+	
+	  _onChange: function () {
+	    this.setState({ reservations: ReservationStore.userReservations(this.state.user.id) });
+	  },
 	
 	  render: function () {
+	    var reservations;
+	    if (this.state.reservations.length === 0) {
+	      reservations = "You do not have any upcoming reservations.";
+	    } else {
+	      reservations = this.state.reservations.map(function (res, idx) {
+	        return React.createElement(
+	          'div',
+	          { className: '', key: idx + 1 },
+	          React.createElement(
+	            'h3',
+	            null,
+	            res
+	          )
+	        );
+	      });
+	    }
+	
+	    var username = "";
+	    if (this.state.user) {
+	      username = ", " + this.state.user.username;
+	    }
+	
 	    return React.createElement(
-	      "h1",
-	      { id: "testing" },
-	      "User Account Page"
+	      'div',
+	      { className: 'user-profile-page-container' },
+	      React.createElement(
+	        'div',
+	        { className: 'user-profile-content' },
+	        React.createElement(
+	          'div',
+	          { 'class': '' },
+	          React.createElement(
+	            'h1',
+	            null,
+	            'Welcome',
+	            username,
+	            '!'
+	          )
+	        ),
+	        React.createElement(
+	          'h2',
+	          null,
+	          'Upcoming Reservations'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'upcoming-trips' },
+	          reservations
+	        )
+	      )
 	    );
 	  }
 	
