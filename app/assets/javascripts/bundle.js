@@ -35107,15 +35107,45 @@
 	var Search = __webpack_require__(273);
 	var HashHistory = __webpack_require__(166).hashHistory;
 	
+	// var CloudinaryConfig = require('react-cloudinary').CloudinaryConfig;
+	// console.log(CloudinaryConfig);
+	// var CloudinaryVideo = require('react-cloudinary').CloudinaryVideo;
+	// console.log(CloudinaryVideo);
+	// cloudinaryConfig({ cloud_name: 'dyzqtq32z' });
+	
 	var Home = React.createClass({
 	  displayName: 'Home',
 	
+	  getInitialState: function () {
+	    return { video: "" };
+	  },
+	
+	  componentWillMount: function () {
+	    this.fetchVideo();
+	  },
 	
 	  clickCity: function (coords) {
 	    HashHistory.push({
 	      pathname: "s/",
 	      query: coords
 	    });
+	  },
+	
+	  fetchVideo: function () {
+	    this.setState({ video: "http://res.cloudinary.com/dyzqtq32z/video/upload/ac_none/v1463730794/montage-work_wighhl.mp4" });
+	    // $.ajax({
+	    //   method: "GET",
+	    //   url: "http://res.cloudinary.com/dyzqtq32z/video/upload/ac_none/v1463730794/montage-work_wighhl.mp4",
+	    //   success: function(video) {
+	    //     // this.setState({video: video});
+	    //     console.log(video);
+	    //   }.bind(this),
+	    //   error: function(data) {
+	    //     console.log(data);
+	    //     al
+	    //     // ServerActions.handleError(data);
+	    //   }
+	    // });
 	  },
 	
 	  render: function () {
@@ -35163,35 +35193,17 @@
 	      }.bind(this)
 	    };
 	
-	    function createCORSRequest(method, url) {
-	      var xhr = new XMLHttpRequest();
-	      if ("withCredentials" in xhr) {
-	        console.log("yay");
-	        // Check if the XMLHttpRequest object has a "withCredentials" property.
-	        // "withCredentials" only exists on XMLHTTPRequest2 objects.
-	        xhr.open(method, url, true);
-	      } else if (typeof XDomainRequest != "undefined") {
-	
-	        // Otherwise, check if XDomainRequest.
-	        // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
-	        xhr = new XDomainRequest();
-	        xhr.open(method, url);
-	      } else {
-	
-	        // Otherwise, CORS is not supported by the browser.
-	        xhr = null;
-	      }
-	      return xhr;
-	    }
-	    var url = "http://res.cloudinary.com/dyzqtq32z/video/upload/v1463730794/montage-work_wighhl.mp4";
 	    return React.createElement(
 	      'div',
 	      { className: 'homepage' },
 	      React.createElement(
 	        'video',
-	        { crossorigin: 'anonymous', id: 'above-fold-background-video', autoPlay: true, loop: true },
-	        '  ',
-	        React.createElement('source', { src: url, type: 'video/mp4' })
+	        { crossorigin: 'anonymous',
+	          id: 'above-fold-background-video',
+	          autoPlay: true, loop: true,
+	          poster: 'http://res.cloudinary.com/dyzqtq32z/image/upload/c_scale,w_1920/v1463764488/screenshot-homepage_tma0vf.jpg'
+	        },
+	        React.createElement('source', { src: this.state.video })
 	      ),
 	      React.createElement(
 	        'div',
