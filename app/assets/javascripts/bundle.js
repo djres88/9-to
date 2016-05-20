@@ -65158,7 +65158,7 @@
 	        React.createElement(
 	          'h2',
 	          null,
-	          'Upcoming Reservations'
+	          'My Reservations'
 	        ),
 	        React.createElement(
 	          'div',

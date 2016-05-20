@@ -78,7 +78,7 @@ var UserAccount = React.createClass({
           <div class="">
             <h1>Welcome{username}!</h1>
           </div>
-          <h2>Upcoming Reservations</h2>
+          <h2>My Reservations</h2>
           <div className="upcoming-reservations">
             {reservations}
           </div>
