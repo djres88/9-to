@@ -35110,6 +35110,7 @@
 	var Home = React.createClass({
 	  displayName: 'Home',
 	
+	
 	  clickCity: function (coords) {
 	    HashHistory.push({
 	      pathname: "s/",
@@ -35163,12 +35164,15 @@
 	    };
 	
 	    var url = "http://res.cloudinary.com/dyzqtq32z/video/upload/v1463730794/montage-work_wighhl.mp4";
-	
-	    // TODO video issues
 	    return React.createElement(
 	      'div',
 	      { className: 'homepage' },
-	      React.createElement('video', { id: 'above-fold-background-video', autoPlay: true, loop: true, src: url, type: 'video/mp4' }),
+	      React.createElement(
+	        'video',
+	        { id: 'above-fold-background-video', autoPlay: true, loop: true },
+	        '  ',
+	        React.createElement('source', { src: url, type: 'video/mp4' })
+	      ),
 	      React.createElement(
 	        'div',
 	        { className: 'above-fold-text' },

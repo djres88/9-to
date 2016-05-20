@@ -3,6 +3,7 @@ var Search = require('./Search/Search');
 var HashHistory = require('react-router').hashHistory;
 
 var Home = React.createClass({
+
   clickCity: function(coords) {
     HashHistory.push({
       pathname: "s/",
@@ -43,12 +44,10 @@ var Home = React.createClass({
       action: function() { this.clickCity({lat: 37.7749, lng: -122.4194}); }.bind(this)
     };
 
-    var url = "http://res.cloudinary.com/dyzqtq32z/video/upload/v1463730794/montage-work_wighhl.mp4";
-
-    // TODO video issues
+var url = "http://res.cloudinary.com/dyzqtq32z/video/upload/v1463730794/montage-work_wighhl.mp4";
     return (
       <div className="homepage">
-        <video id="above-fold-background-video" autoPlay loop  src={url} type="video/mp4">
+        <video id="above-fold-background-video" autoPlay loop>  <source src={url} type="video/mp4"/>
         </video>
         <div className="above-fold-text">
           <h1>WHEREVER WORK TAKES YOU</h1>
