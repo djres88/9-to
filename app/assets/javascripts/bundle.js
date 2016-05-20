@@ -35116,22 +35116,24 @@
 	var Home = React.createClass({
 	  displayName: 'Home',
 	
-	  getInitialState: function () {
-	    return { video: "" };
-	  },
-	
-	  componentWillMount: function () {
-	    this.fetchVideo();
-	  },
-	
 	  componentDidMount: function () {
-	    var vid = document.getElementById("above-fold-background-video");
-	    vid.addEventListener("canplaythrough", function () {
-	      setTimeout(function () {
-	        console.log(vid);
-	        vid.play();
-	      }, 3000);
-	    });
+	    // var vid = document.getElementById("above-fold-background-video");
+	    // vid.load();
+	    // vid.addEventListener("canplaythrough", function(e) {
+	    //   e.preventDefault();
+	    //   setTimeout(function() {
+	    //     vid.play();
+	    //   }, 2000);
+	    // });
+	    // vid.addEventListener("ended", function(e) {
+	    //   e.preventDefault();
+	    //   setTimeout(function() {
+	    //     vid.pause();
+	    //   }, 1000);
+	    //   setTimeout(function() {
+	    //     vid.play();
+	    //   }, 2000);
+	    // });
 	  },
 	
 	  clickCity: function (coords) {
@@ -35139,10 +35141,6 @@
 	      pathname: "s/",
 	      query: coords
 	    });
-	  },
-	
-	  fetchVideo: function () {
-	    this.setState({ video: "http://res.cloudinary.com/dyzqtq32z/video/upload/ac_none/v1463730794/montage-work_wighhl.mp4" });
 	  },
 	
 	  render: function () {
@@ -35194,13 +35192,16 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'homepage' },
-	      React.createElement('video', {
-	        id: 'above-fold-background-video',
-	        preload: 'auto',
-	        poster: 'http://res.cloudinary.com/dyzqtq32z/image/upload/c_scale,w_1920/v1463764488/screenshot-homepage_tma0vf.jpg',
-	        loop: true,
-	        src: this.state.video
-	      }),
+	      React.createElement(
+	        'video',
+	        {
+	          id: 'above-fold-background-video',
+	          autoPlay: true,
+	          poster: 'http://res.cloudinary.com/dyzqtq32z/image/upload/c_scale,w_1920/v1463764488/screenshot-homepage_tma0vf.jpg',
+	          loop: true
+	        },
+	        React.createElement('source', { id: 'video-player', src: 'http://res.cloudinary.com/dyzqtq32z/video/upload/ac_none/v1463730794/montage-work_wighhl.mp4', type: 'video/mp4' })
+	      ),
 	      React.createElement(
 	        'div',
 	        { className: 'above-fold-text' },

@@ -9,22 +9,24 @@ var HashHistory = require('react-router').hashHistory;
 // cloudinaryConfig({ cloud_name: 'dyzqtq32z' });
 
 var Home = React.createClass({
-  getInitialState: function() {
-    return {video: ""};
-  },
-
-  componentWillMount: function() {
-    this.fetchVideo();
-  },
-
   componentDidMount: function() {
-    var vid = document.getElementById("above-fold-background-video");
-    vid.addEventListener("canplaythrough", function() {
-      setTimeout(function() {
-        console.log(vid);
-        vid.play();
-      }, 3000);
-    });
+    // var vid = document.getElementById("above-fold-background-video");
+    // vid.load();
+    // vid.addEventListener("canplaythrough", function(e) {
+    //   e.preventDefault();
+    //   setTimeout(function() {
+    //     vid.play();
+    //   }, 2000);
+    // });
+    // vid.addEventListener("ended", function(e) {
+    //   e.preventDefault();
+    //   setTimeout(function() {
+    //     vid.pause();
+    //   }, 1000);
+    //   setTimeout(function() {
+    //     vid.play();
+    //   }, 2000);
+    // });
   },
 
   clickCity: function(coords) {
@@ -32,10 +34,6 @@ var Home = React.createClass({
       pathname: "s/",
       query: coords
     });
-  },
-
-  fetchVideo: function() {
-    this.setState({video: "http://res.cloudinary.com/dyzqtq32z/video/upload/ac_none/v1463730794/montage-work_wighhl.mp4"});
   },
 
   render: function() {
@@ -76,11 +74,11 @@ var Home = React.createClass({
       <div className="homepage">
         <video
           id="above-fold-background-video"
-          preload="auto"
+          autoPlay
           poster="http://res.cloudinary.com/dyzqtq32z/image/upload/c_scale,w_1920/v1463764488/screenshot-homepage_tma0vf.jpg"
           loop
-          src={this.state.video}
           >
+          <source id="video-player" src="http://res.cloudinary.com/dyzqtq32z/video/upload/ac_none/v1463730794/montage-work_wighhl.mp4" type="video/mp4"/>
         </video>
         <div className="above-fold-text">
           <h1>WHEREVER WORK TAKES YOU</h1>
