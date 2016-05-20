@@ -35165,7 +35165,11 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'homepage' },
-	      React.createElement('div', { id: 'above-fold-background' }),
+	      React.createElement(
+	        'video',
+	        { id: 'above-fold-background-video', autoPlay: true, loop: true },
+	        React.createElement('source', { src: 'http://res.cloudinary.com/dyzqtq32z/video/upload/v1463727267/background-vid_lyypkm.mp4', type: 'video/mp4' })
+	      ),
 	      React.createElement(
 	        'div',
 	        { className: 'above-fold-text' },
