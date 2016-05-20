@@ -32,20 +32,7 @@ var Home = React.createClass({
   },
 
   fetchVideo: function() {
-    this.setState({video: "http://res.cloudinary.com/dyzqtq32z/video/upload/ac_none/v1463730794/montage-work_wighhl.mp4"});
-  //   $.ajax({
-  //     method: "GET",
-  //     url: '/',
-  //     dataType: "json",
-  //     success: function(video) {
-  //       // this.setState({video: video});
-  //       console.log(video);
-  //     }.bind(this),
-  //     error: function(data) {
-  //       console.log(data);
-  //       // ServerActions.handleError(data);
-  //     }
-  //   });
+    this.setState({video: "http://res.cloudinary.com/dyzqtq32z/video/upload/ac_none,br_5000/v1463730794/montage-work_wighhl.mp4"});
   },
 
   render: function() {

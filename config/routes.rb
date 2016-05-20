@@ -8,6 +8,5 @@ Rails.application.routes.draw do
     resources :workspaces, only: [:index, :show] do
       resources :reservations, only: [:create, :index, :update, :destroy, :show]
     end
-    resource :video, only: [:show]
   end
 end
