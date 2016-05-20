@@ -1,0 +1,18 @@
+development:
+  cloud_name: dyzqtq32z
+  api_key: '195679152928229'
+  api_secret: x7RrQfJgpkRKdVUgjDQayuARvKU
+  enhance_image_tag: true
+  static_image_support: false
+production:
+  cloud_name: dyzqtq32z
+  api_key: '195679152928229'
+  api_secret: x7RrQfJgpkRKdVUgjDQayuARvKU
+  enhance_image_tag: true
+  static_image_support: true
+test:
+  cloud_name: dyzqtq32z
+  api_key: '195679152928229'
+  api_secret: x7RrQfJgpkRKdVUgjDQayuARvKU
+  enhance_image_tag: true
+  static_image_support: false
