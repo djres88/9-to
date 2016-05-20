@@ -69,6 +69,7 @@
 	var WorkspaceIndex = __webpack_require__(279);
 	var WorkspaceShow = __webpack_require__(390);
 	var ReservationForm = __webpack_require__(391);
+	var UserAccount = __webpack_require__(498);
 	
 	//Check for logged in current user on page load.
 	function preloadUser() {
@@ -113,7 +114,7 @@
 	    React.createElement(IndexRoute, { component: Home }),
 	    React.createElement(Route, { path: 's(/:coords)', component: WorkspaceIndex }),
 	    React.createElement(Route, { path: 'workspaces/:workspaceId', component: WorkspaceShow }),
-	    React.createElement(Route, { path: 'reservations' })
+	    React.createElement(Route, { path: 'profile/:username', component: UserAccount })
 	  )
 	);
 	
@@ -34491,12 +34492,19 @@
 	var React = __webpack_require__(1);
 	var UserStore = __webpack_require__(232);
 	var UserActions = __webpack_require__(225);
+	var HashHistory = __webpack_require__(166).hashHistory;
 	
 	var NavbarItem = React.createClass({
 	  displayName: 'NavbarItem',
 	
 	  logout: function () {
 	    UserActions.logout();
+	  },
+	
+	  goToAccount: function () {
+	    HashHistory.push({
+	      pathname: "profile/" + UserStore.currentUser().username
+	    });
 	  },
 	
 	  menuDropdown: function () {
@@ -34515,7 +34523,7 @@
 	        React.createElement('hr', null),
 	        React.createElement(
 	          'li',
-	          null,
+	          { onClick: this.goToAccount },
 	          'My Account'
 	        ),
 	        React.createElement('hr', null),
@@ -35058,10 +35066,20 @@
 	  componentDidMount: function () {
 	    var input = document.getElementById('searchTextField');
 	    window.autocomplete = new google.maps.places.Autocomplete(input, { types: ['(cities)'] });
-	    document.getElementById('searchTextField').addEventListener('enter', this.handleSubmit);
+	
+	    var that = this;
+	    document.getElementById('searchTextField').addEventListener('keypress', function (e) {
+	      if (e.charCode === 13) {
+	        that.handleSubmit();
+	      }
+	    });
 	  },
 	
 	  handleSubmit: function () {
+	    //check valid location
+	    if (!window.autocomplete.getPlace()) {
+	      return;
+	    }
 	    var coords = {
 	      lat: window.autocomplete.getPlace().geometry.location.lat(),
 	      lng: window.autocomplete.getPlace().geometry.location.lng()
@@ -65018,6 +65036,28 @@
 	};
 	
 	module.exports = ReservationStore;
+
+/***/ },
+/* 498 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var UserAccount = React.createClass({
+	  displayName: "UserAccount",
+	
+	
+	  render: function () {
+	    return React.createElement(
+	      "h1",
+	      { id: "testing" },
+	      "User Account Page"
+	    );
+	  }
+	
+	});
+	
+	module.exports = UserAccount;
 
 /***/ }
 /******/ ]);

@@ -8,12 +8,22 @@ var SearchLocationsBar = React.createClass({
 
   componentDidMount: function() {
     var input = document.getElementById('searchTextField');
-      window.autocomplete = new google.maps.places.Autocomplete(input, {types: ['(cities)']});
+    window.autocomplete = new google.maps.places.Autocomplete(input, {types: ['(cities)']});
+
+    var that = this;
     document.getElementById('searchTextField').addEventListener(
-      'enter', this.handleSubmit);
+      'keypress', function(e) {
+        if (e.charCode === 13) {
+          that.handleSubmit();
+        }
+      });
   },
 
   handleSubmit: function() {
+    //check valid location
+    if (!window.autocomplete.getPlace()) {
+      return;
+    }
     var coords = {
       lat: window.autocomplete.getPlace().geometry.location.lat(),
       lng: window.autocomplete.getPlace().geometry.location.lng()

@@ -58,7 +58,6 @@ var Map = React.createClass({
     this.markerListener.remove();
   },
 
-
   eachSpace: function(callback){
     var spaces = this.props.spaces;
     var keys = Object.keys(spaces);

@@ -1,10 +1,17 @@
 var React = require('react');
 var UserStore = require('../../stores/UserStore');
 var UserActions = require('../../actions/UserClientActions');
+var HashHistory = require('react-router').hashHistory;
 
 var NavbarItem = React.createClass({
   logout: function() {
     UserActions.logout();
+  },
+
+  goToAccount: function() {
+    HashHistory.push({
+      pathname: "profile/" + UserStore.currentUser().username
+    });
   },
 
   menuDropdown: function() {
@@ -16,7 +23,7 @@ var NavbarItem = React.createClass({
         <ul className="user-menu">
           <li id="user-menu-username">{username}</li>
           <hr/>
-          <li>My Account</li>
+          <li onClick={this.goToAccount}>My Account</li>
           <hr/>
           <li onClick={this.logout}>Logout</li>
         </ul>

@@ -23,6 +23,7 @@ var Home = require('./components/Home');
 var WorkspaceIndex = require('./components/Workspaces/WorkspaceIndex');
 var WorkspaceShow = require('./components/Workspaces/WorkspaceShow');
 var ReservationForm = require('./components/Forms/ReservationForm');
+var UserAccount = require('./components/Profile/UserAccount');
 
 //Check for logged in current user on page load.
 function preloadUser() {
@@ -62,7 +63,7 @@ var Router = (
       <IndexRoute component={Home}/>
       <Route path="s(/:coords)" component={WorkspaceIndex}/>
       <Route path="workspaces/:workspaceId" component={WorkspaceShow}/>
-        <Route path="reservations"/>
+      <Route path="profile/:username" component={UserAccount}/>
     </Route>
   </Router>
 );
