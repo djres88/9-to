@@ -44,10 +44,33 @@ var Home = React.createClass({
       action: function() { this.clickCity({lat: 37.7749, lng: -122.4194}); }.bind(this)
     };
 
+    function createCORSRequest(method, url) {
+      var xhr = new XMLHttpRequest();
+      if ("withCredentials" in xhr) {
+        console.log("yay");
+        // Check if the XMLHttpRequest object has a "withCredentials" property.
+        // "withCredentials" only exists on XMLHTTPRequest2 objects.
+        xhr.open(method, url, true);
+
+      } else if (typeof XDomainRequest != "undefined") {
+
+    // Otherwise, check if XDomainRequest.
+    // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
+        xhr = new XDomainRequest();
+        xhr.open(method, url);
+
+      } else {
+
+    // Otherwise, CORS is not supported by the browser.
+    xhr = null;
+
+  }
+  return xhr;
+}
 var url = "http://res.cloudinary.com/dyzqtq32z/video/upload/v1463730794/montage-work_wighhl.mp4";
     return (
       <div className="homepage">
-        <video id="above-fold-background-video" autoPlay loop>  <source src={url} type="video/mp4"/>
+        <video crossorigin="anonymous" id="above-fold-background-video" autoPlay loop>  <source src={url} type="video/mp4"/>
         </video>
         <div className="above-fold-text">
           <h1>WHEREVER WORK TAKES YOU</h1>
