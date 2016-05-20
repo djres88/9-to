@@ -65033,17 +65033,23 @@
 	var ReservationStore = __webpack_require__(497);
 	var ClientActions = __webpack_require__(274);
 	var UserStore = __webpack_require__(232);
+	var moment = __webpack_require__(287);
+	var HashHistory = __webpack_require__(166).hashHistory;
 	
 	var UserAccount = React.createClass({
 	  displayName: 'UserAccount',
 	
 	  getInitialState: function () {
-	    return { user: UserStore.currentUser(), reservations: ["New York", "San Francisco", "Minneapolis "] };
+	    return { user: UserStore.currentUser(), reservations: [] };
 	  },
 	
-	  componentWillMount: function () {
+	  componentDidMount: function () {
 	    this.listener = ReservationStore.addListener(this._onChange);
 	    this.userListener = UserStore.addListener(this._retrievedUser);
+	    // Loads on navigation, which is the case 90% of the time, but need to retrieve username just in case user refreshes page.
+	    if (this.state.user) {
+	      ClientActions.fetchUserReservations(UserStore.currentUser().id);
+	    }
 	  },
 	
 	  componentWillUnmount: function () {
@@ -65054,12 +65060,15 @@
 	  _retrievedUser: function () {
 	    // on user load, set state and fetch reservations. component will rerender when reservations are returned.
 	    this.setState({ user: UserStore.currentUser() });
-	    ClientActions.fetchUserReservations(UserStore.currentUser().id);
+	    if (this.state.user) {
+	      ClientActions.fetchUserReservations(UserStore.currentUser().id);
+	    } else {
+	      HashHistory.push("/");
+	    }
 	  },
 	
 	  _onChange: function () {
 	    this.setState({ reservations: ReservationStore.userReservations() });
-	    debugger;
 	  },
 	
 	  render: function () {
@@ -65068,13 +65077,53 @@
 	      reservations = "You do not have any upcoming reservations.";
 	    } else {
 	      reservations = this.state.reservations.map(function (res, idx) {
+	        var start = moment(res.start_date, "YYYY-MM-DD");
+	        var end = moment(res.end_date, "YYYY-MM-DD");
+	        var time = moment.duration(end.diff(start)).days() + 1;
+	        var days;
+	        if (time > 1) {
+	          days = " days.";
+	        } else {
+	          days = " day.";
+	        }
 	        return React.createElement(
 	          'div',
-	          { className: '', key: idx + 1 },
+	          { key: idx + 1 },
 	          React.createElement(
 	            'h3',
 	            null,
-	            res.id
+	            res.city
+	          ),
+	          React.createElement(
+	            'h4',
+	            { className: 'dates' },
+	            'ARRIVE: ',
+	            start.format('dddd, MMMM Do, YYYY')
+	          ),
+	          React.createElement(
+	            'h4',
+	            { className: 'dates' },
+	            'DEPART: ',
+	            end.format('dddd, MMMM Do, YYYY')
+	          ),
+	          React.createElement('img', { src: res.thumbnail_url, alt: '' }),
+	          React.createElement(
+	            'p',
+	            null,
+	            res.officetype
+	          ),
+	          React.createElement(
+	            'h4',
+	            { className: 'price' },
+	            React.createElement(
+	              'span',
+	              { style: { fontWeight: 500 } },
+	              'Total: '
+	            ),
+	            '$',
+	            Math.round(res.price_week / 7 * time),
+	            ' for ',
+	            time + " " + days
 	          )
 	        );
 	      });
@@ -65109,7 +65158,7 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'upcoming-trips' },
+	          { className: 'upcoming-reservations' },
 	          reservations
 	        )
 	      )
