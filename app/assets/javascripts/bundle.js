@@ -35162,6 +35162,7 @@
 	      }.bind(this)
 	    };
 	
+	    // TODO video issues
 	    return React.createElement(
 	      'div',
 	      { className: 'homepage' },
