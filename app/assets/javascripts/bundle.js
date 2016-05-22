@@ -35107,34 +35107,9 @@
 	var Search = __webpack_require__(273);
 	var HashHistory = __webpack_require__(166).hashHistory;
 	
-	// var CloudinaryConfig = require('react-cloudinary').CloudinaryConfig;
-	// console.log(CloudinaryConfig);
-	// var CloudinaryVideo = require('react-cloudinary').CloudinaryVideo;
-	// console.log(CloudinaryVideo);
-	// cloudinaryConfig({ cloud_name: 'dyzqtq32z' });
-	
 	var Home = React.createClass({
 	  displayName: 'Home',
 	
-	  componentDidMount: function () {
-	    // var vid = document.getElementById("above-fold-background-video");
-	    // vid.load();
-	    // vid.addEventListener("canplaythrough", function(e) {
-	    //   e.preventDefault();
-	    //   setTimeout(function() {
-	    //     vid.play();
-	    //   }, 2000);
-	    // });
-	    // vid.addEventListener("ended", function(e) {
-	    //   e.preventDefault();
-	    //   setTimeout(function() {
-	    //     vid.pause();
-	    //   }, 1000);
-	    //   setTimeout(function() {
-	    //     vid.play();
-	    //   }, 2000);
-	    // });
-	  },
 	
 	  clickCity: function (coords) {
 	    HashHistory.push({
@@ -35176,7 +35151,7 @@
 	      style: { backgroundImage: 'url(http://res.cloudinary.com/dyzqtq32z/image/upload/c_fill,h_350,w_400/v1462551922/NYC_vsnlar.jpg)' },
 	      label: "New York",
 	      action: function () {
-	        this.clickCity({ lat: 37.7749, lng: -122.4194 });
+	        this.clickCity({ lat: 40.7639, lng: -73.9763 });
 	      }.bind(this)
 	    };
 	
@@ -35184,11 +35159,10 @@
 	      style: { backgroundImage: 'url(http://res.cloudinary.com/dyzqtq32z/image/upload/c_fill,h_350,w_400/v1463594350/chicago-image-1_qm0dep.jpg)' },
 	      label: "Chicago",
 	      action: function () {
-	        this.clickCity({ lat: 37.7749, lng: -122.4194 });
+	        this.clickCity({ lat: 41.8829, lng: -87.6674 });
 	      }.bind(this)
 	    };
 	
-	    // crossorigin="anonymous"
 	    return React.createElement(
 	      'div',
 	      { className: 'homepage' },
@@ -35196,11 +35170,11 @@
 	        'video',
 	        {
 	          id: 'above-fold-background-video',
+	          poster: 'http://res.cloudinary.com/dyzqtq32z/image/upload/c_scale,w_1926/v1463882714/Screen_Shot_2016-05-21_at_7.04.17_PM_if4pdz.jpg',
 	          autoPlay: true,
-	          poster: 'http://res.cloudinary.com/dyzqtq32z/image/upload/c_scale,w_1920/v1463764488/screenshot-homepage_tma0vf.jpg',
 	          loop: true
 	        },
-	        React.createElement('source', { id: 'video-player', src: 'http://res.cloudinary.com/dyzqtq32z/video/upload/ac_none/v1463730794/montage-work_wighhl.mp4', type: 'video/mp4' })
+	        React.createElement('source', { src: 'http://res.cloudinary.com/dyzqtq32z/video/upload/ac_none/v1463881896/background-vid_v4_5-20_umfvox.mp4', type: 'video/mp4' })
 	      ),
 	      React.createElement(
 	        'div',
