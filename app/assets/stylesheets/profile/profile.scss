@@ -24,11 +24,17 @@
 }
 
 .upcoming-reservations {
-  margin-top: 10px;
   display: flex;
   justify-content: space-around;
   flex-direction: row;
   flex-wrap: wrap;
+  margin-top: 10px;
+
+  
+  display: -webkit-flex;
+  -webkit-justify-content: space-around;
+  -webkit-flex-direction: row;
+  -webkit-flex-wrap: wrap;
 }
 
 .upcoming-reservations div {

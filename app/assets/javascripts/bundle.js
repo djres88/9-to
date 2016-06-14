@@ -35272,8 +35272,7 @@
 	              )
 	            )
 	          )
-	        ),
-	        React.createElement('div', { id: 'homepage-footer' })
+	        )
 	      )
 	    );
 	  }
@@ -35795,14 +35794,13 @@
 	      React.createElement(
 	        'ul',
 	        null,
-	        React.createElement('hr', null),
 	        React.createElement(
 	          'li',
 	          null,
 	          React.createElement(
 	            'h4',
 	            null,
-	            'Capacity'
+	            'People'
 	          ),
 	          'Spaces Needed:',
 	          React.createElement(

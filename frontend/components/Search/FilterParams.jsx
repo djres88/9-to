@@ -90,9 +90,8 @@ var FilterParams = React.createClass({
     return (
       <div className="search-params">
         <ul>
-          <hr/>
           <li>
-            <h4>Capacity</h4>
+            <h4>People</h4>
               Spaces Needed:
               <select
                 value={this.state.capacity}

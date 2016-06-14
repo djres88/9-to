@@ -4,12 +4,17 @@
 
 .workspace-index {
   display: flex;
-  width: 60%;
   flex-wrap: wrap;
   flex-direction: row;
+  width: 60%;
   background-color: rgb(245, 245, 245);
   position: relative;
   padding-left: 10px;
+
+  
+  display: -webkit-flex;
+  -webkit-flex-wrap: wrap;
+  -webkit-flex-direction: row;
 }
 
 .workspace-index-item {

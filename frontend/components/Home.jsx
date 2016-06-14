@@ -104,7 +104,6 @@ var HashHistory = require('react-router').hashHistory;
               </div>
             </div>
           </div>
-          <div id="homepage-footer"></div>
         </div>
       </div>
     );

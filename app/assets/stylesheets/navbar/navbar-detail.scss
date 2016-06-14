@@ -1,13 +1,16 @@
 .nav-detail {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
   position: fixed;
   background: white;
   z-index:100000;
   width: 100%;
-  display: flex;
-  flex-direction: row;
   border: 2px solid #eee;
-  justify-content: flex-end;
   color: black;
+  display: -webkit-flex;
+  -webkit-flex-direction: row;
+  -webkit-justify-content: flex-end;
 }
 
 .nav-detail div {
@@ -18,11 +21,13 @@
 }
 
 .navbar-items {
-  position: relative;
   display: flex;
   justify-content: flex-start;
+  position: relative;
   margin: 0;
   padding-left: 0;
+  display: -webkit-flex;
+  -webkit-justify-content: flex-start;
 }
 
 .nav-detail .navbar-items span {

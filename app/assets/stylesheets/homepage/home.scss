@@ -8,6 +8,9 @@
   z-index: -100;
   transform: translateX(-50%) translateY(-50%);
   transition: 1s opacity;
+
+  /*Safari*/
+  -webkit-transform: translateX(-50%) translateY(-50%);
 }
 // background-image: url('http://res.cloudinary.com/dyzqtq32z/image/upload/v1462081650/main-background_keuduj.jpg');
 
@@ -20,6 +23,12 @@
   position: absolute;
   margin-top: 12em;
   width: 100%;
+  /*Safari*/
+  display: -webkit-flex;
+  -webkit-flex-direction: column;
+  -webkit-justify-content: center;
+  -webkit-align-items: center;
+  -webkit-align-content: center;
 }
 
 .above-fold-text h1, h2 {
@@ -46,6 +55,9 @@
   text-align: center;
   font-weight: 600;
   color: #565a5c;
+  /*Safari*/
+  display: -webkit-flex;
+  -webkit-flex-direction: column;
 }
 
 .below-fold div {
@@ -54,6 +66,8 @@
   font-size: 35px;
   margin: 30px auto;
   height: 150px;
+  /*Safari*/
+  -webkit-justify-content: center;
 }
 
 .below-fold h3 {
@@ -64,6 +78,9 @@
 .graphics-gallery {
   display: flex;
   flex-direction: row;
+  /*Safari*/
+  display: -webkit-flex;
+  -webkit-flex-direction: row;
 }
 
 .graphics-gallery img {
@@ -82,6 +99,10 @@
   flex-direction: row;
   height: 300px;
   flex-wrap: wrap;
+  /*Safari*/
+  display: -webkit-flex;
+  -webkit-flex-direction: row;
+  -webkit-flex-wrap: wrap;
 }
 
 .homepage-section-two .city-images {

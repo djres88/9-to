@@ -1,12 +1,15 @@
 .nav-home {
-  z-index:100000;
-  width: 100%;
   display: flex;
   justify-content: flex-end;
   flex-direction: row;
+  z-index:100000;
+  width: 100%;
   color: white;
   height: 64px;
   position: absolute;
+  display: -webkit-flex;
+  -webkit-justify-content: flex-end;
+  -webkit-flex-direction: row;
 }
 
 #scroll-nav-on {
@@ -87,6 +90,8 @@
 
 .login-and-signup {
   display: flex;
+  /*Safari*/
+  display: -webkit-flex;
 }
 
 .dropdown {

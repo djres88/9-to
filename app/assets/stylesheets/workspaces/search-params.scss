@@ -7,13 +7,18 @@
 }
 
 .search-params ul {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
   margin: 20px 20px;
   font-size: 14px;
   font-weight: 300;
-  display: flex;
-  justify-content: flex-start;
 
-  flex-direction: column;
+  
+  display: -webkit-flex;
+  -webkit-justify-content: flex-start;
+  -webkit-flex-direction: column;
+
 }
 
 .search-params hr {
