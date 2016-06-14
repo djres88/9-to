@@ -1,11 +1,10 @@
 #above-fold-background-video {
   margin-top: 0px;
-  object-fit: contain;
   position: absolute;
   top: 10%;
-  left: 50%;
-  min-width: 50%;
-  width: auto;
+  left: 33.5%;
+  /* min-width: 50%; */
+  /* width: auto; */
   z-index: -100;
   transform: translateX(-50%) translateY(-50%);
   transition: 1s opacity;
