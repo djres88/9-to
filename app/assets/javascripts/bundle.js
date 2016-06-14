@@ -35181,7 +35181,7 @@
 	        React.createElement(
 	          'h2',
 	          null,
-	          'Flexible-term office space for freelancers and teams.'
+	          'Find flexible-term office space for you and your team.'
 	        )
 	      ),
 	      React.createElement(Search, { location: this.props.location.pathname }),
@@ -35190,27 +35190,11 @@
 	        { className: 'below-fold' },
 	        React.createElement(
 	          'div',
-	          { className: 'homepage-section-one' },
-	          React.createElement(
-	            'h3',
-	            null,
-	            'Time is money. Save yours.'
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'graphics-gallery' },
-	            React.createElement('img', { className: 'graphics', src: 'http://res.cloudinary.com/dyzqtq32z/image/upload/v1462574399/savings_lubtzw.png', alt: '' }),
-	            React.createElement('img', { className: 'graphics', src: 'http://res.cloudinary.com/dyzqtq32z/image/upload/v1462574386/happy2_pvmdnt.png', alt: '' }),
-	            React.createElement('img', { className: 'graphics', src: 'http://res.cloudinary.com/dyzqtq32z/image/upload/v1462574376/time_noachj.png', alt: '' })
-	          )
-	        ),
-	        React.createElement(
-	          'div',
 	          { className: 'homepage-section-two' },
 	          React.createElement(
 	            'h3',
 	            null,
-	            'Productivity Near You'
+	            'Explore Cities'
 	          ),
 	          React.createElement(
 	            'div',

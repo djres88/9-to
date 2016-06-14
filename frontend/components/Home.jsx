@@ -56,22 +56,15 @@ var HashHistory = require('react-router').hashHistory;
         </video>
         <div className="above-fold-text">
           <h1>WHEREVER WORK TAKES YOU</h1>
-          <h2>Flexible-term office space for freelancers and teams.</h2>
+          <h2>Find flexible-term office space for you and your team.</h2>
         </div>
 
       <Search location={this.props.location.pathname}/>
 
       <div className="below-fold">
-          <div className="homepage-section-one">
-            <h3>Time is money. Save yours.</h3>
-            <div className="graphics-gallery">
-              <img className="graphics" src="http://res.cloudinary.com/dyzqtq32z/image/upload/v1462574399/savings_lubtzw.png" alt=""/>
-              <img className="graphics" src="http://res.cloudinary.com/dyzqtq32z/image/upload/v1462574386/happy2_pvmdnt.png" alt=""/>
-              <img className="graphics" src="http://res.cloudinary.com/dyzqtq32z/image/upload/v1462574376/time_noachj.png" alt=""/>
-            </div>
-          </div>
+
           <div className="homepage-section-two">
-            <h3>Productivity Near You</h3>
+            <h3>Explore Cities</h3>
             <div className="image-gallery">
               <div className="city-images"
                 style={sf.style}
