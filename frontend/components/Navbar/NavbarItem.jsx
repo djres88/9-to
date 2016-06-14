@@ -21,8 +21,6 @@ var NavbarItem = React.createClass({
       var username = UserStore.currentUser().username;
       return (
         <ul className="user-menu">
-          <li id="user-menu-username">{username}</li>
-          <hr/>
           <li onClick={this.goToAccount}>My Account</li>
           <hr/>
           <li onClick={this.logout}>Logout</li>

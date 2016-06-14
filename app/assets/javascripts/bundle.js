@@ -34516,12 +34516,6 @@
 	        { className: 'user-menu' },
 	        React.createElement(
 	          'li',
-	          { id: 'user-menu-username' },
-	          username
-	        ),
-	        React.createElement('hr', null),
-	        React.createElement(
-	          'li',
 	          { onClick: this.goToAccount },
 	          'My Account'
 	        ),
@@ -65084,7 +65078,7 @@
 	  render: function () {
 	    var reservations;
 	    if (this.state.reservations.length === 0) {
-	      reservations = "You do not have any upcoming reservations.";
+	      reservations = "You do not have any upcoming reservations. Enter a city in the search bar to find a workspace!";
 	    } else {
 	      reservations = this.state.reservations.map(function (res, idx) {
 	        var start = moment(res.start_date, "YYYY-MM-DD");

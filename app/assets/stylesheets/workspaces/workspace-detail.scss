@@ -9,7 +9,7 @@
 
 .listing-detail .highlights-bar {
   position: relative;
-  width: 100%;
+  width: auto;
   height: 150px;
   border-bottom: 1px solid lightgray;
 }
@@ -96,15 +96,11 @@
 .mini-reservation-form {
   position: absolute;;
   border: 1px solid #eee;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-left: 22%;
+  margin-left: 30%;
   margin-top: -187px;
   background-color: white;
   z-index: 1;
-  width: 18%;
+  width: 10em;
 }
 
 .mini-reservation-form h1 {
@@ -127,6 +123,7 @@
 .mini-reservation-form div .reservation-form-dates {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .mini-reservation-form .search-button-open {
@@ -162,4 +159,5 @@
   height: 25px;
   margin: 5px;
   width: 90%;
+  text-align: center;
 }
