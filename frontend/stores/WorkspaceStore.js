@@ -6,7 +6,8 @@ var _workspaces = {};
 var WorkspaceStore = new Store(AppDispatcher);
 
 WorkspaceStore.all = function () {
-  return Object.assign({}, _workspaces);
+  // Object.assign not working in Safari.
+  return _workspaces;
 };
 
 WorkspaceStore.find = function(id) {

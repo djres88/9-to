@@ -21,13 +21,11 @@ var Map = React.createClass({
     };
   },
 
-  componentDidMount: function(){
+  componentDidMount: function() {
     var map = ReactDOM.findDOMNode(this.refs.map);
     this.map = new google.maps.Map(map, this.mapOptions());
     this.markers = [];
-    this.eachSpace(this.createMarker);
     this.registerListeners();
-
     var that = this;
     // NOTE: The map element has mounted on the DOM, but the Google Map API has not yet created a Map object for the Autocomplete (search bar) to listen to. In order to avoid an error (that.map is undefined), I'll wait a tick to add the listener. Not sure if setTimeout is the best way to solve this problem (or any problem, for that matter), but it's one solution.
 
@@ -37,18 +35,22 @@ var Map = React.createClass({
         that.map.setCenter(place);
         that.map.setZoom(12);
       });
-    }, 500);
+    }, 100);
 
-    // NOTE: (discussion point for iviews? tough bug). We normally use the map object's bounds to fetch the right workspaces, but — per the note above — the map has not yet been created. And yet in this case we don't want to wait to fetch the workspaces. Solution: I'm going to using the location query params for the initial ClientActions call, and use the Map bounds (once the map is loaded) for each subsequent call. The initial zoom of the map will always be the same, so I can grab the lat/lng of the NE/SW corners by factoring in the map's height/width in degrees.
+    // NOTE: (discussion point for iviews? tough bug). We normally use the map object's bounds to fetch the right workspaces, but — per the note above — the map has not yet been created. And yet in this case we don't want to wait to fetch the workspaces. Solution: I'm going to use the location query params for the initial ClientActions call, and use the Map bounds (once the map is loaded) for each subsequent call. The initial zoom of the map will always be the same, so I can grab the lat/lng of the NE/SW corners by factoring in the map's height/width in degrees.
     var params = FilterStore.params();
     var bounds = {
       SW: {lat: this.props.lat - 0.097245, lng: this.props.lng - 0.054932},
       NE: {lat: this.props.lat + 0.097245, lng: this.props.lng + 0.054932}
     };
     params.map_bounds = bounds;
+
+    // Fetch workspaces based on the map's current bounds.
     ClientActions.fetchWorkspaces(params);
 
+    // Prevent the initial re-rendering if browser window resizes on load.
     this.idleListenerWasSet = false;
+
     this.filterListener = FilterStore.addListener(this.updateBounds);
   },
 
@@ -58,7 +60,11 @@ var Map = React.createClass({
     this.markerListener.remove();
   },
 
-  eachSpace: function(callback){
+  componentDidUpdate: function() {
+    this.updateMarkers();
+  },
+
+  eachSpace: function(callback) {
     var spaces = this.props.spaces;
     var keys = Object.keys(spaces);
     keys.forEach(function(key){
@@ -66,11 +72,7 @@ var Map = React.createClass({
     });
   },
 
-  componentDidUpdate: function () {
-    this._onChange();
-  },
-
-  _onChange: function(){
+  updateMarkers: function() {
     var newWorkspaces = [];
     var removeMarkers = [];
 
@@ -80,15 +82,23 @@ var Map = React.createClass({
       }
     }.bind(this));
 
-    var currentWorkspaces = this.markers.map(function(marker){
-      return marker.workspaceId;
+    var currentWorkspaces = {};
+    this.markers.forEach(function(marker){
+      currentWorkspaces[marker.workspaceId] = true;
     });
 
-    this.eachSpace(function(space){
-      if (!currentWorkspaces.includes(space.id)){
+    if (Object.keys(currentWorkspaces).length > 0) {
+      this.eachSpace(function(space){
+        if (!currentWorkspaces[space.id]) {
+          newWorkspaces.push(space);
+        }
+      });
+    } else {
+      this.eachSpace(function(space){
         newWorkspaces.push(space);
-      }
-    });
+      });
+    }
+
     newWorkspaces.forEach(this.createMarker);
     removeMarkers.forEach(this.removeMarker);
   },
@@ -117,7 +127,6 @@ var Map = React.createClass({
     params.map_bounds = bounds;
 
     ClientActions.fetchWorkspaces(params);
-    this._onChange();
 
     var coords = { lat: this.map.center.lat(), lng: this.map.center.lng() };
     this._handleChange(coords);

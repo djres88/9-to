@@ -25,16 +25,19 @@ var Navbar = React.createClass({
   },
 
   componentWillUnmount: function() {
+    console.log("unmounted");
     this.listener.remove();
-    window.removeEventListener('scroll', this.handleScroll);
+    // window.removeEventListener('scroll', this.handleScroll);
   },
 
 
   handleScroll: function(event) {
+    event.preventDefault();
+
     if (window.location.hash[2] === "s") {
       return;
     }
-    event.preventDefault();
+
     if (event.srcElement.body.scrollTop > 585 && this.state.scrollNavAction === "off") {
       this.setState({scrollNavAction: "on"});
     } else if (event.srcElement.body.scrollTop <= 585 && this.state.scrollNavAction === "on") {
@@ -89,7 +92,7 @@ var Navbar = React.createClass({
   },
 
   render: function() {
-
+    console.log(this.state.scrollNavAction);
     return (
       <div id={"scroll-nav-" + this.state.scrollNavAction} className={this.props.className}>
         <NavbarItem id="nav-logo" className="logo" actions={this.goHome} text="9to"></NavbarItem>

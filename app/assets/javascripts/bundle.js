@@ -34406,15 +34406,18 @@
 	  },
 	
 	  componentWillUnmount: function () {
+	    console.log("unmounted");
 	    this.listener.remove();
-	    window.removeEventListener('scroll', this.handleScroll);
+	    // window.removeEventListener('scroll', this.handleScroll);
 	  },
 	
 	  handleScroll: function (event) {
+	    event.preventDefault();
+	
 	    if (window.location.hash[2] === "s") {
 	      return;
 	    }
-	    event.preventDefault();
+	
 	    if (event.srcElement.body.scrollTop > 585 && this.state.scrollNavAction === "off") {
 	      this.setState({ scrollNavAction: "on" });
 	    } else if (event.srcElement.body.scrollTop <= 585 && this.state.scrollNavAction === "on") {
@@ -34470,7 +34473,7 @@
 	  addSpace: function () {},
 	
 	  render: function () {
-	
+	    console.log(this.state.scrollNavAction);
 	    return React.createElement(
 	      'div',
 	      { id: "scroll-nav-" + this.state.scrollNavAction, className: this.props.className },
@@ -34873,14 +34876,6 @@
 	var ApiUtil = __webpack_require__(275);
 	
 	module.exports = {
-	  // fetchWorkspaces:  function() {
-	  //   ApiUtil.fetchWorkspaces();
-	  // },
-	  //
-	  // fetchSingleWorkspace: function(id) {
-	  //   ApiUtil.fetchSingleWorkspace(id);
-	  // }
-	
 	  //NOTE: fetch workspaces based on map bounds. Use the searchbox as a starting point for the map (i.e. translate the city input to map coordinates).
 	  fetchWorkspaces: function (params) {
 	    ApiUtil.fetchWorkspaces(params);
@@ -35322,9 +35317,12 @@
 	
 	  render: function () {
 	    var workspaces = this.state.workspaces;
-	    var workspaceComponents = Object.keys(workspaces).map(function (key, i) {
-	      return React.createElement(WorkspaceIndexItem, { key: i, workspace: workspaces[key] });
-	    });
+	    var workspaceComponents = "";
+	    if (workspaces && Object.keys(workspaces).length !== 0) {
+	      workspaceComponents = Object.keys(workspaces).map(function (key, i) {
+	        return React.createElement(WorkspaceIndexItem, { key: i, workspace: workspaces[key] });
+	      });
+	    }
 	
 	    return React.createElement(
 	      'div',
@@ -35382,7 +35380,8 @@
 	var WorkspaceStore = new Store(AppDispatcher);
 	
 	WorkspaceStore.all = function () {
-	  return Object.assign({}, _workspaces);
+	  // Object.assign not working in Safari.
+	  return _workspaces;
 	};
 	
 	WorkspaceStore.find = function (id) {
@@ -35502,9 +35501,7 @@
 	    var map = ReactDOM.findDOMNode(this.refs.map);
 	    this.map = new google.maps.Map(map, this.mapOptions());
 	    this.markers = [];
-	    this.eachSpace(this.createMarker);
 	    this.registerListeners();
-	
 	    var that = this;
 	    // NOTE: The map element has mounted on the DOM, but the Google Map API has not yet created a Map object for the Autocomplete (search bar) to listen to. In order to avoid an error (that.map is undefined), I'll wait a tick to add the listener. Not sure if setTimeout is the best way to solve this problem (or any problem, for that matter), but it's one solution.
 	
@@ -35514,18 +35511,22 @@
 	        that.map.setCenter(place);
 	        that.map.setZoom(12);
 	      });
-	    }, 500);
+	    }, 100);
 	
-	    // NOTE: (discussion point for iviews? tough bug). We normally use the map object's bounds to fetch the right workspaces, but — per the note above — the map has not yet been created. And yet in this case we don't want to wait to fetch the workspaces. Solution: I'm going to using the location query params for the initial ClientActions call, and use the Map bounds (once the map is loaded) for each subsequent call. The initial zoom of the map will always be the same, so I can grab the lat/lng of the NE/SW corners by factoring in the map's height/width in degrees.
+	    // NOTE: (discussion point for iviews? tough bug). We normally use the map object's bounds to fetch the right workspaces, but — per the note above — the map has not yet been created. And yet in this case we don't want to wait to fetch the workspaces. Solution: I'm going to use the location query params for the initial ClientActions call, and use the Map bounds (once the map is loaded) for each subsequent call. The initial zoom of the map will always be the same, so I can grab the lat/lng of the NE/SW corners by factoring in the map's height/width in degrees.
 	    var params = FilterStore.params();
 	    var bounds = {
 	      SW: { lat: this.props.lat - 0.097245, lng: this.props.lng - 0.054932 },
 	      NE: { lat: this.props.lat + 0.097245, lng: this.props.lng + 0.054932 }
 	    };
 	    params.map_bounds = bounds;
+	
+	    // Fetch workspaces based on the map's current bounds.
 	    ClientActions.fetchWorkspaces(params);
 	
+	    // Prevent the initial re-rendering if browser window resizes on load.
 	    this.idleListenerWasSet = false;
+	
 	    this.filterListener = FilterStore.addListener(this.updateBounds);
 	  },
 	
@@ -35533,6 +35534,10 @@
 	    this.filterListener.remove();
 	    this.idleListener.remove();
 	    this.markerListener.remove();
+	  },
+	
+	  componentDidUpdate: function () {
+	    this.updateMarkers();
 	  },
 	
 	  eachSpace: function (callback) {
@@ -35543,11 +35548,7 @@
 	    });
 	  },
 	
-	  componentDidUpdate: function () {
-	    this._onChange();
-	  },
-	
-	  _onChange: function () {
+	  updateMarkers: function () {
 	    var newWorkspaces = [];
 	    var removeMarkers = [];
 	
@@ -35557,15 +35558,23 @@
 	      }
 	    }.bind(this));
 	
-	    var currentWorkspaces = this.markers.map(function (marker) {
-	      return marker.workspaceId;
+	    var currentWorkspaces = {};
+	    this.markers.forEach(function (marker) {
+	      currentWorkspaces[marker.workspaceId] = true;
 	    });
 	
-	    this.eachSpace(function (space) {
-	      if (!currentWorkspaces.includes(space.id)) {
+	    if (Object.keys(currentWorkspaces).length > 0) {
+	      this.eachSpace(function (space) {
+	        if (!currentWorkspaces[space.id]) {
+	          newWorkspaces.push(space);
+	        }
+	      });
+	    } else {
+	      this.eachSpace(function (space) {
 	        newWorkspaces.push(space);
-	      }
-	    });
+	      });
+	    }
+	
 	    newWorkspaces.forEach(this.createMarker);
 	    removeMarkers.forEach(this.removeMarker);
 	  },
@@ -35594,7 +35603,6 @@
 	    params.map_bounds = bounds;
 	
 	    ClientActions.fetchWorkspaces(params);
-	    this._onChange();
 	
 	    var coords = { lat: this.map.center.lat(), lng: this.map.center.lng() };
 	    this._handleChange(coords);
@@ -35662,7 +35670,7 @@
 	};
 	
 	FilterStore.params = function () {
-	  return Object.assign({}, _params);
+	  return _params;
 	};
 	
 	FilterStore.__onDispatch = function (payload) {

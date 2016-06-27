@@ -1,14 +1,6 @@
 var ApiUtil = require('../util/ApiUtil');
 
 module.exports = {
-  // fetchWorkspaces:  function() {
-  //   ApiUtil.fetchWorkspaces();
-  // },
-  //
-  // fetchSingleWorkspace: function(id) {
-  //   ApiUtil.fetchSingleWorkspace(id);
-  // }
-
   //NOTE: fetch workspaces based on map bounds. Use the searchbox as a starting point for the map (i.e. translate the city input to map coordinates).
   fetchWorkspaces: function(params) {
     ApiUtil.fetchWorkspaces(params);

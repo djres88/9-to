@@ -1,6 +1,6 @@
 module.exports = {
   context: __dirname,
-  entry: "./frontend/nineto.jsx",
+  entry: './frontend/nineto.jsx',
   output: {
     path: './app/assets/javascripts',
     filename: "bundle.js",

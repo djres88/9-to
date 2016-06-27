@@ -34,9 +34,12 @@ var WorkspaceIndex = React.createClass({
 
   render: function() {
     var workspaces = this.state.workspaces;
-    var workspaceComponents = Object.keys(workspaces).map(function(key, i) {
-      return <WorkspaceIndexItem key={i} workspace={workspaces[key]} />;
-    });
+    var workspaceComponents = "";
+    if (workspaces && Object.keys(workspaces).length !== 0) {
+      workspaceComponents = Object.keys(workspaces).map(function(key, i) {
+       return <WorkspaceIndexItem key={i} workspace={workspaces[key]} />;
+     });
+    }
 
     return (
       <div className="search-listings-page">

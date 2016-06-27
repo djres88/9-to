@@ -11,7 +11,7 @@ var _params = {
 };
 
 FilterStore.params = function() {
-  return Object.assign({}, _params);
+  return _params;
 };
 
 FilterStore.__onDispatch = function (payload) {
