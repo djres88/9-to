@@ -15,7 +15,9 @@ var Navbar = React.createClass({
 
   componentDidMount: function() {
     this.listener = UserStore.addListener(this._onChange);
-    window.addEventListener('scroll', this.handleScroll);
+    if (window.location.hash[2] !== "s") {
+      window.addEventListener('scroll', this.handleScroll);
+    }
     window.scrollTo(0,0);
   },
 
@@ -32,11 +34,11 @@ var Navbar = React.createClass({
   handleScroll: function(event) {
     event.preventDefault();
 
-    if (window.location.hash[2] === "s") {
+    if (this.props.loc[1] === "s") {
       return;
     }
 
-    if (event.srcElement.body.scrollTop > 585 && this.state.scrollNavAction === "off") {
+    if (window.scrollY > 585 && this.state.scrollNavAction === "off") {
       this.setState({scrollNavAction: "on"});
     } else if (event.srcElement.body.scrollTop <= 585 && this.state.scrollNavAction === "on") {
       this.setState({scrollNavAction: "off"});
