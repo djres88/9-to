@@ -10,26 +10,24 @@ var SearchLocationsBar = require('../Search/SearchLocationsBar');
 
 var Navbar = React.createClass({
   getInitialState: function() {
-    return {route: window.location.hash, loggedIn: false, userMenu: "hide", scrollNavAction: "off", searchText: ""};
+    return {loggedIn: false, userMenu: "hide", scrollNavAction: "off", searchText: ""};
   },
 
   componentDidMount: function() {
     this.listener = UserStore.addListener(this._onChange);
-    var that = this;
-    if (that.state.route[2] !== "s") {
-      window.addEventListener('scroll', that.handleScroll);
-      window.addEventListener('popstate', function() {
-        that.setState({scrollNavAction: "off"});
-      });
+    window.addEventListener('scroll', this.handleScroll);
+    window.scrollTo(0,0);
+  },
+
+  componentWillReceiveProps: function() {
+    if (this.props.loc[1] !== "s") {
+      window.addEventListener('scroll', this.handleScroll);
+    } else {
+      window.removeEventListener('scroll', this.handleScroll);
+      this.setState({scrollNavAction: "off"});
     }
+    window.scrollTo(0,0);
   },
-
-  componentWillUnmount: function() {
-    console.log("unmounted");
-    this.listener.remove();
-    // window.removeEventListener('scroll', this.handleScroll);
-  },
-
 
   handleScroll: function(event) {
     event.preventDefault();
@@ -49,13 +47,10 @@ var Navbar = React.createClass({
 
   _onChange: function() {
     this.setState({loggedIn: UserStore.currentUser ()});
-    this.setState({route: window.location.hash});
   },
 
   goHome: function() {
     hashHistory.push("/");
-    this.setState({route: window.location.hash});
-    window.addEventListener('scroll', this.handleScroll);
   },
 
   showUserMenu: function() {
@@ -92,7 +87,6 @@ var Navbar = React.createClass({
   },
 
   render: function() {
-    console.log(this.state.scrollNavAction);
     return (
       <div id={"scroll-nav-" + this.state.scrollNavAction} className={this.props.className}>
         <NavbarItem id="nav-logo" className="logo" actions={this.goHome} text="9to"></NavbarItem>

@@ -46,7 +46,6 @@ var FilterParams = React.createClass({
   updateCapacity: function(e) {
     this.setState({capacity: e.target.value});
     FilterActions.updateCapacity(e.target.value);
-    console.log(e.target.value);
   },
   //
   // updateBeginDate: function(beginDate) {

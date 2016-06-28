@@ -50,7 +50,7 @@ var App = React.createClass({
   render: function() {
     return (
       <div>
-        <Navbar className={this.determineNavClass()}/>
+        <Navbar className={this.determineNavClass()} loc={window.location.hash}/>
         {this.props.children}
       </div>
     );

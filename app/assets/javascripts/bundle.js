@@ -99,7 +99,7 @@
 	    return React.createElement(
 	      'div',
 	      null,
-	      React.createElement(Navbar, { className: this.determineNavClass() }),
+	      React.createElement(Navbar, { className: this.determineNavClass(), loc: window.location.hash }),
 	      this.props.children
 	    );
 	  }
@@ -34391,24 +34391,23 @@
 	  displayName: 'Navbar',
 	
 	  getInitialState: function () {
-	    return { route: window.location.hash, loggedIn: false, userMenu: "hide", scrollNavAction: "off", searchText: "" };
+	    return { loggedIn: false, userMenu: "hide", scrollNavAction: "off", searchText: "" };
 	  },
 	
 	  componentDidMount: function () {
 	    this.listener = UserStore.addListener(this._onChange);
-	    var that = this;
-	    if (that.state.route[2] !== "s") {
-	      window.addEventListener('scroll', that.handleScroll);
-	      window.addEventListener('popstate', function () {
-	        that.setState({ scrollNavAction: "off" });
-	      });
-	    }
+	    window.addEventListener('scroll', this.handleScroll);
+	    window.scrollTo(0, 0);
 	  },
 	
-	  componentWillUnmount: function () {
-	    console.log("unmounted");
-	    this.listener.remove();
-	    // window.removeEventListener('scroll', this.handleScroll);
+	  componentWillReceiveProps: function () {
+	    if (this.props.loc[1] !== "s") {
+	      window.addEventListener('scroll', this.handleScroll);
+	    } else {
+	      window.removeEventListener('scroll', this.handleScroll);
+	      this.setState({ scrollNavAction: "off" });
+	    }
+	    window.scrollTo(0, 0);
 	  },
 	
 	  handleScroll: function (event) {
@@ -34429,13 +34428,10 @@
 	
 	  _onChange: function () {
 	    this.setState({ loggedIn: UserStore.currentUser() });
-	    this.setState({ route: window.location.hash });
 	  },
 	
 	  goHome: function () {
 	    hashHistory.push("/");
-	    this.setState({ route: window.location.hash });
-	    window.addEventListener('scroll', this.handleScroll);
 	  },
 	
 	  showUserMenu: function () {
@@ -34473,7 +34469,6 @@
 	  addSpace: function () {},
 	
 	  render: function () {
-	    console.log(this.state.scrollNavAction);
 	    return React.createElement(
 	      'div',
 	      { id: "scroll-nav-" + this.state.scrollNavAction, className: this.props.className },
@@ -35755,7 +35750,6 @@
 	  updateCapacity: function (e) {
 	    this.setState({ capacity: e.target.value });
 	    FilterActions.updateCapacity(e.target.value);
-	    console.log(e.target.value);
 	  },
 	  //
 	  // updateBeginDate: function(beginDate) {
